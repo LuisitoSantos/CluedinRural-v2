@@ -1,11 +1,11 @@
 name: Flutter Web - GitHub Pages
 
 on:
-  pull_request:
-  workflow_dispatch:
   push:
     branches:
       - main
+  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -30,7 +30,7 @@ jobs:
         run: flutter pub get
 
       - name: Build Flutter Web
-        run: flutter build web --release
+        run: flutter build web --release --base-href /CluedinRural-v2/
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
@@ -51,6 +51,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
