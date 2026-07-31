@@ -1,0 +1,8318 @@
+{
+    "A1": {
+        "name": "A1",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [0,0]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "fence",
+        "right": "ground"
+    },
+    "A2": {
+        "name": "A2",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [1,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "ground"
+    },
+    "A3": {
+        "name": "A3",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [2,0]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "fence",
+        "right": "ground"
+    },
+    "A4": {
+        "name": "A4",
+        "type": "rock",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [3,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A5": {
+        "name": "A5",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [4,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "window"
+    },
+    "A6": {
+        "name": "A6",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [5,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A7": {
+        "name": "A7",
+        "type": "ground",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [6,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A8": {
+        "name": "A8",
+        "type": "ground",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [7,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A9": {
+        "name": "A9",
+        "type": "ground",
+        "belongCuadrant": "",
+        "coordinates": [
+            [8,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A10": {
+        "name": "A10",
+        "type": "ground",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [9,0]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "fence",
+        "right": "window"
+    },
+    "A11": {
+        "name": "A11",
+        "type": "rock",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [10,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A12": {
+        "name": "A12",
+        "type": "ground",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [11,0]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A13": {
+        "name": "A13",
+        "type": "ground",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [12,0]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "fence",
+        "right": "window"
+    },
+    "A14": {
+        "name": "A14",
+        "type": "rock",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [13,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A15": {
+        "name": "A15",
+        "type": "ground",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [14,0]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A16": {
+        "name": "A16",
+        "type": "ground",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [15,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A17": {
+        "name": "A17",
+        "type": "ground",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [16,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A18": {
+        "name": "A18",
+        "type": "ground",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [17,0]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "fence",
+        "right": "window"
+    },
+    "A19": {
+        "name": "A19",
+        "type": "rock",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [18,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A20": {
+        "name": "A20",
+        "type": "ground",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [19,0]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A21": {
+        "name": "A21",
+        "type": "ground",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [20,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A22": {
+        "name": "A22",
+        "type": "ground",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [21,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A23": {
+        "name": "A23",
+        "type": "ground",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [22,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "window"
+    },
+    "A24": {
+        "name": "A24",
+        "type": "ground",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [23,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "window"
+    },
+    "A25": {
+        "name": "A25",
+        "type": "ground",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [24,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "window"
+    },
+    "A26": {
+        "name": "A26",
+        "type": "ground",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [25,0]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A27": {
+        "name": "A27",
+        "type": "rock",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [26,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A28": {
+        "name": "A28",
+        "type": "ground",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [27,0]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A29": {
+        "name": "A29",
+        "type": "ground",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [28,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A30": {
+        "name": "A30",
+        "type": "ground",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [29,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "window"
+    },
+    "A31": {
+        "name": "A31",
+        "type": "ground",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [30,0]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A32": {
+        "name": "A32",
+        "type": "ground",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [31,0]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "fence",
+        "right": "wall"
+    },
+    "A33": {
+        "name": "A33",
+        "type": "rock",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [32,0]
+        ],
+        "up": "ground",
+        "down": "fence",
+        "left": "fence",
+        "right": "wall"
+    },
+    "B1": {
+        "name": "B1",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [0,1]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+    "B2": {
+        "name": "B2",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [1,1]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "rock"
+    },
+    "B3": {
+        "name": "B3",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [2,1]
+        ],
+        "up": "ground",
+        "down": "wall",
+        "left": "ground",
+        "right": "ground"
+    },
+    "B4": {
+        "name": "4",
+        "type": "bed",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [3,1]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "wall",
+        "right": "bed"
+    },
+    "B5": {
+        "name": "B5",
+        "type": "floor",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [4,1]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "window",
+        "right": "ground"
+    },
+    "B6": {
+        "name": "B6",
+        "type": "bathroom",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [5,1]
+        ],
+        "up": "wall",
+        "down": "shower",
+        "left": "wall",
+        "right": "bathroom"
+    },
+    "B7": {
+        "name": "B7",
+        "type": "shower",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [6,1]
+        ],
+        "up": "bathroom",
+        "down": "wall",
+        "left": "wall",
+        "right": "bathroom"
+    },
+    "B8": {
+        "name": "B8",
+        "type": "bathroom",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [7,1]
+        ],
+        "up": "wall",
+        "down": "bathroom",
+        "left": "wall",
+        "right": "shower"
+    },
+    "B9": {
+        "name": "B9",
+        "type": "bathroom",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [8,1]
+        ],
+        "up": "bathroom",
+        "down": "wall",
+        "left": "wall",
+        "right": "bathroom"
+    },
+    "B10": {
+        "name": "B10",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [9,1]
+        ],
+        "up": "wall",
+        "down": "bed",
+        "left": "window",
+        "right": "floor"
+    },
+    "B11": {
+        "name": "B11",
+        "type": "bed",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [10,1]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "wall",
+        "right": "bed"
+    },
+    "B12": {
+        "name": "B12",
+        "type": "bed",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [11,1]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "wall",
+        "right": "bed"
+    },
+    "B13": {
+        "name": "B13",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [12,1]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "window",
+        "right": "floor"
+    },
+    "B14": {
+        "name": "B14",
+        "type": "bathroom",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [13,1]
+        ],
+        "up": "wall",
+        "down": "bathroom",
+        "left": "wall",
+        "right": "bathroom"
+    },
+    "B15": {
+        "name": "B15",
+        "type": "bathroom",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [14,1]
+        ],
+        "up": "bathroom",
+        "down": "wall",
+        "left": "wall",
+        "right": "shower"
+    },
+    "B16": {
+        "name": "B16",
+        "type": "bed",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [15,1]
+        ],
+        "up": "wall",
+        "down": "bed",
+        "left": "wall",
+        "right": "floor"
+    },
+    "B17": {
+        "name": "B17",
+        "type": "bed",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [16,1]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "wall",
+        "right": "floor"
+    },
+    "B18": {
+        "name": "B18",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [17,1]
+        ],
+        "up": "bed",
+        "down": "closet",
+        "left": "window",
+        "right": "floor"
+    },
+    "B19": {
+        "name": "B19",
+        "type": "closet",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [18,1]
+        ],
+        "up": "floor",
+        "down": "closet",
+        "left": "wall",
+        "right": "floor"
+    },
+    "B20": {
+        "name": "B20",
+        "type": "closet",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [19,1]
+        ],
+        "up": "closet",
+        "down": "wall",
+        "left": "wall",
+        "right": "wall"
+    },
+    "B21": {
+        "name": "B21",
+        "type": "worktop",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [20,1]
+        ],
+        "up": "wall",
+        "down": "worktop",
+        "left": "wall",
+        "right": "worktop"
+    },
+    "B22": {
+        "name": "B22",
+        "type": "worktop",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [21,1]
+        ],
+        "up": "worktop",
+        "down": "worktop",
+        "left": "wall",
+        "right": "floor"
+    },
+    "B23": {
+        "name": "B23",
+        "type": "worktop",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [22,1]
+        ],
+        "up": "worktop",
+        "down": "worktop",
+        "left": "window",
+        "right": "floor"
+    },
+    "B24": {
+        "name": "B24",
+        "type": "worktop",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [23,1]
+        ],
+        "up": "worktop",
+        "down": "worktop",
+        "left": "wall",
+        "right": "floor"
+    },
+    "B25": {
+        "name": "B25",
+        "type": "worktop",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [24,1]
+        ],
+        "up": "worktop",
+        "down": "worktop",
+        "left": "window",
+        "right": "floor"
+    },
+    "B26": {
+        "name": "B26",
+        "type": "worktop",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [25,1]
+        ],
+        "up": "worktop",
+        "down": "worktop",
+        "left": "wall",
+        "right": "floor"
+    },
+    "B27": {
+        "name": "B27",
+        "type": "worktop",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [26,1]
+        ],
+        "up": "worktop",
+        "down": "wall",
+        "left": "wall",
+        "right": "worktop"
+    },
+    "B28": {
+        "name": "B28",
+        "type": "shower",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [27,1]
+        ],
+        "up": "wall",
+        "down": "bathroom",
+        "left": "wall",
+        "right": "wall"
+    },
+    "B29": {
+        "name": "B29",
+        "type": "bathroom",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [28,1]
+        ],
+        "up": "shower",
+        "down": "bathroom",
+        "left": "wall",
+        "right": "wall"
+    },
+    "B30": {
+        "name": "B30",
+        "type": "bathroom",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [29,1]
+        ],
+        "up": "bathroom",
+        "down": "bathroom",
+        "left": "wall",
+        "right": "door"
+    },
+    "B31": {
+        "name": "B31",
+        "type": "bathroom",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [30,1]
+        ],
+        "up": "bathroom",
+        "down": "bathroom",
+        "left": "wall",
+        "right": "wall"
+    },
+    "B32": {
+        "name": "B32",
+        "type": "bathroom",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [31,1]
+        ],
+        "up": "bathroom",
+        "down": "wall",
+        "left": "wall",
+        "right": "wall"
+    },
+    "B33": {
+        "name": "B33",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [31,1]
+        ],
+        "up": "wall",
+        "down": "wall",
+        "left": "wall",
+        "right": "floor"
+    },
+    "C1": {
+        "name": "C1",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [0,2]
+        ],
+        "up": "fence",
+        "down": "rock",
+        "left": "ground",
+        "right": "ground"
+    },
+    "C2": {
+        "name": "C2",
+        "type": "rock",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [1,2]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+    "C3": {
+        "name": "C3",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [2,2]
+        ],
+        "up": "rock",
+        "down": "wall",
+        "left": "ground",
+        "right": "rock"
+    },
+    "C4": {
+        "name": "C4",
+        "type": "bed",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [3,2]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "bed",
+        "right": "floor"
+    },
+    "C5": {
+        "name": "C5",
+        "type": "floor",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [4,2]
+        ],
+        "up": "bed",
+        "down": "door",
+        "left": "floor",
+        "right": "floor"
+    },
+    "C6": {
+        "name": "C6",
+        "type": "bathroom",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [5,2]
+        ],
+        "up": "door",
+        "down": "bathroom",
+        "left": "bathroom",
+        "right": "wall"
+    },
+    "C7": {
+        "name": "C7",
+        "type": "bathroom",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [6,2]
+        ],
+        "up": "bathroom",
+        "down": "wall",
+        "left": "shower",
+        "right": "wall"
+    },
+    "C8": {
+        "name": "C8",
+        "type": "shower",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [7,2]
+        ],
+        "up": "wall",
+        "down": "bathroom",
+        "left": "bathroom",
+        "right": "wall"
+    },
+    "C9": {
+        "name": "C9",
+        "type": "bathroom",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [8,2]
+        ],
+        "up": "shower",
+        "down": "door",
+        "left": "bathroom",
+        "right": "wall"
+    },
+    "C10": {
+        "name": "C10",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [9,2]
+        ],
+        "up": "door",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+    "C11": {
+        "name": "C11",
+        "type": "bed",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [10,2]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "bed",
+        "right": "floor"
+    },
+    "C12": {
+        "name": "C12",
+        "type": "bed",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [11,2]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "bed",
+        "right": "floor"
+    },
+    "C13": {
+        "name": "C13",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [12,2]
+        ],
+        "up": "bed",
+        "down": "door",
+        "left": "floor",
+        "right": "floor"
+    },
+    "C14": {
+        "name": "C14",
+        "type": "bathroom",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [13,2]
+        ],
+        "up": "door",
+        "down": "shower",
+        "left": "bathroom",
+        "right": "wall"
+    },
+    "C15": {
+        "name": "C15",
+        "type": "shower",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [14,2]
+        ],
+        "up": "bathroom",
+        "down": "wall",
+        "left": "bathroom",
+        "right": "wall"
+    },
+    "C16": {
+        "name": "C16",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [15,2]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "bed",
+        "right": "bed"
+    },
+    "C17": {
+        "name": "C17",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [16,2]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "bed",
+        "right": "bed"
+    },
+    "C18": {
+        "name": "C18",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [17,2]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "C19": {
+        "name": "C19",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [18,2]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "closet",
+        "right": "floor"
+    },
+    "C20": {
+        "name": "C20",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [19,2]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "closet",
+        "right": "floor"
+    },
+    "C21": {
+        "name": "C21",
+        "type": "worktop",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [20,2]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "worktop",
+        "right": "worktop"
+    },
+    "C22": {
+        "name": "C22",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [21,2]
+        ],
+        "up": "worktop",
+        "down": "floor",
+        "left": "worktop",
+        "right": "floor"
+    },
+    "C23": {
+        "name": "C23",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [22,2]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "worktop",
+        "right": "floor"
+    },
+    "C24": {
+        "name": "C24",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [23,2]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "worktop",
+        "right": "floor"
+    },
+    "C25": {
+        "name": "C25",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [24,2]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "worktop",
+        "right": "floor"
+    },
+    "C26": {
+        "name": "C26",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [25,2]
+        ],
+        "up": "floor",
+        "down": "worktop",
+        "left": "worktop",
+        "right": "floor"
+    },
+    "C27": {
+        "name": "C27",
+        "type": "worktop",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [26,2]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "worktop",
+        "right": "floor"
+    },
+    "C28": {
+        "name": "C28",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [27,2]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "wall",
+        "right": "bed"
+    },
+    "C29": {
+        "name": "C29",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [28,2]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "bed"
+    },
+    "C30": {
+        "name": "C30",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [29,2]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "door",
+        "right": "floor"
+    },
+    "C31": {
+        "name": "C31",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [30,2]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "floor"
+    },
+    "C32": {
+        "name": "C32",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [31,2]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "wall",
+        "right": "floor"
+    },
+    "C33": {
+        "name": "C33",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [32,2]
+        ],
+        "up": "wall",
+        "down": "wall",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D1": {
+        "name": "D1",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [0,3]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+    "D2": {
+        "name": "D2",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [1,3]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "rock",
+        "right": "ground"
+    },
+    "D3": {
+        "name": "D3",
+        "type": "rock",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [2,3]
+        ],
+        "up": "ground",
+        "down": "wall",
+        "left": "ground",
+        "right": "ground"
+    },
+    "D4": {
+        "name": "D4",
+        "type": "floor",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [3,3]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "bed",
+        "right": "closet"
+    },
+    "D5": {
+        "name": "D5",
+        "type": "floor",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [4,3]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D6": {
+        "name": "D6",
+        "type": "floor",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [5,3]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "bed"
+    },
+    "D7": {
+        "name": "D7",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [6,3]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "wall",
+        "right": "bed"
+    },
+    "D8": {
+        "name": "D8",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [7,3]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "wall",
+        "right": "closet"
+    },
+    "D9": {
+        "name": "D9",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [8,3]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "floor"
+    },
+    "D10": {
+        "name": "D10",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [9,3]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "bed"
+    },
+    "D11": {
+        "name": "D11",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [10,3]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "bed",
+        "right": "bed"
+    },
+    "D12": {
+        "name": "D12",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [11,3]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "bed",
+        "right": "floor"
+    },
+    "D13": {
+        "name": "D13",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [12,3]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D14": {
+        "name": "D14",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [13,3]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "floor"
+    },
+    "D15": {
+        "name": "D15",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [14,3]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "wall",
+        "right": "floor"
+    },
+    "D16": {
+        "name": "D16",
+        "type": "bed",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [15,3]
+        ],
+        "up": "wall",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D17": {
+        "name": "D17",
+        "type": "bed",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [16,3]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D18": {
+        "name": "D18",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [17,3]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D19": {
+        "name": "D19",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [18,3]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D20": {
+        "name": "D20",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [19,3]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "bed"
+    },
+    "D21": {
+        "name": "D21",
+        "type": "worktop",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [20,3]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "worktop",
+        "right": "worktop"
+    },
+    "D22": {
+        "name": "D22",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [21,3]
+        ],
+        "up": "worktop",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D23": {
+        "name": "D23",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [22,3]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D24": {
+        "name": "D24",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [23,3]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D25": {
+        "name": "D25",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [24,3]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D26": {
+        "name": "D26",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [25,3]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D27": {
+        "name": "D27",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [26,3]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "worktop",
+        "right": "worktop"
+    },
+    "D28": {
+        "name": "D28",
+        "type": "bed",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [27,3]
+        ],
+        "up": "wall",
+        "down": "bed",
+        "left": "floor",
+        "right": "bed"
+    },
+    "D29": {
+        "name": "D29",
+        "type": "bed",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [28,3]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "floor",
+        "right": "bed"
+    },
+    "D30": {
+        "name": "D30",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [29,3]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D31": {
+        "name": "D31",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [30,3]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D32": {
+        "name": "D32",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [31,3]
+        ],
+        "up": "floor",
+        "down": "window",
+        "left": "floor",
+        "right": "floor"
+    },
+    "D33": {
+        "name": "D33",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [32,3]
+        ],
+        "up": "window",
+        "down": "wall",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E1": {
+        "name": "E1",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [0,4]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+    "E2": {
+        "name": "E2",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [1,4]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "rock"
+    },
+    "E3": {
+        "name": "E3",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [2,4]
+        ],
+        "up": "ground",
+        "down": "wall",
+        "left": "rock",
+        "right": "ground"
+    },
+    "E4": {
+        "name": "E4",
+        "type": "closet",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [3,4]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "floor",
+        "right": "closet"
+    },
+    "E5": {
+        "name": "E5",
+        "type": "floor",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [4,4]
+        ],
+        "up": "closet",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E6": {
+        "name": "E6",
+        "type": "bed",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [5,4]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "bed"
+    },
+    "E7": {
+        "name": "E7",
+        "type": "bed",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [6,4]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "floor",
+        "right": "bed"
+    },
+    "E8": {
+        "name": "E8",
+        "type": "closet",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [7,4]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "floor",
+        "right": "closet"
+    },
+    "E9": {
+        "name": "E9",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [8,4]
+        ],
+        "up": "closet",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E10": {
+        "name": "E10",
+        "type": "bed",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [9,4]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "bed"
+    },
+    "E11": {
+        "name": "E11",
+        "type": "bed",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [10,4]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "floor",
+        "right": "bed"
+    },
+    "E12": {
+        "name": "E12",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [11,4]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E13": {
+        "name": "E13",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [12,4]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "bed"
+    },
+    "E14": {
+        "name": "E14",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [13,4]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "bed"
+    },
+    "E15": {
+        "name": "E15",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [14,4]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E16": {
+        "name": "E16",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [15,4]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "bed",
+        "right": "floor"
+    },
+    "E17": {
+        "name": "E17",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [16,4]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "bed",
+        "right": "bed"
+    },
+    "E18": {
+        "name": "E18",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [17,4]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "bed"
+    },
+    "E19": {
+        "name": "E19",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [18,4]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E20": {
+        "name": "E20",
+        "type": "bed",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [19,4]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "bed"
+    },
+    "E21": {
+        "name": "E21",
+        "type": "worktop",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [20,4]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "worktop",
+        "right": "floor"
+    },
+    "E22": {
+        "name": "E22",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [21,4]
+        ],
+        "up": "worktop",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E23": {
+        "name": "E23",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [22,4]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E24": {
+        "name": "E24",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [23,4]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E25": {
+        "name": "E25",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [24,4]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E26": {
+        "name": "E26",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [25,4]
+        ],
+        "up": "floor",
+        "down": "worktop",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E27": {
+        "name": "E27",
+        "type": "worktop",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [26,4]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E28": {
+        "name": "E28",
+        "type": "bed",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [27,4]
+        ],
+        "up": "wall",
+        "down": "bed",
+        "left": "bed",
+        "right": "wall"
+    },
+    "E29": {
+        "name": "E29",
+        "type": "bed",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [28,4]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "bed",
+        "right": "wall"
+    },
+    "E30": {
+        "name": "E30",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [29,4]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E31": {
+        "name": "E31",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [30,4]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E32": {
+        "name": "E32",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [31,4]
+        ],
+        "up": "floor",
+        "down": "window",
+        "left": "floor",
+        "right": "floor"
+    },
+    "E33": {
+        "name": "E33",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [32,4]
+        ],
+        "up": "window",
+        "down": "wall",
+        "left": "floor",
+        "right": "floor"
+    },
+    "F1": {
+        "name": "F1",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [0,5]
+        ],
+        "up": "fence",
+        "down": "rock",
+        "left": "ground",
+        "right": "ground"
+    },
+    "F2": {
+        "name": "F2",
+        "type": "rock",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [1,5]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "rock"
+    },
+    "F3": {
+        "name": "F3",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [2,5]
+        ],
+        "up": "rock",
+        "down": "wall",
+        "left": "ground",
+        "right": "ground"
+    },
+    "F4": {
+        "name": "F4",
+        "type": "closet",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [3,5]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "closet",
+        "right": "floor"
+    },
+    "F5": {
+        "name": "F5",
+        "type": "floor",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [4,5]
+        ],
+        "up": "closet",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+    "F6": {
+        "name": "F6",
+        "type": "bed",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [5,5]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "bed",
+        "right": "floor"
+    },
+    "F7": {
+        "name": "F7",
+        "type": "bed",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [6,5]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "bed",
+        "right": "floor"
+    },
+    "F8": {
+        "name": "F8",
+        "type": "closet",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [7,5]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "closet",
+        "right": "floor"
+    },
+    "F9": {
+        "name": "F9",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [8,5]
+        ],
+        "up": "closet",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+    "F10": {
+        "name": "F10",
+        "type": "bed",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [9,5]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "bed",
+        "right": "floor"
+    },
+    "F11": {
+        "name": "F11",
+        "type": "bed",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [10,5]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "bed",
+        "right": "floor"
+    },
+    "F12": {
+        "name": "F12",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [11,5]
+        ],
+        "up": "wall",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+    "F13": {
+        "name": "F13",
+        "type": "bed",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [12,5]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "bed"
+    },
+    "F14": {
+        "name": "F14",
+        "type": "bed",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [13,5]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "floor",
+        "right": "bed"
+    },
+    "F15": {
+        "name": "F15",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [14,5]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "floor",
+        "right": "floor"
+    },
+    "F16": {
+        "name": "F16",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [15,5]
+        ],
+        "up": "wall",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+    "F17": {
+        "name": "F17",
+        "type": "bed",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [18,5]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "bed"
+    },
+    "F18": {
+        "name": "F18",
+        "type": "bed",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [17,5]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "floor",
+        "right": "bed"
+    },
+    "F19": {
+        "name": "F19",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [18,5]
+        ],
+        "up": "bed",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+    "F20": {
+        "name": "F20",
+        "type": "bed",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [19,5]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "bed",
+        "right": "floor"
+    },
+    "F21": {
+        "name": "F21",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [20,5]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "worktop",
+        "right": "worktop"
+    },
+    "F22": {
+        "name": "F22",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [21,5]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "worktop"
+    },
+    "F23": {
+        "name": "F23",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [22,5]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "F24": {
+        "name": "F24",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [23,5]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "F25": {
+        "name": "F25",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [24,5]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "F26": {
+        "name": "F26",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [25,5]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "F27": {
+        "name": "F27",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [26,5]
+        ],
+        "up": "floor",
+        "down": "door",
+        "left": "worktop",
+        "right": "floor"
+    },
+    "F28": {
+        "name": "F28",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [27,5]
+        ],
+        "up": "door",
+        "down": "floor",
+        "left": "wall",
+        "right": "closet"
+    },
+    "F29": {
+        "name": "F29",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [28,5]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "wall",
+        "right": "closet"
+    },
+    "F30": {
+        "name": "F30",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [29,5]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "floor",
+        "right": "fence"
+    },
+    "F31": {
+        "name": "F31",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [30,5]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "fence"
+    },
+    "F32": {
+        "name": "F32",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [31,5]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "floor"
+    },
+    "F33": {
+        "name": "F33",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [32,5]
+        ],
+        "up": "wall",
+        "down": "wall",
+        "left": "floor",
+        "right": "floor"
+    },
+    "G1": {
+        "name": "G1",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [0,6]
+        ],
+        "up": "fence",
+        "down": "rock",
+        "left": "ground",
+        "right": "ground"
+    },
+    "G2": {
+        "name": "G2",
+        "type": "rock",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [1,6]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "ground"
+    },
+    "G3": {
+        "name": "G3",
+        "type": "ground",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [2,6]
+        ],
+        "up": "rock",
+        "down": "wall",
+        "left": "ground",
+        "right": "ground"
+    },
+    "G4": {
+        "name": "G4",
+        "type": "floor",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [3,6]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "closet",
+        "right": "wall"
+    },
+    "G5": {
+        "name": "G5",
+        "type": "floor",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [4,6]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "door"
+    },
+    "G6": {
+        "name": "G6",
+        "type": "floor",
+        "belongCuadrant": "A",
+        "coordinates": [
+            [5,6]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "bed",
+        "right": "wall"
+    },
+    "G7": {
+        "name": "G7",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [6,6]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "bed",
+        "right": "wall"
+    },
+    "G8": {
+        "name": "G8",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [7,6]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "closet",
+        "right": "wall"
+    },
+    "G9": {
+        "name": "G9",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [8,6]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "door"
+    },
+    "G10": {
+        "name": "G10",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [9,6]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "bed",
+        "right": "wall"
+    },
+    "G11": {
+        "name": "G11",
+        "type": "floor",
+        "belongCuadrant": "D",
+        "coordinates": [
+            [10,6]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "bed",
+        "right": "wall"
+    },
+    "G12": {
+        "name": "G12",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [11,6]
+        ],
+        "up": "wall",
+        "down": "bed",
+        "left": "floor",
+        "right": "wall"
+    },
+    "G13": {
+        "name": "G13",
+        "type": "bed",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [12,6]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "bed",
+        "right": "wall"
+    },
+    "G14": {
+        "name": "G14",
+        "type": "bed",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [13,6]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "bed",
+        "right": "wall"
+    },
+    "G15": {
+        "name": "G15",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [14,6]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "floor",
+        "right": "wall"
+    },
+    "G16": {
+        "name": "G16",
+        "type": "floor",
+        "belongCuadrant": "G",
+        "coordinates": [
+            [15,6]
+        ],
+        "up": "wall",
+        "down": "bed",
+        "left": "floor",
+        "right": "wall"
+    },
+    "G17": {
+        "name": "G17",
+        "type": "bed",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [16,6]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "bed",
+        "right": "wall"
+    },
+    "G18": {
+        "name": "G18",
+        "type": "bed",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [17,6]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "bed",
+        "right": "wall"
+    },
+    "G19": {
+        "name": "G19",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [18,6]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "floor",
+        "right": "door"
+    },
+    "G20": {
+        "name": "G20",
+        "type": "floor",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [19,6]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "bed",
+        "right": "wall"
+    },
+    "G21": {
+        "name": "G21",
+        "type": "worktop",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [20,6]
+        ],
+        "up": "wall",
+        "down": "worktop",
+        "left": "floor",
+        "right": "wall"
+    },
+    "G22": {
+        "name": "G22",
+        "type": "worktop",
+        "belongCuadrant": "J",
+        "coordinates": [
+            [21,6]
+        ],
+        "up": "worktop",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+    "G23": {
+        "name": "G23",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [22,6]
+        ],
+        "up": "worktop",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+    "G24": {
+        "name": "G24",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [23,6]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "door"
+    },
+    "G25": {
+        "name": "G25",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [24,6]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "door"
+    },
+    "G26": {
+        "name": "G26",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [25,6]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+    "G27": {
+        "name": "G27",
+        "type": "floor",
+        "belongCuadrant": "M",
+        "coordinates": [
+            [26,6]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "wall"
+    },
+    "G28": {
+        "name": "G28",
+        "type": "closet",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [27,6]
+        ],
+        "up": "wall",
+        "down": "closet",
+        "left": "floor",
+        "right": "wall"
+    },
+    "G29": {
+        "name": "G29",
+        "type": "closet",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [28,6]
+        ],
+        "up": "closet",
+        "down": "wall",
+        "left": "floor",
+        "right": "wall"
+    },
+    "G30": {
+        "name": "G30",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [29,6]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "fence",
+        "right": "wall"
+    },
+    "G31": {
+        "name": "G31",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [30,6]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "fence",
+        "right": "wall"
+    },
+    "G32": {
+        "name": "G32",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [31,6]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "door"
+    },
+    "G33": {
+        "name": "G33",
+        "type": "floor",
+        "belongCuadrant": "P",
+        "coordinates": [
+            [32,6]
+        ],
+        "up": "wall",
+        "down": "wall",
+        "left": "floor",
+        "right": "floor"
+    },
+    "H1": {
+        "name": "H1",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [0,7]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+    "H2": {
+        "name": "H2",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [1,7]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "ground"
+    },
+    "H3": {
+        "name": "H3",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [2,7]
+        ],
+        "up": "ground",
+        "down": "window",
+        "left": "ground",
+        "right": "rock"
+    },
+    "H4": {
+        "name": "H4",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [3,7]
+        ],
+        "up": "window",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H5": {
+        "name": "H5",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [4,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "door",
+        "right": "door"
+    },
+    "H6": {
+        "name": "H6",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [5,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H7": {
+        "name": "H7",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [6,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H8": {
+        "name": "H8",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [7,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H9": {
+        "name": "H9",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [8,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "door",
+        "right": "door"
+    },
+    "H10": {
+        "name": "H10",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [9,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H11": {
+        "name": "H11",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [10,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H12": {
+        "name": "H12",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [11,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H13": {
+        "name": "H13",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [12,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H14": {
+        "name": "H14",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [13,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H15": {
+        "name": "H15",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [14,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "door"
+    },
+    "H16": {
+        "name": "H16",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [15,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H17": {
+        "name": "H17",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [16,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H18": {
+        "name": "H18",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [17,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "door"
+    },
+    "H19": {
+        "name": "H19",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [18,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "door",
+        "right": "wall"
+    },
+    "H20": {
+        "name": "H20",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [19,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H21": {
+        "name": "H21",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [20,7]
+        ],
+        "up": "floor",
+        "down": "door",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H22": {
+        "name": "H22",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [21,7]
+        ],
+        "up": "door",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H23": {
+        "name": "H23",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [22,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "window"
+    },
+    "H24": {
+        "name": "H24",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [23,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "door",
+        "right": "door"
+    },
+    "H25": {
+        "name": "H25",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [24,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "door",
+        "right": "door"
+    },
+    "H26": {
+        "name": "H26",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [25,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H27": {
+        "name": "H27",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [26,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "window"
+    },
+    "H28": {
+        "name": "H28",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [27,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "window"
+    },
+    "H29": {
+        "name": "H29",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [28,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "wall"
+    },
+    "H30": {
+        "name": "H30",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [29,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "window"
+    },
+    "H31": {
+        "name": "H31",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [30,7]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "window"
+    },
+    "H32": {
+        "name": "H32",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [31,7]
+        ],
+        "up": "floor",
+        "down": "door",
+        "left": "door",
+        "right": "wall"
+    },
+    "H33": {
+        "name": "H33",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [32,7]
+        ],
+        "up": "door",
+        "down": "fence",
+        "left": "floor",
+        "right": "grass"
+    },
+    "I1": {
+        "name": "I1",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [0,8]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "ground",
+        "right": "rock"
+    },
+    "I2": {
+        "name": "I2",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [1,8]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "ground",
+        "right": "ground"
+    },
+    "I3": {
+        "name": "I3",
+        "type": "rock",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [2,8]
+        ],
+        "up": "ground",
+        "down": "wall",
+        "left": "ground",
+        "right": "ground"
+    },
+    "I4": {
+        "name": "I4",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [3,8]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "wall",
+        "right": "bed"
+    },
+    "I5": {
+        "name": "I5",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [4,8]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "door",
+        "right": "floor"
+    },
+    "I6": {
+        "name": "I6",
+        "type": "bed",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [5,8]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "wall",
+        "right": "floor"
+    },
+    "I7": {
+        "name": "I7",
+        "type": "bed",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [6,8]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "wall",
+        "right": "floor"
+    },
+    "I8": {
+        "name": "I8",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [7,8]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "wall",
+        "right": "closet"
+    },
+    "I9": {
+        "name": "I9",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [8,8]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "door",
+        "right": "floor"
+    },
+    "I10": {
+        "name": "I10",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [9,8]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "bed"
+    },
+    "I11": {
+        "name": "I11",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [10,8]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "wall",
+        "right": "bed"
+    },
+    "I12": {
+        "name": "I12",
+        "type": "bed",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [11,8]
+        ],
+        "up": "wall",
+        "down": "bed",
+        "left": "wall",
+        "right": "floor"
+    },
+    "I13": {
+        "name": "I13",
+        "type": "bed",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [12,8]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "wall",
+        "right": "floor"
+    },
+    "I14": {
+        "name": "I14",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [13,8]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "wall",
+        "right": "floor"
+    },
+    "I15": {
+        "name": "I15",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [14,8]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "door",
+        "right": "floor"
+    },
+    "I16": {
+        "name": "I16",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [15,8]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "wall",
+        "right": "floor"
+    },
+    "I17": {
+        "name": "I17",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [16,8]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "wall",
+        "right": "closet"
+    },
+    "I18": {
+        "name": "I18",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [17,8]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "door",
+        "right": "floor"
+    },
+    "I19": {
+        "name": "I19",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [18,8]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "floor"
+    },
+    "I20": {
+        "name": "I20",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [19,8]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "bed"
+    },
+    "I21": {
+        "name": "I21",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [20,8]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "wall",
+        "right": "bed"
+    },
+    "I22": {
+        "name": "I22",
+        "type": "couch",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [21,8]
+        ],
+        "up": "wall",
+        "down": "couch",
+        "left": "wall",
+        "right": "closet"
+    },
+    "I23": {
+        "name": "I23",
+        "type": "couch",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [22,8]
+        ],
+        "up": "couch",
+        "down": "floor",
+        "left": "window",
+        "right": "floor"
+    },
+    "I24": {
+        "name": "I24",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [23,8]
+        ],
+        "up": "couch",
+        "down": "floor",
+        "left": "door",
+        "right": "floor"
+    },
+    "I25": {
+        "name": "I25",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [24,8]
+        ],
+        "up": "floor",
+        "down": "couch",
+        "left": "door",
+        "right": "floor"
+    },
+    "I26": {
+        "name": "I26",
+        "type": "couch",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [25,8]
+        ],
+        "up": "floor",
+        "down": "couch",
+        "left": "wall",
+        "right": "floor"
+    },
+    "I27": {
+        "name": "I27",
+        "type": "couch",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [26,8]
+        ],
+        "up": "couch",
+        "down": "floor",
+        "left": "window",
+        "right": "floor"
+    },
+    "I28": {
+        "name": "I28",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [27,8]
+        ],
+        "up": "couch",
+        "down": "floor",
+        "left": "window",
+        "right": "floor"
+    },
+    "I29": {
+        "name": "I29",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [28,8]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "table"
+    },
+    "I30": {
+        "name": "I30",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [29,8]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "window",
+        "right": "table"
+    },
+    "I31": {
+        "name": "I31",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [30,8]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "window",
+        "right": "table"
+    },
+    "I32": {
+        "name": "I32",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [31,8]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "wall",
+        "right": "floor"
+    },
+    "I33": {
+        "name": "I33",
+        "type": "grass",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [32,8]
+        ],
+        "up": "wall",
+        "down": "fence",
+        "left": "floor",
+        "right": "grass"
+    },
+    "J1": {
+        "name": "J1",
+        "type": "rock",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [0,9]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+    "J2": {
+        "name": "J2",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [1,9]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "ground",
+        "right": "rock"
+    },
+    "J3": {
+        "name": "J3",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [2,9]
+        ],
+        "up": "ground",
+        "down": "window",
+        "left": "rock",
+        "right": "ground"
+    },
+    "J4": {
+        "name": "J4",
+        "type": "bed",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [3,9]
+        ],
+        "up": "window",
+        "down": "floor",
+        "left": "floor",
+        "right": "bed"
+    },
+    "J5": {
+        "name": "J5",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [4,9]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J6": {
+        "name": "J6",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [5,9]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "bed",
+        "right": "floor"
+    },
+    "J7": {
+        "name": "J7",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [6,9]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "bed",
+        "right": "floor"
+    },
+    "J8": {
+        "name": "J8",
+        "type": "closet",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [7,9]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "floor",
+        "right": "closet"
+    },
+    "J9": {
+        "name": "J9",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [8,9]
+        ],
+        "up": "closet",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J10": {
+        "name": "J10",
+        "type": "bed",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [9,9]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "bed"
+    },
+    "J11": {
+        "name": "J11",
+        "type": "bed",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [10,9]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "floor",
+        "right": "bed"
+    },
+    "J12": {
+        "name": "J12",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [11,9]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "bed",
+        "right": "bed"
+    },
+    "J13": {
+        "name": "J13",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [12,9]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "bed",
+        "right": "bed"
+    },
+    "J14": {
+        "name": "J14",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [13,9]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J15": {
+        "name": "J15",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [14,9]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J16": {
+        "name": "J16",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [15,9]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J17": {
+        "name": "J17",
+        "type": "closet",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [16,9]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "floor",
+        "right": "closet"
+    },
+    "J18": {
+        "name": "J18",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [17,9]
+        ],
+        "up": "closet",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J19": {
+        "name": "J19",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [18,9]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J20": {
+        "name": "J20",
+        "type": "bed",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [19,9]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "bed"
+    },
+    "J21": {
+        "name": "J21",
+        "type": "bed",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [20,9]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "floor",
+        "right": "bed"
+    },
+    "J22": {
+        "name": "J22",
+        "type": "closet",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [21,9]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "couch",
+        "right": "rock"
+    },
+    "J23": {
+        "name": "J23",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [22,9]
+        ],
+        "up": "closet",
+        "down": "floor",
+        "left": "couch",
+        "right": "table"
+    },
+    "J24": {
+        "name": "J24",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [23,9]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J25": {
+        "name": "J25",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [24,9]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J26": {
+        "name": "J26",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [25,9]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "couch",
+        "right": "floor"
+    },
+    "J27": {
+        "name": "J27",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [28,9]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "couch",
+        "right": "floor"
+    },
+    "J28": {
+        "name": "J28",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [27,9]
+        ],
+        "up": "floor",
+        "down": "table",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J29": {
+        "name": "J29",
+        "type": "table",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [28,9]
+        ],
+        "up": "floor",
+        "down": "table",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J30": {
+        "name": "J30",
+        "type": "table",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [29,9]
+        ],
+        "up": "table",
+        "down": "table",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J31": {
+        "name": "J31",
+        "type": "table",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [30,9]
+        ],
+        "up": "table",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J32": {
+        "name": "J32",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [31,9]
+        ],
+        "up": "table",
+        "down": "window",
+        "left": "floor",
+        "right": "floor"
+    },
+    "J33": {
+        "name": "J33",
+        "type": "grass",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [32,9]
+        ],
+        "up": "window",
+        "down": "fence",
+        "left": "grass",
+        "right": "grass"
+    },
+	"K1": {
+        "name": "K1",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [0,10]
+        ],
+        "up": "fence",
+        "down": "rock",
+        "left": "rock",
+        "right": "ground"
+    },
+	"K2": {
+        "name": "K2",
+        "type": "rock",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [1,10]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"K3": {
+        "name": "K3",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [2,10]
+        ],
+        "up": "rock",
+        "down": "wall",
+        "left": "ground",
+        "right": "rock"
+    },
+	"K4": {
+        "name": "K4",
+        "type": "bed",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [3,10]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "bed",
+        "right": "floor"
+    },
+	"K5": {
+        "name": "K5",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [4,10]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K6": {
+        "name": "K6",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [5,10]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "bed"
+    },
+	"K7": {
+        "name": "K7",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [6,10]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "bed"
+    },
+	"K8": {
+        "name": "K8",
+        "type": "closet",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [7,10]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "closet",
+        "right": "floor"
+    },
+	"K9": {
+        "name": "K9",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [8,10]
+        ],
+        "up": "closet",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K10": {
+        "name": "K10",
+        "type": "bed",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [9,10]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "bed",
+        "right": "floor"
+    },
+	"K11": {
+        "name": "K11",
+        "type": "bed",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [10,10]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "bed",
+        "right": "floor"
+    },
+	"K12": {
+        "name": "K12",
+        "type": "bed",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [11,10]
+        ],
+        "up": "wall",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K13": {
+        "name": "K13",
+        "type": "bed",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [12,10]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K14": {
+        "name": "K14",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [13,10]
+        ],
+        "up": "bed",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K15": {
+        "name": "K15",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [14,10]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K16": {
+        "name": "K16",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [15,10]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K17": {
+        "name": "K17",
+        "type": "closet",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [16,10]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "closet",
+        "right": "floor"
+    },
+	"K18": {
+        "name": "K18",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [17,10]
+        ],
+        "up": "closet",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K19": {
+        "name": "K19",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [18,10]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K20": {
+        "name": "K20",
+        "type": "bed",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [19,10]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "bed",
+        "right": "floor"
+    },
+	"K21": {
+        "name": "K21",
+        "type": "bed",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [20,10]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "bed",
+        "right": "floor"
+    },
+	"K22": {
+        "name": "K22",
+        "type": "rock",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [21,10]
+        ],
+        "up": "wall",
+        "down": "table",
+        "left": "closet",
+        "right": "rock"
+    },
+	"K23": {
+        "name": "K23",
+        "type": "table",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [22,10]
+        ],
+        "up": "rock",
+        "down": "floor",
+        "left": "floor",
+        "right": "table"
+    },
+	"K24": {
+        "name": "K24",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [23,10]
+        ],
+        "up": "table",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K25": {
+        "name": "K25",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [24,10]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K26": {
+        "name": "K26",
+        "type": "",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [25,10]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K27": {
+        "name": "K27",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [26,10]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K28": {
+        "name": "K28",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [27,10]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K29": {
+        "name": "K29",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [28,10]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "table",
+        "right": "floor"
+    },
+	"K30": {
+        "name": "K30",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [29,10]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "table",
+        "right": "floor"
+    },
+	"K31": {
+        "name": "K31",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [30,10]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "table",
+        "right": "floor"
+    },
+	"K32": {
+        "name": "K32",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [31,10]
+        ],
+        "up": "floor",
+        "down": "window",
+        "left": "floor",
+        "right": "floor"
+    },
+	"K33": {
+        "name": "K33",
+        "type": "grass",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [32,10]
+        ],
+        "up": "window",
+        "down": "fence",
+        "left": "grass",
+        "right": "grass"
+    },
+    "L1": {
+        "name": "L1",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [0,11]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"L2": {
+        "name": "L2",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [1,11]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "rock",
+        "right": "ground"
+    },
+	"L3": {
+        "name": "L3",
+        "type": "rock",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [2,11]
+        ],
+        "up": "ground",
+        "down": "wall",
+        "left": "ground",
+        "right": "ground"
+    },
+	"L4": {
+        "name": "L4",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [3,11]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "bed",
+        "right": "floor"
+    },
+	"L5": {
+        "name": "L5",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [4,11]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+	"L6": {
+        "name": "L6",
+        "type": "bed",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [5,11]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "wall"
+    },
+	"L7": {
+        "name": "L7",
+        "type": "bed",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [6,11]
+        ],
+        "up": "bed",
+        "down": "wall",
+        "left": "floor",
+        "right": "wall"
+    },
+	"L8": {
+        "name": "L8",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [7,11]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "closet",
+        "right": "wall"
+    },
+	"L9": {
+        "name": "L9",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [8,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"L10": {
+        "name": "L10",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [9,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "bed",
+        "right": "floor"
+    },
+	"L11": {
+        "name": "L11",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [10,11]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "bed",
+        "right": "bed"
+    },
+	"L12": {
+        "name": "L12",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [11,11]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "bed",
+        "right": "floor"
+    },
+	"L13": {
+        "name": "L13",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [12,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "bed",
+        "right": "floor"
+    },
+	"L14": {
+        "name": "L14",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [13,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"L15": {
+        "name": "L15",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [14,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"L16": {
+        "name": "L16",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [15,11]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "wall"
+    },
+	"L17": {
+        "name": "L17",
+        "type": "floor",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [16,11]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "closet",
+        "right": "wall"
+    },
+	"L18": {
+        "name": "L18",
+        "type": "floor",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [17,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"L19": {
+        "name": "L19",
+        "type": "floor",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [18,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"L20": {
+        "name": "L20",
+        "type": "floor",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [19,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "bed",
+        "right": "floor"
+    },
+	"L21": {
+        "name": "L21",
+        "type": "floor",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [20,11]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "bed",
+        "right": "bed"
+    },
+	"L22": {
+        "name": "L22",
+        "type": "rock",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [21,11]
+        ],
+        "up": "wall",
+        "down": "table",
+        "left": "rock",
+        "right": "closet"
+    },
+	"L23": {
+        "name": "L23",
+        "type": "table",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [22,11]
+        ],
+        "up": "rock",
+        "down": "floor",
+        "left": "table",
+        "right": "floor"
+    },
+	"L24": {
+        "name": "L24",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [23,11]
+        ],
+        "up": "table",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"L25": {
+        "name": "L25",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [24,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"L26": {
+        "name": "L26",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [25,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"L27": {
+        "name": "L27",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [26,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"L28": {
+        "name": "L28",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [27,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"L29": {
+        "name": "L29",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [28,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "table"
+    },
+	"L30": {
+        "name": "L30",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [29,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "table"
+    },
+	"L31": {
+        "name": "L31",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [30,11]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "table"
+    },
+	"L32": {
+        "name": "L32",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [31,11]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "floor"
+    },
+	"L33": {
+        "name": "L33",
+        "type": "grass",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [32,11]
+        ],
+        "up": "wall",
+        "down": "fence",
+        "left": "grass",
+        "right": "grass"
+    },
+    "M1": {
+        "name": "M1",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [0,12]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "ground",
+        "right": "fence"
+    },
+	"M2": {
+        "name": "M2",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [1,12]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "fence"
+    },
+	"M3": {
+        "name": "M3",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [2,12]
+        ],
+        "up": "ground",
+        "down": "window",
+        "left": "rock",
+        "right": "ground"
+    },
+	"M4": {
+        "name": "M4",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [3,12]
+        ],
+        "up": "window",
+        "down": "floor",
+        "left": "floor",
+        "right": "closet"
+    },
+	"M5": {
+        "name": "M5",
+        "type": "floor",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [4,12]
+        ],
+        "up": "floor",
+        "down": "door",
+        "left": "floor",
+        "right": "closet"
+    },
+	"M6": {
+        "name": "M6",
+        "type": "bathroom",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [5,12]
+        ],
+        "up": "door",
+        "down": "shower",
+        "left": "wall",
+        "right": "bathroom"
+    },
+	"M7": {
+        "name": "M7",
+        "type": "shower",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [6,12]
+        ],
+        "up": "bathroom",
+        "down": "wall",
+        "left": "wall",
+        "right": "bathroom"
+    },
+	"M8": {
+        "name": "M8",
+        "type": "bathroom",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [7,12]
+        ],
+        "up": "wall",
+        "down": "bathroom",
+        "left": "wall",
+        "right": "shower"
+    },
+	"M9": {
+        "name": "M9",
+        "type": "bathroom",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [8,12]
+        ],
+        "up": "bathroom",
+        "down": "door",
+        "left": "wall",
+        "right": "bathroom"
+    },
+	"M10": {
+        "name": "M10",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [9,12]
+        ],
+        "up": "door",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M11": {
+        "name": "M11",
+        "type": "bed",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [10,12]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "bed"
+    },
+	"M12": {
+        "name": "M12",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [11,12]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M13": {
+        "name": "M13",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [12,12]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M14": {
+        "name": "M14",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [13,12]
+        ],
+        "up": "floor",
+        "down": "door",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M15": {
+        "name": "M15",
+        "type": "bathroom",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [14,12]
+        ],
+        "up": "door",
+        "down": "bathroom",
+        "left": "wall",
+        "right": "bathroom"
+    },
+	"M16": {
+        "name": "M16",
+        "type": "bathroom",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [15,12]
+        ],
+        "up": "bathroom",
+        "down": "wall",
+        "left": "wall",
+        "right": "shower"
+    },
+	"M17": {
+        "name": "M17",
+        "type": "shower",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [16,12]
+        ],
+        "up": "wall",
+        "down": "bathroom",
+        "left": "wall",
+        "right": "bathroom"
+    },
+	"M18": {
+        "name": "M18",
+        "type": "bathroom",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [17,12]
+        ],
+        "up": "shower",
+        "down": "door",
+        "left": "wall",
+        "right": "bathroom"
+    },
+	"M19": {
+        "name": "M19",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [18,12]
+        ],
+        "up": "door",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M20": {
+        "name": "M20",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [19,12]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M21": {
+        "name": "M21",
+        "type": "bed",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [20,12]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "bed"
+    },
+	"M22": {
+        "name": "M22",
+        "type": "closet",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [21,12]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "rock",
+        "right": "table"
+    },
+	"M23": {
+        "name": "M23",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [22,12]
+        ],
+        "up": "closet",
+        "down": "floor",
+        "left": "table",
+        "right": "couch"
+    },
+	"M24": {
+        "name": "M24",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [23,12]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "couch"
+    },
+	"M25": {
+        "name": "M25",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [24,12]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M26": {
+        "name": "M26",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [25,12]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M27": {
+        "name": "M27",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [26,12]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M28": {
+        "name": "M28",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [27,12]
+        ],
+        "up": "floor",
+        "down": "table",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M29": {
+        "name": "M29",
+        "type": "table",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [28,12]
+        ],
+        "up": "floor",
+        "down": "table",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M30": {
+        "name": "M30",
+        "type": "table",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [29,12]
+        ],
+        "up": "table",
+        "down": "table",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M31": {
+        "name": "M31",
+        "type": "table",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [30,12]
+        ],
+        "up": "table",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M32": {
+        "name": "M32",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [31,12]
+        ],
+        "up": "table",
+        "down": "window",
+        "left": "floor",
+        "right": "floor"
+    },
+	"M33": {
+        "name": "M33",
+        "type": "grass",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [32,12]
+        ],
+        "up": "window",
+        "down": "fence",
+        "left": "grass",
+        "right": "grass"
+    },
+    "N1": {
+        "name": "N1",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [0,13]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "fence",
+        "right": "ground"
+    },
+	"N2": {
+        "name": "N2",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [1,13]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "fence"
+    },
+	"N3": {
+        "name": "N3",
+        "type": "ground",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [2,13]
+        ],
+        "up": "ground",
+        "down": "wall",
+        "left": "ground",
+        "right": "fence"
+    },
+	"N4": {
+        "name": "N4",
+        "type": "closet",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [3,13]
+        ],
+        "up": "wall",
+        "down": "closet",
+        "left": "floor",
+        "right": "wall"
+    },
+	"N5": {
+        "name": "N5",
+        "type": "closet",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [4,13]
+        ],
+        "up": "closet",
+        "down": "wall",
+        "left": "floor",
+        "right": "wall"
+    },
+	"N6": {
+        "name": "N6",
+        "type": "bathroom",
+        "belongCuadrant": "B",
+        "coordinates": [
+            [5,13]
+        ],
+        "up": "wall",
+        "down": "bathroom",
+        "left": "bathroom",
+        "right": "wall"
+    },
+	"N7": {
+        "name": "N7",
+        "type": "bathroom",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [6,13]
+        ],
+        "up": "bathroom",
+        "down": "wall",
+        "left": "shower",
+        "right": "window"
+    },
+	"N8": {
+        "name": "N8",
+        "type": "shower",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [7,13]
+        ],
+        "up": "wall",
+        "down": "bathroom",
+        "left": "bathroom",
+        "right": "wall"
+    },
+	"N9": {
+        "name": "N9",
+        "type": "bathroom",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [8,13]
+        ],
+        "up": "shower",
+        "down": "wall",
+        "left": "bathroom",
+        "right": "wall"
+    },
+	"N10": {
+        "name": "N10",
+        "type": "floor",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [9,13]
+        ],
+        "up": "wall",
+        "down": "bed",
+        "left": "floor",
+        "right": "wall"
+    },
+	"N11": {
+        "name": "N11",
+        "type": "bed",
+        "belongCuadrant": "E",
+        "coordinates": [
+            [10,13]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "bed",
+        "right": "wall"
+    },
+	"N12": {
+        "name": "N12",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [11,13]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"N13": {
+        "name": "N13",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [12,13]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "window"
+    },
+	"N14": {
+        "name": "N14",
+        "type": "floor",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [13,13]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "wall"
+    },
+	"N15": {
+        "name": "N15",
+        "type": "bathroom",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [14,13]
+        ],
+        "up": "wall",
+        "down": "shower",
+        "left": "bathroom",
+        "right": "wall"
+    },
+	"N16": {
+        "name": "N16",
+        "type": "shower",
+        "belongCuadrant": "H",
+        "coordinates": [
+            [15,13]
+        ],
+        "up": "bathroom",
+        "down": "wall",
+        "left": "bathroom",
+        "right": "wall"
+    },
+	"N17": {
+        "name": "N17",
+        "type": "bathroom",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [16,13]
+        ],
+        "up": "wall",
+        "down": "bathroom",
+        "left": "shower",
+        "right": "wall"
+    },
+	"N18": {
+        "name": "N18",
+        "type": "bathroom",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [17,13]
+        ],
+        "up": "bathroom",
+        "down": "wall",
+        "left": "bathroom",
+        "right": "wall"
+    },
+	"N19": {
+        "name": "N19",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [18,13]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"N20": {
+        "name": "N20",
+        "type": "floor",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [19,13]
+        ],
+        "up": "floor",
+        "down": "bed",
+        "left": "floor",
+        "right": "window"
+    },
+	"N21": {
+        "name": "N21",
+        "type": "bed",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [20,13]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "bed",
+        "right": "wall"
+    },
+	"N22": {
+        "name": "N22",
+        "type": "table",
+        "belongCuadrant": "K",
+        "coordinates": [
+            [21,13]
+        ],
+        "up": "wall",
+        "down": "couch",
+        "left": "closet",
+        "right": "wall"
+    },
+	"N23": {
+        "name": "N23",
+        "type": "couch",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [22,13]
+        ],
+        "up": "table",
+        "down": "couch",
+        "left": "floor",
+        "right": "window"
+    },
+	"N24": {
+        "name": "N24",
+        "type": "couch",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [23,13]
+        ],
+        "up": "couch",
+        "down": "floor",
+        "left": "floor",
+        "right": "window"
+    },
+	"N25": {
+        "name": "N25",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [24,13]
+        ],
+        "up": "couch",
+        "down": "floor",
+        "left": "floor",
+        "right": "door"
+    },
+	"N26": {
+        "name": "N26",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [25,13]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"N27": {
+        "name": "N27",
+        "type": "floor",
+        "belongCuadrant": "N",
+        "coordinates": [
+            [26,13]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "window"
+    },
+	"N28": {
+        "name": "N28",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [27,13]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "window"
+    },
+	"N29": {
+        "name": "N29",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [28,13]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "table",
+        "right": "wall"
+    },
+	"N30": {
+        "name": "N30",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [29,13]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "table",
+        "right": "window"
+    },
+	"N31": {
+        "name": "N31",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [30,13]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "table",
+        "right": "window"
+    },
+	"N32": {
+        "name": "N32",
+        "type": "floor",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [31,13]
+        ],
+        "up": "floor",
+        "down": "window",
+        "left": "floor",
+        "right": "wall"
+    },
+	"N33": {
+        "name": "N33",
+        "type": "grass",
+        "belongCuadrant": "Q",
+        "coordinates": [
+            [32,13]
+        ],
+        "up": "window",
+        "down": "fence",
+        "left": "grass",
+        "right": "grass"
+    },
+    "O1": {
+        "name": "O1",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [0,14]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "ground",
+        "right": "fence"
+    },
+	"O2": {
+        "name": "O2",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [1,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "fence"
+    },
+	"O3": {
+        "name": "O3",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [2,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "fence"
+    },
+	"O4": {
+        "name": "O4",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [3,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "wall",
+        "right": "ground"
+    },
+	"O5": {
+        "name": "O5",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [4,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "wall",
+        "right": "ground"
+    },
+	"O6": {
+        "name": "O6",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [5,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "wall",
+        "right": "ground"
+    },
+	"O7": {
+        "name": "O7",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [6,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "window",
+        "right": "ground"
+    },
+	"O8": {
+        "name": "O8",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [7,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "wall",
+        "right": "ground"
+    },
+	"O9": {
+        "name": "O9",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [8,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "wall",
+        "right": "rock"
+    },
+	"O10": {
+        "name": "O10",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [9,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "window",
+        "right": "ground"
+    },
+	"O11": {
+        "name": "O11",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [10,14]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "wall",
+        "right": "ground"
+    },
+	"O12": {
+        "name": "O12",
+        "type": "rock",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [11,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "wall",
+        "right": "ground"
+    },
+	"O13": {
+        "name": "O13",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [12,14]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "window",
+        "right": "ground"
+    },
+	"O14": {
+        "name": "O14",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [13,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "wall",
+        "right": "ground"
+    },
+	"O15": {
+        "name": "O15",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [14,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "wall",
+        "right": "rock"
+    },
+	"O16": {
+        "name": "O16",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [15,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "wall",
+        "right": "ground"
+    },
+	"O17": {
+        "name": "O17",
+        "type": "rock",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [16,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "wall",
+        "right": "ground"
+    },
+	"O18": {
+        "name": "O18",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [17,14]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "wall",
+        "right": "ground"
+    },
+	"O19": {
+        "name": "O19",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [18,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "wall",
+        "right": "ground"
+    },
+	"O20": {
+        "name": "O20",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [19,14]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "window",
+        "right": "fence"
+    },
+	"O21": {
+        "name": "O21",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [20,14]
+        ],
+        "up": "ground",
+        "down": "floor",
+        "left": "wall",
+        "right": "fence"
+    },
+	"O22": {
+        "name": "O22",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [21,14]
+        ],
+        "up": "ground",
+        "down": "couch",
+        "left": "wall",
+        "right": "floor"
+    },
+	"O23": {
+        "name": "O23",
+        "type": "couch",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [22,14]
+        ],
+        "up": "floor",
+        "down": "couch",
+        "left": "window",
+        "right": "floor"
+    },
+	"O24": {
+        "name": "O24",
+        "type": "couch",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [23,14]
+        ],
+        "up": "couch",
+        "down": "floor",
+        "left": "window",
+        "right": "floor"
+    },
+	"O25": {
+        "name": "O25",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [24,14]
+        ],
+        "up": "couch",
+        "down": "floor",
+        "left": "door",
+        "right": "floor"
+    },
+	"O26": {
+        "name": "O26",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [25,14]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "wall",
+        "right": "floor"
+    },
+	"O27": {
+        "name": "O27",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [26,14]
+        ],
+        "up": "floor",
+        "down": "couch",
+        "left": "window",
+        "right": "floor"
+    },
+	"O28": {
+        "name": "O28",
+        "type": "couch",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [27,14]
+        ],
+        "up": "floor",
+        "down": "couch",
+        "left": "window",
+        "right": "floor"
+    },
+	"O29": {
+        "name": "O29",
+        "type": "couch",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [28,14]
+        ],
+        "up": "couch",
+        "down": "floor",
+        "left": "wall",
+        "right": "floor"
+    },
+	"O30": {
+        "name": "O30",
+        "type": "floor",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [29,14]
+        ],
+        "up": "couch",
+        "down": "floor",
+        "left": "window",
+        "right": "floor"
+    },
+	"O31": {
+        "name": "O31",
+        "type": "floor",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [30,14]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "window",
+        "right": "table"
+    },
+	"O32": {
+        "name": "O32",
+        "type": "floor",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [31,14]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "wall",
+        "right": "floor"
+    },
+	"O33": {
+        "name": "O33",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [32,14]
+        ],
+        "up": "wall",
+        "down": "fence",
+        "left": "grass",
+        "right": "grass"
+    },
+    "P1": {
+        "name": "P1",
+        "type": "empty",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [0,15]
+        ],
+        "up": "empty",
+        "down": "empty",
+        "left": "empty",
+        "right": "empty"
+    },
+	"P2": {
+        "name": "P2",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [1,15]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "fence",
+        "right": "ground"
+    },
+	"P3": {
+        "name": "P3",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [2,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "rock"
+    },
+	"P4": {
+        "name": "P4",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [3,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"P5": {
+        "name": "P5",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [4,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"P6": {
+        "name": "P6",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [5,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "table"
+    },
+	"P7": {
+        "name": "P7",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [6,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "table"
+    },
+	"P8": {
+        "name": "P8",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [7,15]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "ground",
+        "right": "table"
+    },
+	"P9": {
+        "name": "P9",
+        "type": "rock",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [8,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "table"
+    },
+	"P10": {
+        "name": "P10",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [9,15]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "ground",
+        "right": "table"
+    },
+	"P11": {
+        "name": "P11",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [10,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "table"
+    },
+	"P12": {
+        "name": "P12",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [11,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "table"
+    },
+	"P13": {
+        "name": "P13",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [12,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "table"
+    },
+	"P14": {
+        "name": "P14",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [13,15]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "ground",
+        "right": "table"
+    },
+	"P15": {
+        "name": "P15",
+        "type": "rock",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [14,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "table"
+    },
+	"P16": {
+        "name": "P16",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [15,15]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "ground",
+        "right": "table"
+    },
+	"P17": {
+        "name": "P17",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [16,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "ground"
+    },
+	"P18": {
+        "name": "P18",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [17,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"P19": {
+        "name": "P19",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [18,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"P20": {
+        "name": "P20",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [19,15]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "fence",
+        "right": "rock"
+    },
+	"P21": {
+        "name": "P21",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [20,15]
+        ],
+        "up": "ground",
+        "down": "wall",
+        "left": "fence",
+        "right": "ground"
+    },
+	"P22": {
+        "name": "P22",
+        "type": "floor",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [21,15]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"P23": {
+        "name": "P23",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [22,15]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "couch",
+        "right": "floor"
+    },
+	"P24": {
+        "name": "P24",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [23,15]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "couch",
+        "right": "floor"
+    },
+	"P25": {
+        "name": "P25",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [24,15]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"P26": {
+        "name": "P26",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [25,15]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "table"
+    },
+	"P27": {
+        "name": "P27",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [26,15]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"P28": {
+        "name": "P28",
+        "type": "floor",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [27,15]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "couch",
+        "right": "table"
+    },
+	"P29": {
+        "name": "P29",
+        "type": "floor",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [28,15]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "couch",
+        "right": "floor"
+    },
+	"P30": {
+        "name": "P30",
+        "type": "floor",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [29,15]
+        ],
+        "up": "floor",
+        "down": "table",
+        "left": "floor",
+        "right": "floor"
+    },
+	"P31": {
+        "name": "P31",
+        "type": "table",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [30,15]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "floor"
+    },
+	"P32": {
+        "name": "P32",
+        "type": "floor",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [31,15]
+        ],
+        "up": "table",
+        "down": "wall",
+        "left": "floor",
+        "right": "floor"
+    },
+	"P33": {
+        "name": "P33",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [32,15]
+        ],
+        "up": "wall",
+        "down": "fence",
+        "left": "grass",
+        "right": "tree"
+    },
+    "Q1": {
+        "name": "Q1",
+        "type": "empty",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [0,16]
+        ],
+        "up": "empty",
+        "down": "empty",
+        "left": "empty",
+        "right": "empty"
+    },
+	"Q2": {
+        "name": "Q2",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [1,16]
+        ],
+        "up": "fence",
+        "down": "rock",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q3": {
+        "name": "Q3",
+        "type": "rock",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [2,16]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q4": {
+        "name": "Q4",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [3,16]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q5": {
+        "name": "Q5",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [4,16]
+        ],
+        "up": "ground",
+        "down": "table",
+        "left": "ground",
+        "right": "rock"
+    },
+	"Q6": {
+        "name": "Q6",
+        "type": "table",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [5,16]
+        ],
+        "up": "ground",
+        "down": "table",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q7": {
+        "name": "Q7",
+        "type": "table",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [6,16]
+        ],
+        "up": "table",
+        "down": "table",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q8": {
+        "name": "Q8",
+        "type": "table",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [7,16]
+        ],
+        "up": "table",
+        "down": "table",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q9": {
+        "name": "Q9",
+        "type": "table",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [8,16]
+        ],
+        "up": "table",
+        "down": "table",
+        "left": "rock",
+        "right": "ground"
+    },
+	"Q10": {
+        "name": "Q10",
+        "type": "table",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [9,16]
+        ],
+        "up": "table",
+        "down": "table",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q11": {
+        "name": "Q11",
+        "type": "table",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [10,16]
+        ],
+        "up": "table",
+        "down": "table",
+        "left": "ground",
+        "right": "rock"
+    },
+	"Q12": {
+        "name": "Q12",
+        "type": "table",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [11,16]
+        ],
+        "up": "table",
+        "down": "table",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q13": {
+        "name": "Q13",
+        "type": "table",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [12,16]
+        ],
+        "up": "table",
+        "down": "table",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q14": {
+        "name": "Q14",
+        "type": "table",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [13,16]
+        ],
+        "up": "table",
+        "down": "table",
+        "left": "ground",
+        "right": "rock"
+    },
+	"Q15": {
+        "name": "Q15",
+        "type": "table",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [14,16]
+        ],
+        "up": "table",
+        "down": "table",
+        "left": "rock",
+        "right": "ground"
+    },
+	"Q16": {
+        "name": "Q16",
+        "type": "table",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [15,16]
+        ],
+        "up": "table",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q17": {
+        "name": "Q17",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [16,16]
+        ],
+        "up": "table",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q18": {
+        "name": "Q18",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [17,16]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "rock"
+    },
+	"Q19": {
+        "name": "Q19",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [18,16]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q20": {
+        "name": "Q20",
+        "type": "rock",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [19,16]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q21": {
+        "name": "Q21",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [20,16]
+        ],
+        "up": "rock",
+        "down": "wall",
+        "left": "ground",
+        "right": "ground"
+    },
+	"Q22": {
+        "name": "Q22",
+        "type": "floor",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [21,16]
+        ],
+        "up": "wall",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"Q23": {
+        "name": "Q23",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [22,16]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"Q24": {
+        "name": "Q24",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [23,16]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"Q25": {
+        "name": "Q25",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [24,16]
+        ],
+        "up": "floor",
+        "down": "table",
+        "left": "floor",
+        "right": "wall"
+    },
+	"Q26": {
+        "name": "Q26",
+        "type": "table",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [25,16]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"Q27": {
+        "name": "Q27",
+        "type": "floor",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [26,16]
+        ],
+        "up": "table",
+        "down": "table",
+        "left": "floor",
+        "right": "wall"
+    },
+	"Q28": {
+        "name": "Q28",
+        "type": "table",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [27,16]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"Q29": {
+        "name": "Q29",
+        "type": "floor",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [28,16]
+        ],
+        "up": "table",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"Q30": {
+        "name": "Q30",
+        "type": "floor",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [29,16]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "floor",
+        "right": "wall"
+    },
+	"Q31": {
+        "name": "Q31",
+        "type": "floor",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [30,16]
+        ],
+        "up": "floor",
+        "down": "floor",
+        "left": "table",
+        "right": "wall"
+    },
+	"Q32": {
+        "name": "Q32",
+        "type": "floor",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [31,16]
+        ],
+        "up": "floor",
+        "down": "wall",
+        "left": "floor",
+        "right": "wall"
+    },
+	"Q33": {
+        "name": "Q33",
+        "type": "tree",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [32,16]
+        ],
+        "up": "wall",
+        "down": "fence",
+        "left": "grass",
+        "right": "grass"
+    },
+    "R1": {
+        "name": "R1",
+        "type": "empty",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [0,17]
+        ],
+        "up": "empty",
+        "down": "empty",
+        "left": "empty",
+        "right": "empty"
+    },
+	"R2": {
+        "name": "R2",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [1,17]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"R3": {
+        "name": "R3",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [2,17]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "ground"
+    },
+	"R4": {
+        "name": "R4",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [3,17]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "ground",
+        "right": "ground"
+    },
+	"R5": {
+        "name": "R5",
+        "type": "rock",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [4,17]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"R6": {
+        "name": "R6",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [5,17]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "table",
+        "right": "rock"
+    },
+	"R7": {
+        "name": "R7",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [6,17]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "table",
+        "right": "ground"
+    },
+	"R8": {
+        "name": "R8",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [7,17]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "table",
+        "right": "ground"
+    },
+	"R9": {
+        "name": "R9",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [8,17]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "table",
+        "right": "ground"
+    },
+	"R10": {
+        "name": "R10",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [9,17]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "table",
+        "right": "ground"
+    },
+	"R11": {
+        "name": "R11",
+        "type": "rock",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [10,17]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "table",
+        "right": "ground"
+    },
+	"R12": {
+        "name": "R12",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [11,17]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "table",
+        "right": "ground"
+    },
+	"R13": {
+        "name": "R13",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [12,17]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "table",
+        "right": "ground"
+    },
+	"R14": {
+        "name": "R14",
+        "type": "rock",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [13,17]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "table",
+        "right": "ground"
+    },
+	"R15": {
+        "name": "R15",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [14,17]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "table",
+        "right": "ground"
+    },
+	"R16": {
+        "name": "R16",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [15,17]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "table",
+        "right": "rock"
+    },
+	"R17": {
+        "name": "R17",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [16,17]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "ground",
+        "right": "ground"
+    },
+	"R18": {
+        "name": "R18",
+        "type": "rock",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [17,17]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"R19": {
+        "name": "R19",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [18,17]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"R20": {
+        "name": "R20",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [19,17]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "ground"
+    },
+	"R21": {
+        "name": "R21",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [20,17]
+        ],
+        "up": "ground",
+        "down": "fence",
+        "left": "ground",
+        "right": "fence"
+    },
+	"R22": {
+        "name": "R22",
+        "type": "grass",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [21,17]
+        ],
+        "up": "fence",
+        "down": "tree",
+        "left": "wall",
+        "right": "grass"
+    },
+	"R23": {
+        "name": "R23",
+        "type": "tree",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [22,17]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "wall",
+        "right": "grass"
+    },
+	"R24": {
+        "name": "R24",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [23,17]
+        ],
+        "up": "tree",
+        "down": "grass",
+        "left": "wall",
+        "right": "grass"
+    },
+	"R25": {
+        "name": "R25",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [24,17]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "wall",
+        "right": "grass"
+    },
+	"R26": {
+        "name": "R26",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [25,17]
+        ],
+        "up": "grass",
+        "down": "tree",
+        "left": "wall",
+        "right": "tree"
+    },
+	"R27": {
+        "name": "R27",
+        "type": "tree",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [26,17]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "wall",
+        "right": "grass"
+    },
+	"R28": {
+        "name": "R28",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [27,17]
+        ],
+        "up": "tree",
+        "down": "grass",
+        "left": "wall",
+        "right": "tree"
+    },
+	"R29": {
+        "name": "R29",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [28,17]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "wall",
+        "right": "grass"
+    },
+	"R30": {
+        "name": "R30",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [29,17]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "wall",
+        "right": "grass"
+    },
+	"R31": {
+        "name": "R31",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [30,17]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "wall",
+        "right": "tree"
+    },
+	"R32": {
+        "name": "R32",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [31,17]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "wall",
+        "right": "grass"
+    },
+	"R33": {
+        "name": "R33",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [32,17]
+        ],
+        "up": "grass",
+        "down": "fence",
+        "left": "tree",
+        "right": "grass"
+    },
+    "S1": {
+        "name": "S1",
+        "type": "empty",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [0,18]
+        ],
+        "up": "empty",
+        "down": "empty",
+        "left": "empty",
+        "right": "empty"
+    },
+	"S2": {
+        "name": "S2",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [1,18]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"S3": {
+        "name": "S3",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [2,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "rock"
+    },
+	"S4": {
+        "name": "S4",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [3,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"S5": {
+        "name": "S5",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [4,18]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "rock",
+        "right": "tree"
+    },
+	"S6": {
+        "name": "S6",
+        "type": "rock",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [5,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"S7": {
+        "name": "S7",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [6,18]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "ground",
+        "right": "rock"
+    },
+	"S8": {
+        "name": "S8",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [7,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "rock"
+    },
+	"S9": {
+        "name": "S9",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [8,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"S10": {
+        "name": "S10",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [9,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "tree"
+    },
+	"S11": {
+        "name": "S11",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [10,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "ground"
+    },
+	"S12": {
+        "name": "S12",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [11,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"S13": {
+        "name": "S13",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [12,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "rock"
+    },
+	"S14": {
+        "name": "S14",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [13,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "ground"
+    },
+	"S15": {
+        "name": "S15",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [14,18]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "ground",
+        "right": "ground"
+    },
+	"S16": {
+        "name": "S16",
+        "type": "rock",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [15,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"S17": {
+        "name": "S17",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [16,18]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"S18": {
+        "name": "S18",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [17,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "ground"
+    },
+	"S19": {
+        "name": "S19",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [18,18]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"S20": {
+        "name": "S20",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [19,18]
+        ],
+        "up": "ground",
+        "down": "fence",
+        "left": "ground",
+        "right": "fence"
+    },
+	"S21": {
+        "name": "S21",
+        "type": "grass",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [20,18]
+        ],
+        "up": "fence",
+        "down": "grass",
+        "left": "fence",
+        "right": "tree"
+    },
+	"S22": {
+        "name": "S22",
+        "type": "grass",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [21,18]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "grass"
+    },
+	"S23": {
+        "name": "S23",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [22,18]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "tree",
+        "right": "grass"
+    },
+	"S24": {
+        "name": "S24",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [23,18]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "tree"
+    },
+	"S25": {
+        "name": "S25",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [24,18]
+        ],
+        "up": "grass",
+        "down": "tree",
+        "left": "grass",
+        "right": "grass"
+    },
+	"S26": {
+        "name": "S26",
+        "type": "tree",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [25,18]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "grass"
+    },
+	"S27": {
+        "name": "S27",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [26,18]
+        ],
+        "up": "tree",
+        "down": "tree",
+        "left": "tree",
+        "right": "grass"
+    },
+	"S28": {
+        "name": "S28",
+        "type": "tree",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [27,18]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "grass"
+    },
+	"S29": {
+        "name": "S29",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [28,18]
+        ],
+        "up": "tree",
+        "down": "grass",
+        "left": "grass",
+        "right": "grass"
+    },
+	"S30": {
+        "name": "S30",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [29,18]
+        ],
+        "up": "grass",
+        "down": "tree",
+        "left": "grass",
+        "right": "grass"
+    },
+	"S31": {
+        "name": "S31",
+        "type": "tree",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [30,18]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "grass"
+    },
+	"S32": {
+        "name": "S32",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [31,18]
+        ],
+        "up": "tree",
+        "down": "grass",
+        "left": "grass",
+        "right": "tree"
+    },
+	"S33": {
+        "name": "S33",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [32,18]
+        ],
+        "up": "grass",
+        "down": "fence",
+        "left": "grass",
+        "right": "grass"
+    },
+    "T1": {
+        "name": "T1",
+        "type": "empty",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [0,19]
+        ],
+        "up": "empty",
+        "down": "empty",
+        "left": "empty",
+        "right": "empty"
+    },
+	"T2": {
+        "name": "T2",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [1,19]
+        ],
+        "up": "fence",
+        "down": "rock",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T3": {
+        "name": "T3",
+        "type": "rock",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [2,19]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T4": {
+        "name": "T4",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [3,19]
+        ],
+        "up": "rock",
+        "down": "tree",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T5": {
+        "name": "T5",
+        "type": "tree",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [4,19]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T6": {
+        "name": "T6",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [5,19]
+        ],
+        "up": "tree",
+        "down": "rock",
+        "left": "rock",
+        "right": "ground"
+    },
+	"T7": {
+        "name": "T7",
+        "type": "rock",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [6,19]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T8": {
+        "name": "T8",
+        "type": "rock",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [7,19]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T9": {
+        "name": "T9",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [8,19]
+        ],
+        "up": "rock",
+        "down": "tree",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T10": {
+        "name": "T10",
+        "type": "tree",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [9,19]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T11": {
+        "name": "T11",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [10,19]
+        ],
+        "up": "tree",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T12": {
+        "name": "T12",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [11,19]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T13": {
+        "name": "T13",
+        "type": "rock",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [12,19]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T14": {
+        "name": "T14",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [13,19]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T15": {
+        "name": "T15",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [14,19]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "rock"
+    },
+	"T16": {
+        "name": "T16",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [15,19]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "rock"
+    },
+	"T17": {
+        "name": "T17",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [16,19]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T18": {
+        "name": "T18",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [17,19]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "ground"
+    },
+	"T19": {
+        "name": "T19",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [18,19]
+        ],
+        "up": "ground",
+        "down": "fence",
+        "left": "ground",
+        "right": "fence"
+    },
+	"T20": {
+        "name": "T20",
+        "type": "grass",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [19,19]
+        ],
+        "up": "fence",
+        "down": "tree",
+        "left": "fence",
+        "right": "grass"
+    },
+	"T21": {
+        "name": "T21",
+        "type": "tree",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [20,19]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "grass"
+    },
+	"T22": {
+        "name": "T22",
+        "type": "grass",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [21,19]
+        ],
+        "up": "tree",
+        "down": "grass",
+        "left": "grass",
+        "right": "grass"
+    },
+	"T23": {
+        "name": "T23",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [22,19]
+        ],
+        "up": "grass",
+        "down": "tree",
+        "left": "grass",
+        "right": "tree"
+    },
+	"T24": {
+        "name": "T24",
+        "type": "tree",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [23,19]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "grass"
+    },
+	"T25": {
+        "name": "T25",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [24,19]
+        ],
+        "up": "tree",
+        "down": "grass",
+        "left": "grass",
+        "right": "grass"
+    },
+	"T26": {
+        "name": "T26",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [25,19]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "tree",
+        "right": "grass"
+    },
+	"T27": {
+        "name": "T27",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [26,19]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "tree"
+    },
+	"T28": {
+        "name": "T28",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [27,19]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "tree",
+        "right": "grass"
+    },
+	"T29": {
+        "name": "T29",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [28,19]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "tree"
+    },
+	"T30": {
+        "name": "T30",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [29,19]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "tree"
+    },
+	"T31": {
+        "name": "T31",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [30,19]
+        ],
+        "up": "grass",
+        "down": "tree",
+        "left": "tree",
+        "right": "grass"
+    },
+	"T32": {
+        "name": "T32",
+        "type": "tree",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [31,19]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "grass"
+    },
+	"T33": {
+        "name": "T33",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [32,19]
+        ],
+        "up": "tree",
+        "down": "grass",
+        "left": "grass",
+        "right": "grass"
+    },
+    "U1": {
+        "name": "U1",
+        "type": "empty",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [0,20]
+        ],
+        "up": "empty",
+        "down": "empty",
+        "left": "empty",
+        "right": "empty"
+    },
+	"U2": {
+        "name": "U2",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [1,20]
+        ],
+        "up": "fence",
+        "down": "ground",
+        "left": "ground",
+        "right": "fence"
+    },
+	"U3": {
+        "name": "U3",
+        "type": "",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [2,20]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "fence"
+    },
+	"U4": {
+        "name": "U4",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [3,20]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "fence"
+    },
+	"U5": {
+        "name": "U5",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [4,20]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "tree",
+        "right": "fence"
+    },
+	"U6": {
+        "name": "U6",
+        "type": "ground",
+        "belongCuadrant": "C",
+        "coordinates": [
+            [5,20]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "fence"
+    },
+	"U7": {
+        "name": "U7",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [6,20]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "fence"
+    },
+	"U8": {
+        "name": "U8",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [7,20]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "fence"
+    },
+	"U9": {
+        "name": "U9",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [8,20]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "fence"
+    },
+	"U10": {
+        "name": "U10",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [9,20]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "tree",
+        "right": "fence"
+    },
+	"U11": {
+        "name": "U11",
+        "type": "ground",
+        "belongCuadrant": "F",
+        "coordinates": [
+            [10,20]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "fence"
+    },
+	"U12": {
+        "name": "U12",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [11,20]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "ground",
+        "right": "fence"
+    },
+	"U13": {
+        "name": "U13",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [12,20]
+        ],
+        "up": "ground",
+        "down": "ground",
+        "left": "rock",
+        "right": "fence"
+    },
+	"U14": {
+        "name": "U14",
+        "type": "ground",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [13,20]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "ground",
+        "right": "fence"
+    },
+	"U15": {
+        "name": "U15",
+        "type": "rock",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [14,20]
+        ],
+        "up": "ground",
+        "down": "rock",
+        "left": "ground",
+        "right": "fence"
+    },
+	"U16": {
+        "name": "U16",
+        "type": "rock",
+        "belongCuadrant": "I",
+        "coordinates": [
+            [15,20]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "ground",
+        "right": "fence"
+    },
+	"U17": {
+        "name": "U17",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [16,20]
+        ],
+        "up": "rock",
+        "down": "ground",
+        "left": "ground",
+        "right": "fence"
+    },
+	"U18": {
+        "name": "U18",
+        "type": "ground",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [17,20]
+        ],
+        "up": "ground",
+        "down": "fence",
+        "left": "ground",
+        "right": "fence"
+    },
+	"U19": {
+        "name": "U19",
+        "type": "grass",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [18,20]
+        ],
+        "up": "fence",
+        "down": "grass",
+        "left": "fence",
+        "right": "fence"
+    },
+	"U20": {
+        "name": "U20",
+        "type": "grass",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [19,20]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "fence"
+    },
+	"U21": {
+        "name": "U21",
+        "type": "grass",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [20,20]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "tree",
+        "right": "fence"
+    },
+	"U22": {
+        "name": "U22",
+        "type": "grass",
+        "belongCuadrant": "L",
+        "coordinates": [
+            [21,20]
+        ],
+        "up": "grass",
+        "down": "tree",
+        "left": "grass",
+        "right": "fence"
+    },
+	"U23": {
+        "name": "U23",
+        "type": "tree",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [22,20]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "fence"
+    },
+	"U24": {
+        "name": "U24",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [23,20]
+        ],
+        "up": "tree",
+        "down": "grass",
+        "left": "tree",
+        "right": "fence"
+    },
+	"U25": {
+        "name": "U25",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [24,20]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "fence"
+    },
+	"U26": {
+        "name": "U26",
+        "type": "grass",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [25,20]
+        ],
+        "up": "grass",
+        "down": "tree",
+        "left": "grass",
+        "right": "fence"
+    },
+	"U27": {
+        "name": "U27",
+        "type": "tree",
+        "belongCuadrant": "O",
+        "coordinates": [
+            [26,20]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "grass",
+        "right": "fence"
+    },
+	"U28": {
+        "name": "U28",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [27,20]
+        ],
+        "up": "tree",
+        "down": "tree",
+        "left": "grass",
+        "right": "fence"
+    },
+	"U29": {
+        "name": "U29",
+        "type": "tree",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [28,20]
+        ],
+        "up": "grass",
+        "down": "tree",
+        "left": "grass",
+        "right": "fence"
+    },
+	"U30": {
+        "name": "U30",
+        "type": "tree",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [29,20]
+        ],
+        "up": "tree",
+        "down": "grass",
+        "left": "grass",
+        "right": "fence"
+    },
+	"U31": {
+        "name": "U31",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [30,20]
+        ],
+        "up": "tree",
+        "down": "grass",
+        "left": "grass",
+        "right": "fence"
+    },
+	"U32": {
+        "name": "U32",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [31,20]
+        ],
+        "up": "grass",
+        "down": "grass",
+        "left": "tree",
+        "right": "fence"
+    },
+	"U33": {
+        "name": "U33",
+        "type": "grass",
+        "belongCuadrant": "R",
+        "coordinates": [
+            [32,20]
+        ],
+        "up": "grass",
+        "down": "fence",
+        "left": "grass",
+        "right": "fence"
+    }
+}
