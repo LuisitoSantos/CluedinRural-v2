@@ -52,23 +52,70 @@ class GameSetup {
   }
 
   String _clueFor(MapTile tile) {
-    final surroundings = [tile.up, tile.down, tile.left, tile.right];
-    if (surroundings.where((type) => type == 'tree').length >= 2) {
-      return 'Un jugador esta rodeado de arboles.';
-    }
-    final isWallOrFence = {
-      'wall', 'fence',
+    final surroundings = {
+      'arriba': tile.up,
+      'abajo': tile.down,
+      'izquierda': tile.left,
+      'derecha': tile.right,
     };
-    final vertical = isWallOrFence.contains(tile.up) || isWallOrFence.contains(tile.down);
-    final horizontal = isWallOrFence.contains(tile.left) || isWallOrFence.contains(tile.right);
-    if (vertical && horizontal) return 'Un jugador esta en una esquina de la casa o del exterior.';
-    if (surroundings.every((type) => {'ground', 'floor', 'grass'}.contains(type))) {
-      return 'Un jugador solo tiene suelo alrededor.';
+    final clues = <String>[
+      'Un jugador esta sobre ${_terrainLabel(tile.type)}${_isOutdoor(tile.type) ? ', en el exterior' : ', en el interior'}.',
+    ];
+    final trees = surroundings.values.where((type) => type == 'tree').length;
+    if (trees >= 2) clues.add('Tiene arboles en al menos dos lados.');
+
+    const barriers = {'wall', 'fence'};
+    final vertical = barriers.contains(tile.up) || barriers.contains(tile.down);
+    final horizontal = barriers.contains(tile.left) || barriers.contains(tile.right);
+    if (vertical && horizontal) clues.add('Esta en una esquina delimitada por pared o valla.');
+
+    const plainGround = {'ground', 'floor', 'grass'};
+    if (surroundings.values.every(plainGround.contains)) {
+      clues.add('Solo tiene terreno libre alrededor.');
     }
-    if (surroundings.contains('shower')) return 'Un jugador esta junto a una ducha.';
-    if (surroundings.contains('table')) return 'Un jugador esta junto a una mesa.';
-    if (surroundings.contains('rock')) return 'Un jugador esta junto a una roca.';
-    if (surroundings.contains('bed')) return 'Un jugador esta junto a una cama.';
-    return 'Un jugador esta en una zona abierta del mapa.';
+
+    for (final entry in surroundings.entries) {
+      final label = _nearbyLabel(entry.value);
+      if (label != null) clues.add('${_directionLabel(entry.key)} hay $label.');
+    }
+
+    if (clues.length == 1) clues.add('No tiene objetos destacados justo al lado.');
+    return clues.join(' ');
   }
+
+  bool _isOutdoor(String type) => {'ground', 'grass', 'rock', 'tree'}.contains(type);
+
+  String _terrainLabel(String type) => switch (type) {
+        'ground' => 'tierra',
+        'grass' => 'hierba',
+        'floor' => 'suelo de la casa',
+        'bathroom' => 'suelo de bano',
+        'bed' => 'una cama',
+        'couch' => 'un sofa',
+        _ => type.isEmpty ? 'un terreno desconocido' : type,
+      };
+
+  String? _nearbyLabel(String type) => switch (type) {
+        'tree' => 'un arbol',
+        'rock' => 'una roca',
+        'wall' => 'una pared',
+        'fence' => 'una valla',
+        'door' => 'una puerta',
+        'window' => 'una ventana',
+        'table' => 'una mesa',
+        'shower' => 'una ducha',
+        'bed' => 'una cama',
+        'closet' => 'un armario',
+        'couch' => 'un sofa',
+        'worktop' => 'una encimera',
+        _ => null,
+      };
+
+  String _directionLabel(String direction) => switch (direction) {
+        'arriba' => 'Encima',
+        'abajo' => 'Debajo',
+        'izquierda' => 'A su izquierda',
+        'derecha' => 'A su derecha',
+        _ => 'Cerca',
+      };
 }
