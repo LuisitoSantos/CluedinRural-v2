@@ -17,7 +17,14 @@ Future<void> main() async {
     runApp(const _MissingConfigurationApp());
     return;
   }
-  await Supabase.initialize(url: _supabaseUrl, publishableKey: _supabaseKey);
+  await Supabase.initialize(
+    url: _supabaseUrl,
+    publishableKey: _supabaseKey,
+    authOptions: const FlutterAuthClientOptions(
+      autoRefreshToken: true,
+      persistSession: true,
+    ),
+  );
   runApp(const RuralMurdokuApp());
 }
 
@@ -156,6 +163,19 @@ class _MyRoomsPageState extends State<MyRoomsPage> {
 
   void _reload() => setState(() => _rooms = widget.rooms.myRooms());
 
+  Future<void> _signOut() async {
+    try {
+      await widget.rooms.signOut();
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => AccessPage(rooms: widget.rooms)),
+        (_) => false,
+      );
+    } catch (error) {
+      _showError(error.toString());
+    }
+  }
+
   Future<void> _createRoom() async {
     try {
       final room = await widget.rooms.createRoom(widget.account.displayName);
@@ -209,7 +229,18 @@ class _MyRoomsPageState extends State<MyRoomsPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: Text('Mis salas - ${widget.account.displayName}'),
-          actions: [IconButton(onPressed: _reload, icon: const Icon(Icons.refresh))],
+          actions: [
+            IconButton(
+              tooltip: 'Actualizar',
+              onPressed: _reload,
+              icon: const Icon(Icons.refresh),
+            ),
+            IconButton(
+              tooltip: 'Cerrar sesion',
+              onPressed: _signOut,
+              icon: const Icon(Icons.logout),
+            ),
+          ],
         ),
         body: FutureBuilder<List<GameRoom>>(
           future: _rooms,
@@ -292,7 +323,7 @@ class RoomPage extends StatelessWidget {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text(assignment.characterName!, style: Theme.of(context).textTheme.headlineSmall),
                     Text('Equipo ${assignment.team!.label}'),
-                    Text('Rol: ${assignment.roleName}'),
+                    Text('Familia: ${assignment.familyName}'),
                     Text('Casilla: ${assignment.position!.name}'),
                   ]),
                 ),
@@ -313,6 +344,24 @@ class RoomPage extends StatelessWidget {
                         child: Text('• $clue'),
                       )),
                 ]),
+              );
+            },
+          ),
+          FutureBuilder<CompassRole?>(
+            future: rooms.myCompassRole(room.id),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) return const SizedBox.shrink();
+              final role = snapshot.data;
+              if (role == null) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Card(
+                  color: Theme.of(context).colorScheme.errorContainer,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(role.label, style: Theme.of(context).textTheme.titleMedium),
+                  ),
+                ),
               );
             },
           ),
@@ -344,8 +393,11 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   late final Future<List<MapTile>> _tiles = _loadTiles();
+  late final Future<Map<String, CharacterProfile>> _characters = _loadCharacters();
+  late final Future<GameAreaLookup> _areas = _loadAreas();
   late Future<GameRoom> _room;
   List<GamePlayer>? _assignedPlayers;
+  GameMystery? _mystery;
   int _fakePlayerCount = 20;
 
   @override
@@ -360,11 +412,45 @@ class _AdminPageState extends State<AdminPage> {
     return map.values.map((value) => MapTile.fromJson(value as Map<String, dynamic>)).toList();
   }
 
-  Future<void> _assignPositions(List<MapTile> tiles, GameRoom room) async {
-    final players = GameSetup().initialize(players: room.players, tiles: tiles);
-    setState(() => _assignedPlayers = players);
+  Future<Map<String, CharacterProfile>> _loadCharacters() async {
+    final source = await rootBundle.loadString('lib/resources/personajes');
+    final data = jsonDecode(source) as Map<String, dynamic>;
+    return {
+      for (final entry in data.entries)
+        entry.key: CharacterProfile.fromJson(entry.key, entry.value as Map<String, dynamic>),
+    };
+  }
+
+  Future<GameAreaLookup> _loadAreas() async {
+    final sources = await Future.wait([
+      rootBundle.loadString('lib/resources/cuadrantes.json'),
+      rootBundle.loadString('lib/resources/estancias.json'),
+    ]);
+    return GameAreaLookup.fromJson(
+      quadrants: jsonDecode(sources[0]) as Map<String, dynamic>,
+      rooms: jsonDecode(sources[1]) as Map<String, dynamic>,
+    );
+  }
+
+  Future<void> _assignPositions(
+    List<MapTile> tiles,
+    GameRoom room,
+    Map<String, CharacterProfile> characters,
+  ) async {
     try {
-      await widget.rooms.saveAssignments(roomId: room.id, players: players);
+      final setup = GameSetup();
+      final players = setup.initialize(
+        players: room.players,
+        tiles: tiles,
+        charactersByName: characters,
+      );
+      final mystery = setup.selectMystery(players);
+      await widget.rooms.saveAssignments(roomId: room.id, players: players, mystery: mystery);
+      if (!mounted) return;
+      setState(() {
+        _assignedPlayers = players;
+        _mystery = mystery;
+      });
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Partida iniciada.')));
     } catch (error) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
@@ -388,12 +474,14 @@ class _AdminPageState extends State<AdminPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('Administracion de partida')),
         body: FutureBuilder<List<Object>>(
-          future: Future.wait<Object>([_tiles, _room]),
+          future: Future.wait<Object>([_tiles, _characters, _areas, _room]),
           builder: (context, snapshot) {
             if (snapshot.hasError) return _ErrorPage(message: snapshot.error.toString());
             if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
             final tiles = snapshot.data![0] as List<MapTile>;
-            final room = snapshot.data![1] as GameRoom;
+            final characters = snapshot.data![1] as Map<String, CharacterProfile>;
+            final areas = snapshot.data![2] as GameAreaLookup;
+            final room = snapshot.data![3] as GameRoom;
             return Padding(
               padding: const EdgeInsets.all(20),
               child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -412,16 +500,17 @@ class _AdminPageState extends State<AdminPage> {
                 ]),
                 const SizedBox(height: 12),
                 FilledButton.icon(
-                  onPressed: () => _assignPositions(tiles, room),
+                  onPressed: () => _assignPositions(tiles, room, characters),
                   icon: const Icon(Icons.casino_outlined),
                   label: Text(_assignedPlayers == null ? 'Asignar casillas' : 'Repartir de nuevo'),
                 ),
                 const SizedBox(height: 12),
                 Expanded(
-                  child: FutureBuilder<List<Object>>(
-                    future: Future.wait<Object>([
+                  child: FutureBuilder<List<Object?>>(
+                    future: Future.wait<Object?>([
                       widget.rooms.roomAssignments(room),
                       widget.rooms.roomClues(room.id),
+                      widget.rooms.roomMystery(room.id),
                     ]),
                     builder: (context, assignmentsSnapshot) {
                       if (assignmentsSnapshot.hasError) return Text(assignmentsSnapshot.error.toString());
@@ -431,27 +520,30 @@ class _AdminPageState extends State<AdminPage> {
                       final clues = assignmentsSnapshot.hasData
                           ? assignmentsSnapshot.data![1] as Map<String, String>
                           : const <String, String>{};
+                      final storedMystery = assignmentsSnapshot.hasData
+                          ? assignmentsSnapshot.data![2] as GameMystery?
+                          : null;
                       final players = _assignedPlayers ?? storedPlayers;
+                      final mystery = _mystery ?? storedMystery;
                       if (players == null || players.isEmpty) {
                         return const Center(child: Text('Solo el admin puede consultar y generar este listado.'));
                       }
-                      return ListView.builder(
-                        itemCount: players.length,
-                        itemBuilder: (context, index) {
-                          final player = players[index];
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: _teamColor(player.team!),
-                              child: Text(player.team!.label.substring(0, 1)),
-                            ),
-                            title: Text('${player.name} - ${player.characterName}'),
-                            subtitle: Text(
-                              'Equipo ${player.team!.label} - ${player.roleName}${player.isAdmin ? ' - Admin' : ''}\nPista: ${player.clue ?? clues[player.id] ?? 'Sin pista'}',
-                            ),
-                            isThreeLine: true,
-                            trailing: Text(player.position!.name, style: Theme.of(context).textTheme.titleMedium),
-                          );
-                        },
+                      return ListView(
+                        children: [
+                          if (mystery != null) _MysteryCard(mystery: mystery, players: players, areas: areas),
+                          ...players.map((player) => ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: _teamColor(player.team!),
+                                  child: Text(player.team!.label.substring(0, 1)),
+                                ),
+                                title: Text('${player.name} - ${player.characterName}'),
+                                subtitle: Text(
+                                  'Equipo ${player.team!.label}${player.familyName == null ? '' : ' - Familia ${player.familyName}'}${player.isAdmin ? ' - Admin' : ''}\nPista: ${player.clue ?? clues[player.id] ?? 'Sin pista'}',
+                                ),
+                                isThreeLine: true,
+                                trailing: Text(player.position!.name, style: Theme.of(context).textTheme.titleMedium),
+                              )),
+                        ],
                       );
                     },
                   ),
@@ -461,6 +553,51 @@ class _AdminPageState extends State<AdminPage> {
           },
         ),
       );
+}
+
+class _MysteryCard extends StatelessWidget {
+  const _MysteryCard({required this.mystery, required this.players, required this.areas});
+
+  final GameMystery mystery;
+  final List<GamePlayer> players;
+  final GameAreaLookup areas;
+
+  @override
+  Widget build(BuildContext context) {
+    final playersById = {for (final player in players) player.id: player};
+    final thief = playersById[mystery.thiefId];
+    final accomplices = mystery.accompliceIds.map(playersById.new).whereType<GamePlayer>().toList();
+    if (thief == null || accomplices.length != 2) {
+      return const SizedBox.shrink();
+    }
+    return Card(
+      color: Theme.of(context).colorScheme.errorContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Secreto: el Compas Dorado', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            _villainLocation('Ladron (lleva el compas)', thief),
+            _villainLocation('Complice 1', accomplices[0]),
+            _villainLocation('Complice 2', accomplices[1]),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _villainLocation(String role, GamePlayer player) {
+    final position = player.position!;
+    final quadrant = areas.quadrantFor(position.name) ?? 'sin cuadrante';
+    final rooms = areas.roomsFor(position.name);
+    final roomLabel = rooms.isEmpty ? 'sin estancia' : rooms.join(', ');
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Text('$role: ${player.name} — casilla ${position.name}, cuadrante $quadrant, estancia $roomLabel.'),
+    );
+  }
 }
 
 class _ErrorPage extends StatelessWidget {

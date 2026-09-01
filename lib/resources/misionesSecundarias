@@ -1,0 +1,10 @@
+{
+    "1": {
+        "Nivel": 1,
+        "Accion": "Recoger 10 hierbas"
+    },
+    "2": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    }
+}

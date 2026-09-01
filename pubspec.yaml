@@ -22,3 +22,4 @@ flutter:
     - lib/resources/mapa.json
     - lib/resources/estancias.json
     - lib/resources/cuadrantes.json
+    - lib/resources/personajes

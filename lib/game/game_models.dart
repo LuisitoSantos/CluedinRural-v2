@@ -7,7 +7,7 @@ class GamePlayer {
     this.team,
     this.position,
     this.characterName,
-    this.roleName,
+    this.familyName,
     this.clue,
   });
 
@@ -18,14 +18,14 @@ class GamePlayer {
   final Team? team;
   final BoardPosition? position;
   final String? characterName;
-  final String? roleName;
+  final String? familyName;
   final String? clue;
 
   GamePlayer copyWith({
     Team? team,
     BoardPosition? position,
     String? characterName,
-    String? roleName,
+    String? familyName,
     String? clue,
   }) => GamePlayer(
         id: id,
@@ -35,7 +35,7 @@ class GamePlayer {
         team: team ?? this.team,
         position: position ?? this.position,
         characterName: characterName ?? this.characterName,
-        roleName: roleName ?? this.roleName,
+        familyName: familyName ?? this.familyName,
         clue: clue ?? this.clue,
       );
 }
@@ -68,6 +68,66 @@ class GameRoom {
         adminId: adminId,
         players: players ?? this.players,
       );
+}
+
+class GameMystery {
+  const GameMystery({required this.thiefId, required this.accompliceIds});
+
+  final String thiefId;
+  final List<String> accompliceIds;
+
+  List<String> get suspectIds => [thiefId, ...accompliceIds];
+
+  Map<String, dynamic> toJson() => {
+        'thief_participant_id': thiefId,
+        'accomplice_participant_ids': accompliceIds,
+        'compass_holder_participant_id': thiefId,
+      };
+}
+
+enum CompassRole { thief, accomplice }
+
+extension CompassRoleDetails on CompassRole {
+  String get label => switch (this) {
+        CompassRole.thief => 'Eres el ladron y llevas el Compas Dorado.',
+        CompassRole.accomplice => 'Eres complice del robo del Compas Dorado.',
+      };
+}
+
+class GameAreaLookup {
+  const GameAreaLookup({required this._quadrantsByBox, required this._roomsByBox});
+
+  final Map<String, String> _quadrantsByBox;
+  final Map<String, List<String>> _roomsByBox;
+
+  factory GameAreaLookup.fromJson({
+    required Map<String, dynamic> quadrants,
+    required Map<String, dynamic> rooms,
+  }) {
+    final quadrantsByBox = <String, String>{};
+    final roomsByBox = <String, List<String>>{};
+    for (final entry in quadrants.entries) {
+      for (final box in _boxesFromArea(entry.value as Map<String, dynamic>)) {
+        quadrantsByBox[box] = entry.key;
+      }
+    }
+    for (final entry in rooms.entries) {
+      for (final box in _boxesFromArea(entry.value as Map<String, dynamic>)) {
+        roomsByBox.putIfAbsent(box, () => []).add(entry.key);
+      }
+    }
+    return GameAreaLookup(quadrantsByBox: quadrantsByBox, roomsByBox: roomsByBox);
+  }
+
+  String? quadrantFor(String box) => _quadrantsByBox[box];
+
+  List<String> roomsFor(String box) => _roomsByBox[box] ?? const [];
+
+  static Iterable<String> _boxesFromArea(Map<String, dynamic> area) sync* {
+    for (final group in area['belongBoxes'] as List<dynamic>) {
+      yield* (group as List<dynamic>).cast<String>();
+    }
+  }
 }
 
 enum Team { red, blue, green, yellow }
