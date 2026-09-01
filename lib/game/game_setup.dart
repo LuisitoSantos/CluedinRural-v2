@@ -14,6 +14,7 @@ class GameSetup {
   List<GamePlayer> initialize({
     required List<GamePlayer> players,
     required List<MapTile> tiles,
+    required Map<String, CharacterProfile> charactersByName,
   }) {
     if (players.isEmpty) return const [];
     final availableByColumn = <int, List<MapTile>>{};
@@ -26,9 +27,16 @@ class GameSetup {
       throw StateError('No hay suficientes columnas disponibles para ${players.length} jugadores.');
     }
 
+    final characterNames = {
+      for (final entry in charactersByName.entries) entry.key.toLowerCase(): entry.value,
+    };
+    for (final player in players.where((player) => !player.isFake)) {
+      if (!characterNames.containsKey(player.name.trim().toLowerCase())) {
+        throw StateError('No existe ningun personaje llamado "${player.name}" en el fichero de personajes.');
+      }
+    }
+
     final shuffledPlayers = [...players]..shuffle(_random);
-    final characters = List.generate(players.length, (index) => 'Personaje ${index + 1}')..shuffle(_random);
-    const roles = ['Rol 1', 'Rol 2', 'Rol 3', 'Rol 4', 'Rol 5'];
     final columns = availableByColumn.keys.toList()..shuffle(_random);
     final rowUse = <int, int>{};
     final placed = <GamePlayer>[];
@@ -40,15 +48,28 @@ class GameSetup {
           .toList()..shuffle(_random);
       final position = leastUsedChoices.first;
       rowUse.update(position.row, (count) => count + 1, ifAbsent: () => 1);
-      placed.add(shuffledPlayers[index].copyWith(
-        team: Team.values[index % Team.values.length],
+      final player = shuffledPlayers[index];
+      final character = characterNames[player.name.trim().toLowerCase()];
+      placed.add(player.copyWith(
+        team: player.isFake ? Team.values[_random.nextInt(Team.values.length)] : character!.team,
         position: position,
-        characterName: characters[index],
-        roleName: roles[index % roles.length],
+        characterName: player.isFake ? 'Personaje ficticio ${index + 1}' : character!.name,
+        familyName: player.isFake ? null : character!.family,
         clue: _clueFor(position),
       ));
     }
     return placed;
+  }
+
+  GameMystery selectMystery(List<GamePlayer> players) {
+    if (players.length < 3) {
+      throw StateError('Se necesitan al menos 3 jugadores para elegir al ladron y sus dos complices.');
+    }
+    final suspects = [...players]..shuffle(_random);
+    return GameMystery(
+      thiefId: suspects[0].id,
+      accompliceIds: [suspects[1].id, suspects[2].id],
+    );
   }
 
   String _clueFor(MapTile tile) {
@@ -118,4 +139,22 @@ class GameSetup {
         'derecha' => 'A su derecha',
         _ => 'Cerca',
       };
+}
+
+class CharacterProfile {
+  const CharacterProfile({required this.name, required this.team, required this.family});
+
+  final String name;
+  final Team team;
+  final String family;
+
+  factory CharacterProfile.fromJson(String name, Map<String, dynamic> json) {
+    final teamLabel = json['Equipo'] as String?;
+    final family = json['Familia'] as String?;
+    final team = Team.values.where((team) => team.label.toLowerCase() == teamLabel?.toLowerCase()).firstOrNull;
+    if (team == null || family == null || family.trim().isEmpty) {
+      throw FormatException('El personaje "$name" no tiene equipo o familia validos.');
+    }
+    return CharacterProfile(name: name, team: team, family: family);
+  }
 }

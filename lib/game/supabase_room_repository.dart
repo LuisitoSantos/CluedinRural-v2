@@ -35,6 +35,8 @@ class SupabaseRoomRepository {
     );
   }
 
+  Future<void> signOut() => _client.auth.signOut();
+
   Future<List<GameRoom>> myRooms() async {
     final userId = await _ensureAnonymousUser();
     final rows = await _client
@@ -100,14 +102,19 @@ class SupabaseRoomRepository {
   Future<void> addFakePlayers({required String roomId, required int count}) =>
       _client.rpc('add_game_fake_players', params: {'p_room_id': roomId, 'p_count': count});
 
-  Future<void> saveAssignments({required String roomId, required List<GamePlayer> players}) {
+  Future<void> saveAssignments({
+    required String roomId,
+    required List<GamePlayer> players,
+    required GameMystery mystery,
+  }) {
     final assignments = players
         .map((player) => {
               'participant_id': player.id,
               'participant_type': player.isFake ? 'fake' : 'real',
               'character_name': player.characterName,
               'team': player.team!.name,
-              'role_name': player.roleName,
+              // La tabla existente conserva este nombre de columna, pero ahora almacena la familia.
+              'role_name': player.familyName ?? 'Sin familia',
               'position_name': player.position!.name,
               'clue': player.clue,
             })
@@ -115,7 +122,27 @@ class SupabaseRoomRepository {
     return _client.rpc('save_game_assignments', params: {
       'p_room_id': roomId,
       'p_assignments': assignments,
+      'p_mystery': mystery.toJson(),
     });
+  }
+
+  Future<GameMystery?> roomMystery(String roomId) async {
+    final rows = await _client
+        .from('game_room_mysteries')
+        .select('thief_participant_id, accomplice_participant_ids')
+        .eq('room_id', roomId);
+    if ((rows as List<dynamic>).isEmpty) return null;
+    final mystery = rows.first as Map<String, dynamic>;
+    return GameMystery(
+      thiefId: mystery['thief_participant_id'] as String,
+      accompliceIds: (mystery['accomplice_participant_ids'] as List<dynamic>).cast<String>(),
+    );
+  }
+
+  Future<CompassRole?> myCompassRole(String roomId) async {
+    final role = await _client.rpc('my_compass_role', params: {'p_room_id': roomId});
+    if (role == null) return null;
+    return CompassRole.values.byName(role as String);
   }
 
   Future<GamePlayer?> myAssignment(String roomId) async {
@@ -131,7 +158,7 @@ class SupabaseRoomRepository {
       id: userId,
       name: '',
       characterName: assignment['character_name'] as String,
-      roleName: assignment['role_name'] as String,
+      familyName: assignment['role_name'] as String,
       team: Team.values.byName(assignment['team'] as String),
       position: BoardPosition(name: assignment['position_name'] as String, column: 0, row: 0),
     );
@@ -178,7 +205,7 @@ class SupabaseRoomRepository {
         isAdmin: participant?.isAdmin ?? false,
         isFake: assignment['participant_type'] == 'fake',
         characterName: assignment['character_name'] as String,
-        roleName: assignment['role_name'] as String,
+        familyName: assignment['role_name'] as String,
         team: Team.values.byName(assignment['team'] as String),
         position: BoardPosition(name: assignment['position_name'] as String, column: 0, row: 0),
       );

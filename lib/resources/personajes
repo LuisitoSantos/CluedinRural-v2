@@ -1,0 +1,118 @@
+{
+    "Lewis": {
+        "Equipo": "Verde",
+        "Familia": "O'Doherty"
+    },
+    "Isabelle": {
+        "Equipo": "Verde",
+        "Familia": "O'Doherty"
+    },
+    "Albert": {
+        "Equipo": "Verde",
+        "Familia": "O'Doherty"
+    },
+    "Iryn": {
+        "Equipo": "Verde",
+        "Familia": "O'Doherty"
+    },
+    "Julliete": {
+        "Equipo": "Verde",
+        "Familia": "O'Doherty"
+    },
+    "Alexander": {
+        "Equipo": "Verde",
+        "Familia": "O'Doherty"
+    },
+    "Alvar": {
+        "Equipo": "Verde",
+        "Familia": "O'Doherty"
+    },
+    "Camilo": {
+        "Equipo": "Rojo",
+        "Familia": "Rossi"
+    },
+    "Zita": {
+        "Equipo": "Rojo",
+        "Familia": "Rossi"
+    },
+    "Bertina": {
+        "Equipo": "Rojo",
+        "Familia": "Rossi"
+    },
+    "Carlo": {
+        "Equipo": "Rojo",
+        "Familia": "Rossi"
+    },
+    "Vitto": {
+        "Equipo": "Rojo",
+        "Familia": "Rossi"
+    },
+    "Giuseppe": {
+        "Equipo": "Rojo",
+        "Familia": "Rossi"
+    },
+    "Gio": {
+        "Equipo": "Rojo",
+        "Familia": "Rossi"
+    },
+    "Adriano": {
+        "Equipo": "Rojo",
+        "Familia": "Rossi"
+    },
+    "Marie": {
+        "Equipo": "Azul",
+        "Familia": "Beaumont"
+    },
+    "Auveron": {
+        "Equipo": "Azul",
+        "Familia": "Beaumont"
+    },
+    "Aube": {
+        "Equipo": "Azul",
+        "Familia": "Beaumont"
+    },
+    "Artus": {
+        "Equipo": "Azul",
+        "Familia": "Beaumont"
+    },
+    "Adrien": {
+        "Equipo": "Azul",
+        "Familia": "Beaumont"
+    },
+    "Marielle": {
+        "Equipo": "Azul",
+        "Familia": "Beaumont"
+    },
+    "Soren": {
+        "Equipo": "Azul",
+        "Familia": "Beaumont"
+    },
+    "Natasha": {
+        "Equipo": "Amarillo",
+        "Familia": "Romanov"
+    },
+    "Ariadna": {
+        "Equipo": "Amarillo",
+        "Familia": "Romanov"
+    },
+    "Annia": {
+        "Equipo": "Amarillo",
+        "Familia": "Romanov"
+    },
+    "Kristian": {
+        "Equipo": "Amarillo",
+        "Familia": "Romanov"
+    },
+    "Sonya": {
+        "Equipo": "Amarillo",
+        "Familia": "Romanov"
+    },
+    "Adrik": {
+        "Equipo": "Amarillo",
+        "Familia": "Romanov"
+    },
+    "Liza": {
+        "Equipo": "Amarillo",
+        "Familia": "Romanov"
+    }    
+}
