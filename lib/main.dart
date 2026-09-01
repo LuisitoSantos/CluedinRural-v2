@@ -22,7 +22,7 @@ Future<void> main() async {
     publishableKey: _supabaseKey,
     authOptions: const FlutterAuthClientOptions(
       autoRefreshToken: true,
-      persistSession: true,
+      //persistSession: true,
     ),
   );
   runApp(const RuralMurdokuApp());
@@ -566,7 +566,10 @@ class _MysteryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final playersById = {for (final player in players) player.id: player};
     final thief = playersById[mystery.thiefId];
-    final accomplices = mystery.accompliceIds.map(playersById.new).whereType<GamePlayer>().toList();
+    final accomplices = mystery.accompliceIds
+    .map((id) => playersById[id])
+    .whereType<GamePlayer>()
+    .toList();
     if (thief == null || accomplices.length != 2) {
       return const SizedBox.shrink();
     }
