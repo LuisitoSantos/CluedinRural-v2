@@ -50,11 +50,14 @@ class GameSetup {
       rowUse.update(position.row, (count) => count + 1, ifAbsent: () => 1);
       final player = shuffledPlayers[index];
       final character = characterNames[player.name.trim().toLowerCase()];
+      final team = player.isFake ? Team.values[_random.nextInt(Team.values.length)] : character!.team;
       placed.add(player.copyWith(
-        team: player.isFake ? Team.values[_random.nextInt(Team.values.length)] : character!.team,
+        team: team,
         position: position,
         characterName: player.isFake ? 'Personaje ficticio ${index + 1}' : character!.name,
-        familyName: player.isFake ? null : character!.family,
+        // Equipo y familia son la misma agrupación de juego. Los ficticios
+        // usan la familia correspondiente al color que reciben en el sorteo.
+        familyName: team.familyName,
         clue: _clueFor(position),
       ));
     }
@@ -70,6 +73,56 @@ class GameSetup {
       thiefId: suspects[0].id,
       accompliceIds: [suspects[1].id, suspects[2].id],
     );
+  }
+
+  List<Map<String, dynamic>> assignSecondaryMissions({
+    required List<GamePlayer> players,
+    required List<GamePlayer> targets,
+    required List<SecondaryMissionDefinition> missions,
+    required GameAreaLookup areas,
+  }) {
+    if (missions.length < 5) throw StateError('No hay suficientes misiones secundarias.');
+    if (targets.length < players.length * 5) {
+      throw StateError('No hay suficientes personajes para asociar una pista única a cada misión.');
+    }
+    final result = <Map<String, dynamic>>[];
+    final availableTargets = [...targets]..shuffle(_random);
+    for (final player in players) {
+      final deck = [...missions]..shuffle(_random);
+      for (var index = 0; index < 5; index++) {
+        final mission = deck[index];
+        final targetIndex = availableTargets.indexWhere((target) => target.team != player.team);
+        if (targetIndex < 0) {
+          throw StateError('No hay personajes de otros equipos suficientes para repartir las pistas únicas.');
+        }
+        final target = availableTargets.removeAt(targetIndex);
+        final clue = _secondaryClueFor(target, areas);
+        result.add({
+          'participant_id': player.id,
+          'participant_type': player.isFake ? 'fake' : 'real',
+          'mission_number': index + 1,
+          'mission_id': mission.id,
+          'mission_level': mission.level,
+          'mission_action': mission.action,
+          'clue': clue.text,
+          'target_participant_id': target.id,
+          'clue_type': clue.type,
+        });
+      }
+    }
+    return result;
+  }
+
+  _SecondaryClue _secondaryClueFor(GamePlayer target, GameAreaLookup areas) {
+    final position = target.position!;
+    final room = areas.roomsFor(position.name).firstOrNull;
+    final options = <_SecondaryClue>[
+      if (room != null) _SecondaryClue(type: 'room', text: 'Hay un jugador en la habitación $room.'),
+      _SecondaryClue(type: 'column', text: 'Hay un jugador en la columna ${position.name.substring(1)}.'),
+      _SecondaryClue(type: 'row', text: 'Hay un jugador en la fila ${position.name.substring(0, 1)}.'),
+      _SecondaryClue(type: 'location', text: 'Hay un jugador cuya ubicación cumple esto: ${target.clue}'),
+    ];
+    return options[_random.nextInt(options.length)];
   }
 
   String _clueFor(MapTile tile) {
@@ -139,6 +192,13 @@ class GameSetup {
         'derecha' => 'A su derecha',
         _ => 'Cerca',
       };
+}
+
+class _SecondaryClue {
+  const _SecondaryClue({required this.type, required this.text});
+
+  final String type;
+  final String text;
 }
 
 class CharacterProfile {

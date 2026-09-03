@@ -18,7 +18,7 @@ void main() {
     expect(result.map((player) => player.position!.column).toSet(), hasLength(26));
     expect(result.any((player) => player.position!.name == 'blocked'), isFalse);
     expect(result.every((player) => player.team != null), isTrue);
-    expect(result.every((player) => player.familyName == null), isTrue);
+    expect(result.every((player) => player.familyName == player.team!.familyName), isTrue);
   });
 
   test('usa el personaje, equipo y familia predefinidos para jugadores reales', () {
@@ -56,6 +56,16 @@ void main() {
     expect(mystery.accompliceIds, hasLength(2));
     expect(mystery.suspectIds.toSet(), hasLength(3));
     expect(mystery.suspectIds.every((id) => players.any((player) => player.id == id)), isTrue);
+  });
+
+  test('el misterio conserva las tres estancias aunque se repitan', () {
+    const mystery = GameMystery(
+      thiefId: 'a',
+      accompliceIds: ['b', 'c'],
+      suspectRoomNames: ['Room1', 'Room1', 'Room3'],
+    );
+
+    expect(mystery.toJson()['suspect_room_names'], ['Room1', 'Room1', 'Room3']);
   });
 
   test('localiza cuadrantes y estancias de las casillas', () {

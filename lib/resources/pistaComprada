@@ -1,0 +1,402 @@
+{
+    "1": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "2": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "3": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "4": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "5": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "6": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "7": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "8": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "9": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "10": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "11": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "12": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "13": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "14": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "15": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "16": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "17": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "18": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "19": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "20": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "21": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "22": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "23": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "24": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "25": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "26": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "27": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "28": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "29": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "30": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "31": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "32": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "33": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "34": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "35": {
+        "Nivel": 1,
+        "Accion": "pista comprada"
+    },
+    "36": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "37": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "38": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "39": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "40": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "41": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "42": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "43": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "44": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "45": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "46": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "47": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "48": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "49": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "50": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "51": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "52": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "53": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "54": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "55": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "56": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "57": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "58": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "59": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "60": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "61": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "62": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "63": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "64": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "65": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "66": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "67": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "68": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "69": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "70": {
+        "Nivel": 2,
+        "Accion": "pista comprada"
+    },
+    "71": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "72": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "73": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "74": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "75": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "76": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "77": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "78": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "79": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "80": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "81": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "82": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "83": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "84": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "85": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "86": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "87": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "88": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "89": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "90": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "91": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "92": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "93": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "94": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "95": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "96": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "97": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "98": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "99": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    },
+    "100": {
+        "Nivel": 3,
+        "Accion": "pista comprada"
+    }
+}

@@ -22,4 +22,7 @@ flutter:
     - lib/resources/mapa.json
     - lib/resources/estancias.json
     - lib/resources/cuadrantes.json
-    - lib/resources/personajes
+    - lib/resources/personajes.json
+    - lib/resources/misionesSecundarias.json
+    - lib/resources/pistasMisionesSecundarias.json
+    - lib/resources/pistaComprada
