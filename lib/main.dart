@@ -540,7 +540,7 @@ class _GameActionsBarState extends State<_GameActionsBar> {
         currentMission: null,
       );
     }
-    final results = await Future.wait<Object>([
+    final results = await Future.wait<Object?>([
       widget.rooms.purchaseSettings(widget.room.id),
       widget.rooms.myTeamQuadrants(widget.room.id),
       widget.rooms.myCurrentSecondaryMission(widget.room.id),
