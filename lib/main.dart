@@ -254,7 +254,7 @@ class _MyRoomsPageState extends State<MyRoomsPage> {
               itemBuilder: (context, index) {
                 final room = rooms[index];
                 return ListTile(
-                  title: Text('Sala ${room.code}'),
+                  title: Text(room.isAdmin(widget.account.userId) ? 'Sala ${room.code}' : 'Sala'),
                   subtitle: Text('${room.players.length} jugadores'),
                   trailing: room.isAdmin(widget.account.userId) ? const Icon(Icons.admin_panel_settings_outlined) : null,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -278,18 +278,36 @@ class _MyRoomsPageState extends State<MyRoomsPage> {
       );
 }
 
-class RoomPage extends StatelessWidget {
+class RoomPage extends StatefulWidget {
   const RoomPage({super.key, required this.room, required this.account, required this.rooms});
   final GameRoom room;
   final PlayerAccount account;
   final SupabaseRoomRepository rooms;
 
   @override
+  State<RoomPage> createState() => _RoomPageState();
+}
+
+class _RoomPageState extends State<RoomPage> {
+  final ValueNotifier<int> _gameRevision = ValueNotifier(0);
+
+  @override
+  void dispose() {
+    _gameRevision.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final room = widget.room;
+    final account = widget.account;
+    final rooms = widget.rooms;
     final isAdmin = room.isAdmin(account.userId);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sala'),
+        title: isAdmin
+            ? Text('Código de sala: ${room.code}', style: Theme.of(context).textTheme.labelSmall)
+            : const Text('Sala'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -302,51 +320,7 @@ class RoomPage extends StatelessWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Text('Codigo de sala', style: Theme.of(context).textTheme.titleMedium),
-          SelectableText(room.code, style: Theme.of(context).textTheme.displaySmall),
-          const SizedBox(height: 8),
-          const Text('Comparte este codigo con el resto de jugadores.'),
-          const SizedBox(height: 28),
-          Text('Has entrado como ${account.displayName}${isAdmin ? ' (admin)' : ''}.'),
-          const SizedBox(height: 12),
-          Text('Jugadores en la sala: ${room.players.length}'),
-          const SizedBox(height: 20),
-          FutureBuilder<GamePlayer?>(
-            future: rooms.myAssignment(room.id),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) return Text('No se pudo cargar tu ficha: ${snapshot.error}');
-              final assignment = snapshot.data;
-              if (assignment == null) return const Text('Esperando a que el admin inicie la partida.');
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(assignment.characterName!, style: Theme.of(context).textTheme.headlineSmall),
-                    Text('Equipo ${assignment.team!.label}'),
-                    Text('Familia: ${assignment.familyName}'),
-                    Text('Casilla: ${assignment.position!.name}'),
-                  ]),
-                ),
-              );
-            },
-          ),
-          FutureBuilder<List<String>>(
-            future: rooms.myTeamClues(room.id),
-            builder: (context, snapshot) {
-              final clues = snapshot.data ?? const <String>[];
-              if (clues.isEmpty) return const SizedBox.shrink();
-              return Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Pistas de tu equipo', style: Theme.of(context).textTheme.titleMedium),
-                  ...clues.map((clue) => Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: Text('• $clue'),
-                      )),
-                ]),
-              );
-            },
-          ),
+          _PlayerGamePanel(room: room, rooms: rooms, gameRevision: _gameRevision),
           FutureBuilder<CompassRole?>(
             future: rooms.myCompassRole(room.id),
             builder: (context, snapshot) {
@@ -373,13 +347,330 @@ class RoomPage extends StatelessWidget {
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => AdminPage(room: room, rooms: rooms),
               )),
-            )
-          else
-            const Text('Espera a que el admin inicie la partida.', textAlign: TextAlign.center),
+            ),
         ]),
+      ),
+      bottomNavigationBar: _GameActionsBar(
+        room: room,
+        rooms: rooms,
+        gameRevision: _gameRevision,
       ),
     );
   }
+}
+
+class _PlayerGameData {
+  const _PlayerGameData({
+    required this.assignment,
+    required this.coins,
+    required this.purchaseSettings,
+    required this.clues,
+    required this.quadrants,
+    required this.locations,
+    required this.currentMission,
+  });
+
+  final GamePlayer? assignment;
+  final int? coins;
+  final PurchaseSettings purchaseSettings;
+  final List<String> clues;
+  final List<TeamQuadrant> quadrants;
+  final List<QuadrantLocation> locations;
+  final CurrentSecondaryMission? currentMission;
+}
+
+class _PlayerGamePanel extends StatefulWidget {
+  const _PlayerGamePanel({required this.room, required this.rooms, required this.gameRevision});
+
+  final GameRoom room;
+  final SupabaseRoomRepository rooms;
+  final ValueNotifier<int> gameRevision;
+
+  @override
+  State<_PlayerGamePanel> createState() => _PlayerGamePanelState();
+}
+
+class _PlayerGamePanelState extends State<_PlayerGamePanel> {
+  late Future<_PlayerGameData> _gameData;
+
+  @override
+  void initState() {
+    super.initState();
+    _gameData = _loadGameData();
+    widget.gameRevision.addListener(_reload);
+  }
+
+  @override
+  void dispose() {
+    widget.gameRevision.removeListener(_reload);
+    super.dispose();
+  }
+
+  void _reload() => setState(() => _gameData = _loadGameData());
+
+  Future<_PlayerGameData> _loadGameData() async {
+    final assignment = await widget.rooms.myAssignment(widget.room.id);
+    if (assignment == null) {
+      return const _PlayerGameData(
+        assignment: null,
+        coins: null,
+        purchaseSettings: PurchaseSettings(clueEnabled: false, quadrantEnabled: false, quadrantLocationsEnabled: false),
+        clues: [],
+        quadrants: [],
+        locations: [],
+        currentMission: null,
+      );
+    }
+    final results = await Future.wait<Object?>([
+      widget.rooms.myFamilyCoins(widget.room.id),
+      widget.rooms.purchaseSettings(widget.room.id),
+      widget.rooms.myTeamClues(widget.room.id),
+      widget.rooms.myTeamQuadrants(widget.room.id),
+      widget.rooms.myQuadrantLocations(widget.room.id),
+      widget.rooms.myCurrentSecondaryMission(widget.room.id),
+    ]);
+    return _PlayerGameData(
+      assignment: assignment,
+      coins: results[0] as int?,
+      purchaseSettings: results[1] as PurchaseSettings,
+      clues: results[2] as List<String>,
+      quadrants: results[3] as List<TeamQuadrant>,
+      locations: results[4] as List<QuadrantLocation>,
+      currentMission: results[5] as CurrentSecondaryMission?,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<_PlayerGameData>(
+        future: _gameData,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) return Text('No se pudo cargar tu ficha: ${snapshot.error}');
+          if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+          final data = snapshot.data!;
+          final assignment = data.assignment;
+          if (assignment == null) return const Text('Esperando a que el admin inicie la partida.');
+          final quadrantNames = data.quadrants.map((item) => item.quadrant).toSet().toList()..sort();
+          return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(assignment.characterName!, style: Theme.of(context).textTheme.headlineSmall),
+                  Text('Equipo: ${assignment.team!.label} (${assignment.familyName})'),
+                  const SizedBox(height: 8),
+                  Text('Monedas del equipo: ${data.coins ?? 0}', style: Theme.of(context).textTheme.titleMedium),
+                ]),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text('Pistas iniciales', style: Theme.of(context).textTheme.titleMedium),
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Text('Cuadrantes de tu equipo: ${quadrantNames.join(', ')}'),
+            ),
+            if (data.clues.isEmpty)
+              const Padding(padding: EdgeInsets.only(top: 6), child: Text('Aún no hay pistas.'))
+            else
+              ...data.clues.map((clue) => Padding(padding: const EdgeInsets.only(top: 6), child: Text('• $clue'))),
+            if (data.locations.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              ...data.locations.map((location) => Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(location.positionName),
+              )),
+            ],
+            if (data.currentMission != null) ...[
+              const SizedBox(height: 20),
+              Text('Misión secundaria ${data.currentMission!.number}/5', style: Theme.of(context).textTheme.titleMedium),
+              Padding(padding: const EdgeInsets.only(top: 6), child: Text(data.currentMission!.action)),
+              Padding(padding: const EdgeInsets.only(top: 4), child: Text('ID: ${data.currentMission!.id}')),
+            ],
+          ]);
+        },
+      );
+
+}
+
+class _GameActionsData {
+  const _GameActionsData({required this.assignment, required this.settings, required this.quadrants, required this.currentMission});
+
+  final GamePlayer? assignment;
+  final PurchaseSettings settings;
+  final List<TeamQuadrant> quadrants;
+  final CurrentSecondaryMission? currentMission;
+}
+
+class _GameActionsBar extends StatefulWidget {
+  const _GameActionsBar({required this.room, required this.rooms, required this.gameRevision});
+
+  final GameRoom room;
+  final SupabaseRoomRepository rooms;
+  final ValueNotifier<int> gameRevision;
+
+  @override
+  State<_GameActionsBar> createState() => _GameActionsBarState();
+}
+
+class _GameActionsBarState extends State<_GameActionsBar> {
+  late Future<_GameActionsData> _data;
+  String? _buyingItem;
+
+  @override
+  void initState() {
+    super.initState();
+    _data = _load();
+    widget.gameRevision.addListener(_reload);
+  }
+
+  @override
+  void dispose() {
+    widget.gameRevision.removeListener(_reload);
+    super.dispose();
+  }
+
+  void _reload() => setState(() => _data = _load());
+
+  Future<_GameActionsData> _load() async {
+    final assignment = await widget.rooms.myAssignment(widget.room.id);
+    if (assignment == null) {
+      return const _GameActionsData(
+        assignment: null,
+        settings: PurchaseSettings(clueEnabled: false, quadrantEnabled: false, quadrantLocationsEnabled: false),
+        quadrants: [],
+        currentMission: null,
+      );
+    }
+    final results = await Future.wait<Object?>([
+      widget.rooms.purchaseSettings(widget.room.id),
+      widget.rooms.myTeamQuadrants(widget.room.id),
+      widget.rooms.myCurrentSecondaryMission(widget.room.id),
+    ]);
+    return _GameActionsData(
+      assignment: assignment,
+      settings: results[0] as PurchaseSettings,
+      quadrants: results[1] as List<TeamQuadrant>,
+      currentMission: results[2] as CurrentSecondaryMission?,
+    );
+  }
+
+  Future<void> _purchase(String item, {String? quadrant}) async {
+    setState(() => _buyingItem = item);
+    try {
+      final result = await widget.rooms.purchaseGameItem(roomId: widget.room.id, item: item, quadrant: quadrant);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
+      widget.gameRevision.value++;
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    } finally {
+      if (mounted) setState(() => _buyingItem = null);
+    }
+  }
+
+  Future<void> _buyLocations(List<TeamQuadrant> quadrants) async {
+    final choices = quadrants.map((item) => item.quadrant).toSet().toList()..sort();
+    if (choices.isEmpty) return;
+    final selected = await showDialog<String>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: const Text('¿De qué cuadrante quieres las ubicaciones?'),
+        children: choices
+            .map((quadrant) => SimpleDialogOption(
+                  onPressed: () => Navigator.of(context).pop(quadrant),
+                  child: Text('Cuadrante $quadrant'),
+                ))
+            .toList(),
+      ),
+    );
+    if (selected != null && mounted) await _purchase('quadrant_locations', quadrant: selected);
+  }
+
+  Future<void> _completeMission(CurrentSecondaryMission mission) async {
+    final controller = TextEditingController();
+    final enteredId = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Completar misión secundaria'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'ID de la misión'),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancelar')),
+          FilledButton(onPressed: () => Navigator.of(context).pop(controller.text), child: const Text('Confirmar')),
+        ],
+      ),
+    );
+    controller.dispose();
+    if (enteredId == null) return;
+    setState(() => _buyingItem = 'mission');
+    try {
+      final result = await widget.rooms.completeSecondaryMission(roomId: widget.room.id, missionId: enteredId);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
+      widget.gameRevision.value++;
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    } finally {
+      if (mounted) setState(() => _buyingItem = null);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<_GameActionsData>(
+        future: _data,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data!.assignment == null) return const SizedBox.shrink();
+          final data = snapshot.data!;
+          final settings = data.settings;
+          return BottomAppBar(
+            child: SafeArea(
+              top: false,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Row(
+                  children: [
+                    FilledButton.icon(
+                      onPressed: data.currentMission != null && _buyingItem == null
+                          ? () => _completeMission(data.currentMission!)
+                          : null,
+                      icon: _buyingItem == 'mission'
+                          ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                          : const Icon(Icons.task_alt_outlined),
+                      label: const Text('Completar misión secundaria'),
+                    ),
+                    const SizedBox(width: 8),
+                    _purchaseButton('Comprar pista (15 monedas)', 'clue', settings.clueEnabled),
+                    const SizedBox(width: 8),
+                    _purchaseButton('Comprar cuadrante (10 monedas)', 'quadrant', settings.quadrantEnabled),
+                    const SizedBox(width: 8),
+                    OutlinedButton.icon(
+                      onPressed: settings.quadrantLocationsEnabled && _buyingItem == null && data.quadrants.isNotEmpty
+                          ? () => _buyLocations(data.quadrants)
+                          : null,
+                      icon: _buyingItem == 'quadrant_locations'
+                          ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                          : const Icon(Icons.location_on_outlined),
+                      label: const Text('Comprar ubicaciones (25 monedas)'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+
+  Widget _purchaseButton(String label, String item, bool enabled) => OutlinedButton.icon(
+        onPressed: enabled && _buyingItem == null ? () => _purchase(item) : null,
+        icon: _buyingItem == item
+            ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+            : const Icon(Icons.shopping_cart_outlined),
+        label: Text(label),
+      );
 }
 
 class AdminPage extends StatefulWidget {
@@ -413,7 +704,7 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Future<Map<String, CharacterProfile>> _loadCharacters() async {
-    final source = await rootBundle.loadString('lib/resources/personajes');
+    final source = await rootBundle.loadString('lib/resources/personajes.json');
     final data = jsonDecode(source) as Map<String, dynamic>;
     return {
       for (final entry in data.entries)
@@ -436,6 +727,7 @@ class _AdminPageState extends State<AdminPage> {
     List<MapTile> tiles,
     GameRoom room,
     Map<String, CharacterProfile> characters,
+    GameAreaLookup areas,
   ) async {
     try {
       final setup = GameSetup();
@@ -445,16 +737,67 @@ class _AdminPageState extends State<AdminPage> {
         charactersByName: characters,
       );
       final mystery = setup.selectMystery(players);
-      await widget.rooms.saveAssignments(roomId: room.id, players: players, mystery: mystery);
+      final suspectRoomNames = mystery.suspectIds.map((participantId) {
+        final player = players.firstWhere((player) => player.id == participantId);
+        // Se guarda una entrada por cada sospechoso, incluso cuando coincidan.
+        return areas.roomsFor(player.position!.name).firstOrNull ?? player.position!.name;
+      }).toList();
+      final mysteryWithLocations = GameMystery(
+        thiefId: mystery.thiefId,
+        accompliceIds: mystery.accompliceIds,
+        suspectRoomNames: suspectRoomNames,
+      );
+      final secondarySource = await rootBundle.loadString('lib/resources/misionesSecundarias.json');
+      List<SecondaryMissionDefinition> parseDefinitions(String source) {
+        final json = jsonDecode(source) as Map<String, dynamic>;
+        return json.entries
+            .map((entry) => SecondaryMissionDefinition.fromJson(entry.key, entry.value as Map<String, dynamic>))
+            .toList();
+      }
+      final secondaryMissions = setup.assignSecondaryMissions(
+        // Los ficticios no tienen sesión para ver ni completar misiones.
+        players: players.where((player) => !player.isFake).toList(),
+        targets: players,
+        missions: parseDefinitions(secondarySource),
+        areas: areas,
+      );
+      await widget.rooms.saveAssignments(
+        roomId: room.id,
+        players: players,
+        mystery: mysteryWithLocations,
+        secondaryMissions: secondaryMissions,
+      );
       if (!mounted) return;
       setState(() {
         _assignedPlayers = players;
-        _mystery = mystery;
+        _mystery = mysteryWithLocations;
       });
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Partida iniciada.')));
     } catch (error) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
     }
+  }
+
+  Future<void> _confirmAndAssign(
+    List<MapTile> tiles,
+    GameRoom room,
+    Map<String, CharacterProfile> characters,
+    GameAreaLookup areas,
+  ) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('¿Iniciar o reiniciar la partida?'),
+        content: const Text(
+          'Se realizará un nuevo sorteo. Se perderán las asignaciones y las monedas actuales de todas las familias volverán a 100.',
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: const Text('No')),
+          FilledButton(onPressed: () => Navigator.of(dialogContext).pop(true), child: const Text('Sí, continuar')),
+        ],
+      ),
+    );
+    if (confirmed == true && mounted) await _assignPositions(tiles, room, characters, areas);
   }
 
   Future<void> _addFakePlayers() async {
@@ -500,58 +843,290 @@ class _AdminPageState extends State<AdminPage> {
                 ]),
                 const SizedBox(height: 12),
                 FilledButton.icon(
-                  onPressed: () => _assignPositions(tiles, room, characters),
+                  onPressed: () => _confirmAndAssign(tiles, room, characters, areas),
                   icon: const Icon(Icons.casino_outlined),
                   label: Text(_assignedPlayers == null ? 'Asignar casillas' : 'Repartir de nuevo'),
                 ),
                 const SizedBox(height: 12),
-                Expanded(
-                  child: FutureBuilder<List<Object?>>(
-                    future: Future.wait<Object?>([
-                      widget.rooms.roomAssignments(room),
-                      widget.rooms.roomClues(room.id),
-                      widget.rooms.roomMystery(room.id),
-                    ]),
-                    builder: (context, assignmentsSnapshot) {
-                      if (assignmentsSnapshot.hasError) return Text(assignmentsSnapshot.error.toString());
-                      final storedPlayers = assignmentsSnapshot.hasData
-                          ? assignmentsSnapshot.data![0] as List<GamePlayer>
-                          : null;
-                      final clues = assignmentsSnapshot.hasData
-                          ? assignmentsSnapshot.data![1] as Map<String, String>
-                          : const <String, String>{};
-                      final storedMystery = assignmentsSnapshot.hasData
-                          ? assignmentsSnapshot.data![2] as GameMystery?
-                          : null;
-                      final players = _assignedPlayers ?? storedPlayers;
-                      final mystery = _mystery ?? storedMystery;
-                      if (players == null || players.isEmpty) {
-                        return const Center(child: Text('Solo el admin puede consultar y generar este listado.'));
-                      }
-                      return ListView(
-                        children: [
-                          if (mystery != null) _MysteryCard(mystery: mystery, players: players, areas: areas),
-                          ...players.map((player) => ListTile(
-                                leading: CircleAvatar(
-                                  backgroundColor: _teamColor(player.team!),
-                                  child: Text(player.team!.label.substring(0, 1)),
-                                ),
-                                title: Text('${player.name} - ${player.characterName}'),
-                                subtitle: Text(
-                                  'Equipo ${player.team!.label}${player.familyName == null ? '' : ' - Familia ${player.familyName}'}${player.isAdmin ? ' - Admin' : ''}\nPista: ${player.clue ?? clues[player.id] ?? 'Sin pista'}',
-                                ),
-                                isThreeLine: true,
-                                trailing: Text(player.position!.name, style: Theme.of(context).textTheme.titleMedium),
-                              )),
-                        ],
-                      );
-                    },
-                  ),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.list_alt_outlined),
+                  label: const Text('Ver sorteo actual'),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => DrawResultsPage(room: room, rooms: widget.rooms, areas: areas),
+                  )),
+                ),
+                const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.monetization_on_outlined),
+                  label: const Text('Gestionar monedas de familias'),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => FamilyCoinsPage(room: room, rooms: widget.rooms),
+                  )),
+                ),
+                const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.tune_outlined),
+                  label: const Text('Activar compras de jugadores'),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => PurchaseSettingsPage(room: room, rooms: widget.rooms),
+                  )),
                 ),
               ]),
             );
           },
         ),
+      );
+}
+
+class DrawResultsPage extends StatelessWidget {
+  const DrawResultsPage({super.key, required this.room, required this.rooms, required this.areas});
+
+  final GameRoom room;
+  final SupabaseRoomRepository rooms;
+  final GameAreaLookup areas;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('Sorteo actual')),
+        body: FutureBuilder<List<Object?>>(
+          future: Future.wait<Object?>([
+            rooms.roomAssignments(room),
+            rooms.roomClues(room.id),
+            rooms.roomMystery(room.id),
+            rooms.roomTeamQuadrants(room.id),
+          ]),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) return _ErrorPage(message: snapshot.error.toString());
+            if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+            final players = snapshot.data![0] as List<GamePlayer>;
+            final clues = snapshot.data![1] as Map<String, String>;
+            final mystery = snapshot.data![2] as GameMystery?;
+            final quadrants = snapshot.data![3] as List<TeamQuadrant>;
+            if (players.isEmpty) return const Center(child: Text('Todavía no se han asignado casillas.'));
+            return ListView(
+              padding: const EdgeInsets.all(20),
+              children: [
+                if (mystery != null) _MysteryCard(mystery: mystery, players: players, areas: areas),
+                if (quadrants.isNotEmpty)
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Cuadrantes de los equipos', style: Theme.of(context).textTheme.titleMedium),
+                          ...Team.values.where((team) => quadrants.any((item) => item.team == team)).map(
+                                (team) => Text(
+                                  '${team.label}: ${quadrants.where((item) => item.team == team).map((item) => item.source == 'secret' ? '${item.quadrant} (secreto)' : item.quadrant).join(', ')}',
+                                ),
+                              ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ...players.map((player) => ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: _teamColor(player.team!),
+                        child: Text(player.team!.label.substring(0, 1)),
+                      ),
+                      title: Text('${player.name} - ${player.characterName}'),
+                      subtitle: Text(
+                        'Equipo ${player.team!.label}${player.familyName == null ? '' : ' - Familia ${player.familyName}'}${player.isAdmin ? ' - Admin' : ''}\nPista: ${clues[player.id] ?? 'Sin pista'}',
+                      ),
+                      isThreeLine: true,
+                      trailing: Text(player.position!.name, style: Theme.of(context).textTheme.titleMedium),
+                    )),
+              ],
+            );
+          },
+        ),
+      );
+}
+
+class FamilyCoinsPage extends StatefulWidget {
+  const FamilyCoinsPage({super.key, required this.room, required this.rooms});
+
+  final GameRoom room;
+  final SupabaseRoomRepository rooms;
+
+  @override
+  State<FamilyCoinsPage> createState() => _FamilyCoinsPageState();
+}
+
+class _FamilyCoinsPageState extends State<FamilyCoinsPage> {
+  late Future<List<FamilyBalance>> _balances;
+
+  @override
+  void initState() {
+    super.initState();
+    _balances = widget.rooms.familyBalances(widget.room.id);
+  }
+
+  Future<void> _change(FamilyBalance balance, int sign) async {
+    final amount = await _askAmount();
+    if (amount == null) return;
+    try {
+      await widget.rooms.changeFamilyCoins(roomId: widget.room.id, balance: balance, amount: sign * amount);
+      if (mounted) setState(() => _balances = widget.rooms.familyBalances(widget.room.id));
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    }
+  }
+
+  Future<int?> _askAmount() async {
+    return showDialog<int>(
+      context: context,
+      builder: (_) => const _CoinAmountDialog(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('Monedas por familia')),
+        body: FutureBuilder<List<FamilyBalance>>(
+          future: _balances,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) return _ErrorPage(message: snapshot.error.toString());
+            if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+            final balances = snapshot.data!;
+            if (balances.isEmpty) return const Center(child: Text('Asigna las casillas para crear los saldos.'));
+            return ListView(
+              padding: const EdgeInsets.all(20),
+              children: balances.map((balance) => Card(
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: _teamColor(balance.team),
+                    child: Text(balance.team.label.substring(0, 1)),
+                  ),
+                  title: Text('${balance.team.label} - ${balance.familyName}'),
+                  subtitle: Text('${balance.coins} monedas'),
+                  trailing: Wrap(spacing: 4, children: [
+                    IconButton(
+                      tooltip: 'Quitar monedas',
+                      onPressed: () => _change(balance, -1),
+                      icon: const Icon(Icons.remove_circle_outline),
+                    ),
+                    IconButton(
+                      tooltip: 'Añadir monedas',
+                      onPressed: () => _change(balance, 1),
+                      icon: const Icon(Icons.add_circle_outline),
+                    ),
+                  ]),
+                ),
+              )).toList(),
+            );
+          },
+        ),
+      );
+}
+
+class _CoinAmountDialog extends StatefulWidget {
+  const _CoinAmountDialog();
+
+  @override
+  State<_CoinAmountDialog> createState() => _CoinAmountDialogState();
+}
+
+class _CoinAmountDialogState extends State<_CoinAmountDialog> {
+  final _controller = TextEditingController(text: '10');
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _confirm() {
+    final amount = int.tryParse(_controller.text.trim());
+    if (amount == null || amount <= 0) return;
+    // Se desmonta primero el campo (y su teclado) y el controlador se libera
+    // desde dispose, cuando ya no mantiene dependencias del árbol de widgets.
+    FocusManager.instance.primaryFocus?.unfocus();
+    Navigator.of(context).pop(amount);
+  }
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+        title: const Text('Cantidad de monedas'),
+        content: TextField(
+          controller: _controller,
+          autofocus: true,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'Monedas'),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancelar')),
+          FilledButton(
+            onPressed: _confirm,
+            child: const Text('Confirmar'),
+          ),
+        ],
+      );
+}
+
+class PurchaseSettingsPage extends StatefulWidget {
+  const PurchaseSettingsPage({super.key, required this.room, required this.rooms});
+
+  final GameRoom room;
+  final SupabaseRoomRepository rooms;
+
+  @override
+  State<PurchaseSettingsPage> createState() => _PurchaseSettingsPageState();
+}
+
+class _PurchaseSettingsPageState extends State<PurchaseSettingsPage> {
+  late Future<PurchaseSettings> _settings;
+  String? _updatingItem;
+
+  @override
+  void initState() {
+    super.initState();
+    _settings = widget.rooms.purchaseSettings(widget.room.id);
+  }
+
+  Future<void> _setEnabled(String item, bool enabled) async {
+    setState(() => _updatingItem = item);
+    try {
+      await widget.rooms.setPurchaseEnabled(roomId: widget.room.id, item: item, enabled: enabled);
+      if (mounted) setState(() => _settings = widget.rooms.purchaseSettings(widget.room.id));
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    } finally {
+      if (mounted) setState(() => _updatingItem = null);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('Compras de jugadores')),
+        body: FutureBuilder<PurchaseSettings>(
+          future: _settings,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) return _ErrorPage(message: snapshot.error.toString());
+            if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+            final settings = snapshot.data!;
+            return ListView(
+              padding: const EdgeInsets.all(20),
+              children: [
+                const Text('Activa cada compra para que los jugadores puedan usarla.'),
+                const SizedBox(height: 12),
+                _switch('Permitir comprar pista (15 monedas)', 'clue', settings.clueEnabled),
+                _switch('Permitir comprar cuadrante (10 monedas)', 'quadrant', settings.quadrantEnabled),
+                _switch(
+                  'Permitir comprar ubicaciones de cuadrante (25 monedas)',
+                  'quadrant_locations',
+                  settings.quadrantLocationsEnabled,
+                ),
+              ],
+            );
+          },
+        ),
+      );
+
+  Widget _switch(String title, String item, bool value) => SwitchListTile(
+        title: Text(title),
+        value: value,
+        onChanged: _updatingItem == null ? (enabled) => _setEnabled(item, enabled) : null,
       );
 }
 
@@ -585,6 +1160,10 @@ class _MysteryCard extends StatelessWidget {
             _villainLocation('Ladron (lleva el compas)', thief),
             _villainLocation('Complice 1', accomplices[0]),
             _villainLocation('Complice 2', accomplices[1]),
+            if (mystery.suspectRoomNames.length == 3) ...[
+              const SizedBox(height: 8),
+              Text('Pista guardada de estancias: ${mystery.suspectRoomNames.join(', ')}.'),
+            ],
           ],
         ),
       ),

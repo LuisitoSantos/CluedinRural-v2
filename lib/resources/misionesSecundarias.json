@@ -1,0 +1,402 @@
+{
+    "1": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "2": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "3": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "4": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "5": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "6": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "7": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "8": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "9": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "10": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "11": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "12": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "13": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "14": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "15": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "16": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "17": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "18": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "19": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "20": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "21": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "22": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "23": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "24": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "25": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "26": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "27": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "28": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "29": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "30": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "31": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "32": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "33": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "34": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "35": {
+        "Nivel": 1,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "36": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "37": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "38": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "39": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "40": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "41": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "42": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "43": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "44": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "45": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "46": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "47": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "48": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "49": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "50": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "51": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "52": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "53": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "54": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "55": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "56": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "57": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "58": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "59": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "60": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "61": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "62": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "63": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "64": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "65": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "66": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "67": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "68": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "69": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "70": {
+        "Nivel": 2,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "71": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "72": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "73": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "74": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "75": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "76": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "77": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "78": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "79": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "80": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "81": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "82": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "83": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "84": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "85": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "86": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "87": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "88": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "89": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "90": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "91": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "92": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "93": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "94": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "95": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "96": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "97": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "98": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "99": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    },
+    "100": {
+        "Nivel": 3,
+        "Accion": "Recoger 20 hierbas"
+    }
+}

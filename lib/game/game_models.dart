@@ -71,10 +71,17 @@ class GameRoom {
 }
 
 class GameMystery {
-  const GameMystery({required this.thiefId, required this.accompliceIds});
+  const GameMystery({
+    required this.thiefId,
+    required this.accompliceIds,
+    this.suspectRoomNames = const [],
+  });
 
   final String thiefId;
   final List<String> accompliceIds;
+  /// Una estancia por sospechoso, en el mismo orden que [suspectIds].
+  /// No se eliminan los duplicados: tres sospechosos pueden compartir estancia.
+  final List<String> suspectRoomNames;
 
   List<String> get suspectIds => [thiefId, ...accompliceIds];
 
@@ -82,7 +89,67 @@ class GameMystery {
         'thief_participant_id': thiefId,
         'accomplice_participant_ids': accompliceIds,
         'compass_holder_participant_id': thiefId,
+        'suspect_room_names': suspectRoomNames,
       };
+}
+
+class FamilyBalance {
+  const FamilyBalance({required this.team, required this.familyName, required this.coins});
+
+  final Team team;
+  final String familyName;
+  final int coins;
+}
+
+class PurchaseSettings {
+  const PurchaseSettings({
+    required this.clueEnabled,
+    required this.quadrantEnabled,
+    required this.quadrantLocationsEnabled,
+  });
+
+  final bool clueEnabled;
+  final bool quadrantEnabled;
+  final bool quadrantLocationsEnabled;
+}
+
+class TeamQuadrant {
+  const TeamQuadrant({required this.team, required this.quadrant, required this.source});
+
+  final Team team;
+  final String quadrant;
+  /// `initial`, `secret` o `purchase`.
+  final String source;
+}
+
+class QuadrantLocation {
+  const QuadrantLocation({required this.quadrant, required this.positionName});
+
+  final String quadrant;
+  final String positionName;
+}
+
+class SecondaryMissionDefinition {
+  const SecondaryMissionDefinition({required this.id, required this.level, required this.action});
+
+  final String id;
+  final int level;
+  final String action;
+
+  factory SecondaryMissionDefinition.fromJson(String id, Map<String, dynamic> json) => SecondaryMissionDefinition(
+        id: id,
+        level: json['Nivel'] as int,
+        action: json['Accion'] as String,
+      );
+}
+
+class CurrentSecondaryMission {
+  const CurrentSecondaryMission({required this.id, required this.level, required this.action, required this.number});
+
+  final String id;
+  final int level;
+  final String action;
+  final int number;
 }
 
 enum CompassRole { thief, accomplice }
@@ -138,6 +205,13 @@ extension TeamDetails on Team {
         Team.blue => 'Azul',
         Team.green => 'Verde',
         Team.yellow => 'Amarillo',
+  };
+
+  String get familyName => switch (this) {
+        Team.red => 'Rossi',
+        Team.blue => 'Beaumont',
+        Team.green => "O'Doherty",
+        Team.yellow => 'Romanov',
       };
 }
 

@@ -106,7 +106,8 @@ class SupabaseRoomRepository {
     required String roomId,
     required List<GamePlayer> players,
     required GameMystery mystery,
-  }) {
+    required List<Map<String, dynamic>> secondaryMissions,
+  }) async {
     final assignments = players
         .map((player) => {
               'participant_id': player.id,
@@ -119,24 +120,185 @@ class SupabaseRoomRepository {
               'clue': player.clue,
             })
         .toList();
-    return _client.rpc('save_game_assignments', params: {
+    await _client.rpc('save_game_assignments', params: {
       'p_room_id': roomId,
       'p_assignments': assignments,
       'p_mystery': mystery.toJson(),
+    });
+    await _client.rpc('save_secondary_missions', params: {
+      'p_room_id': roomId,
+      'p_missions': secondaryMissions,
     });
   }
 
   Future<GameMystery?> roomMystery(String roomId) async {
     final rows = await _client
         .from('game_room_mysteries')
-        .select('thief_participant_id, accomplice_participant_ids')
+        .select('thief_participant_id, accomplice_participant_ids, suspect_room_names')
         .eq('room_id', roomId);
     if ((rows as List<dynamic>).isEmpty) return null;
     final mystery = rows.first as Map<String, dynamic>;
     return GameMystery(
       thiefId: mystery['thief_participant_id'] as String,
       accompliceIds: (mystery['accomplice_participant_ids'] as List<dynamic>).cast<String>(),
+      suspectRoomNames: (mystery['suspect_room_names'] as List<dynamic>? ?? const []).cast<String>(),
     );
+  }
+
+  Future<List<FamilyBalance>> familyBalances(String roomId) async {
+    final rows = await _client
+        .from('game_family_balances')
+        .select('team, family_name, coins')
+        .eq('room_id', roomId)
+        .order('team')
+        .order('family_name');
+    return (rows as List<dynamic>).map((row) {
+      final value = row as Map<String, dynamic>;
+      return FamilyBalance(
+        team: Team.values.byName(value['team'] as String),
+        familyName: value['family_name'] as String,
+        coins: value['coins'] as int,
+      );
+    }).toList();
+  }
+
+  Future<void> changeFamilyCoins({
+    required String roomId,
+    required FamilyBalance balance,
+    required int amount,
+  }) =>
+      _client.rpc('change_game_family_coins', params: {
+        'p_room_id': roomId,
+        'p_team': balance.team.name,
+        'p_family_name': balance.familyName,
+        'p_amount': amount,
+      });
+
+  Future<int?> myFamilyCoins(String roomId) async {
+    final assignment = await myAssignment(roomId);
+    if (assignment == null) return null;
+    final rows = await _client
+        .from('game_family_balances')
+        .select('coins')
+        .eq('room_id', roomId)
+        .eq('team', assignment.team!.name)
+        .eq('family_name', assignment.familyName ?? 'Sin familia');
+    if ((rows as List<dynamic>).isEmpty) return null;
+    return (rows.first as Map<String, dynamic>)['coins'] as int;
+  }
+
+  Future<PurchaseSettings> purchaseSettings(String roomId) async {
+    final rows = await _client
+        .from('game_room_purchase_settings')
+        .select('clue_enabled, quadrant_enabled, quadrant_locations_enabled')
+        .eq('room_id', roomId);
+    if ((rows as List<dynamic>).isEmpty) {
+      return const PurchaseSettings(clueEnabled: false, quadrantEnabled: false, quadrantLocationsEnabled: false);
+    }
+    final settings = rows.first as Map<String, dynamic>;
+    return PurchaseSettings(
+      clueEnabled: settings['clue_enabled'] as bool,
+      quadrantEnabled: settings['quadrant_enabled'] as bool,
+      quadrantLocationsEnabled: settings['quadrant_locations_enabled'] as bool,
+    );
+  }
+
+  Future<void> setPurchaseEnabled({required String roomId, required String item, required bool enabled}) =>
+      _client.rpc('set_game_purchase_enabled', params: {
+        'p_room_id': roomId,
+        'p_item': item,
+        'p_enabled': enabled,
+      });
+
+  Future<String> purchaseGameItem({required String roomId, required String item, String? quadrant}) async {
+    if (item == 'clue') {
+      final result = await _client.rpc('purchase_team_lost_clue', params: {'p_room_id': roomId});
+      return result as String;
+    }
+    final result = await _client.rpc('purchase_game_item', params: {
+      'p_room_id': roomId,
+      'p_item': item,
+      if (quadrant != null) 'p_quadrant': quadrant,
+    });
+    return result as String? ?? 'Compra registrada.';
+  }
+
+  Future<List<TeamQuadrant>> myTeamQuadrants(String roomId) async {
+    final assignment = await myAssignment(roomId);
+    if (assignment == null) return const [];
+    final rows = await _client
+        .from('game_team_quadrants')
+        .select('team, quadrant, source')
+        .eq('room_id', roomId)
+        .eq('team', assignment.team!.name)
+        // Incluso si quien juega es el admin, el cuadrante secreto solo se
+        // consulta desde la pantalla de administración.
+        .neq('source', 'secret')
+        .order('quadrant');
+    return (rows as List<dynamic>).map((row) {
+      final value = row as Map<String, dynamic>;
+      return TeamQuadrant(
+        team: Team.values.byName(value['team'] as String),
+        quadrant: value['quadrant'] as String,
+        source: value['source'] as String,
+      );
+    }).toList();
+  }
+
+  Future<List<TeamQuadrant>> roomTeamQuadrants(String roomId) async {
+    final rows = await _client
+        .from('game_team_quadrants')
+        .select('team, quadrant, source')
+        .eq('room_id', roomId)
+        .order('team')
+        .order('quadrant');
+    return (rows as List<dynamic>).map((row) {
+      final value = row as Map<String, dynamic>;
+      return TeamQuadrant(
+        team: Team.values.byName(value['team'] as String),
+        quadrant: value['quadrant'] as String,
+        source: value['source'] as String,
+      );
+    }).toList();
+  }
+
+  Future<List<QuadrantLocation>> myQuadrantLocations(String roomId) async {
+    final assignment = await myAssignment(roomId);
+    if (assignment == null) return const [];
+    final rows = await _client
+        .from('game_team_quadrant_locations')
+        .select('quadrant, position_name')
+        .eq('room_id', roomId)
+        .eq('team', assignment.team!.name)
+        .order('quadrant')
+        .order('position_name');
+    return (rows as List<dynamic>).map((row) {
+      final value = row as Map<String, dynamic>;
+      return QuadrantLocation(
+        quadrant: value['quadrant'] as String,
+        positionName: value['position_name'] as String,
+      );
+    }).toList();
+  }
+
+  Future<CurrentSecondaryMission?> myCurrentSecondaryMission(String roomId) async {
+    final row = await _client.rpc('my_current_secondary_mission', params: {'p_room_id': roomId});
+    if (row == null || row is List && row.isEmpty) return null;
+    final value = _firstRow(row);
+    return CurrentSecondaryMission(
+      id: value['mission_id'] as String,
+      level: value['mission_level'] as int,
+      action: value['mission_action'] as String,
+      number: value['mission_number'] as int,
+    );
+  }
+
+  Future<String> completeSecondaryMission({required String roomId, required String missionId}) async {
+    final result = await _client.rpc('complete_secondary_mission', params: {
+      'p_room_id': roomId,
+      'p_mission_id': missionId.trim(),
+    });
+    return result as String;
   }
 
   Future<CompassRole?> myCompassRole(String roomId) async {
@@ -174,7 +336,15 @@ class SupabaseRoomRepository {
         .eq('room_id', roomId)
         .eq('team', assignment.team!.name)
         .neq('target_participant_id', userId);
-    return (rows as List<dynamic>).map((row) => (row as Map<String, dynamic>)['clue'] as String).toList();
+    final secondaryRows = await _client
+        .from('game_team_secondary_clues')
+        .select('clue')
+        .eq('room_id', roomId)
+        .eq('team', assignment.team!.name);
+    return [
+      ...(rows as List<dynamic>).map((row) => (row as Map<String, dynamic>)['clue'] as String),
+      ...(secondaryRows as List<dynamic>).map((row) => (row as Map<String, dynamic>)['clue'] as String),
+    ];
   }
 
   Future<Map<String, String>> roomClues(String roomId) async {
