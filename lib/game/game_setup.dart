@@ -72,8 +72,15 @@ class GameSetup {
     return GameMystery(
       thiefId: suspects[0].id,
       accompliceIds: [suspects[1].id, suspects[2].id],
+      secretWord: _secretWords[_random.nextInt(_secretWords.length)],
     );
   }
+
+  static const _secretWords = <String>[
+    'Almendro', 'Brújula', 'Castaña', 'Dalia', 'Espejo', 'Faro', 'Gacela',
+    'Hoguera', 'Isla', 'Jazmín', 'Linterna', 'Niebla', 'Olivo', 'Pájaro',
+    'Reloj', 'Sauce', 'Trébol', 'Vela',
+  ];
 
   List<Map<String, dynamic>> assignSecondaryMissions({
     required List<GamePlayer> players,
@@ -86,16 +93,20 @@ class GameSetup {
       throw StateError('No hay suficientes personajes para asociar una pista única a cada misión.');
     }
     final result = <Map<String, dynamic>>[];
-    final availableTargets = [...targets]..shuffle(_random);
+    final missionSlots = <GamePlayer>[
+      for (final player in players) ...List.filled(5, player),
+    ]..shuffle(_random);
+    final targetsBySlot = _assignUniqueTargets(missionSlots, targets);
+
+    final slotsByPlayer = <String, List<GamePlayer>>{};
+    for (var index = 0; index < missionSlots.length; index++) {
+      slotsByPlayer.putIfAbsent(missionSlots[index].id, () => []).add(targetsBySlot[index]);
+    }
     for (final player in players) {
       final deck = [...missions]..shuffle(_random);
       for (var index = 0; index < 5; index++) {
         final mission = deck[index];
-        final targetIndex = availableTargets.indexWhere((target) => target.team != player.team);
-        if (targetIndex < 0) {
-          throw StateError('No hay personajes de otros equipos suficientes para repartir las pistas únicas.');
-        }
-        final target = availableTargets.removeAt(targetIndex);
+        final target = slotsByPlayer[player.id]![index];
         final clue = _secondaryClueFor(target, areas);
         result.add({
           'participant_id': player.id,
@@ -111,6 +122,39 @@ class GameSetup {
       }
     }
     return result;
+  }
+
+  /// Empareja cada misión con un personaje de otro equipo sin repetir
+  /// personaje. El emparejamiento aumentante evita que un orden de sorteo
+  /// desafortunado descarte una distribución que sí era posible.
+  List<GamePlayer> _assignUniqueTargets(List<GamePlayer> missionSlots, List<GamePlayer> targets) {
+    final shuffledTargets = [...targets]..shuffle(_random);
+    final targetForSlot = List<int?>.filled(missionSlots.length, null);
+    final slotForTarget = List<int?>.filled(shuffledTargets.length, null);
+
+    bool assign(int slot, Set<int> visitedTargets) {
+      final candidates = <int>[
+        for (var targetIndex = 0; targetIndex < shuffledTargets.length; targetIndex++)
+          if (shuffledTargets[targetIndex].team != missionSlots[slot].team) targetIndex,
+      ]..shuffle(_random);
+      for (final targetIndex in candidates) {
+        if (!visitedTargets.add(targetIndex)) continue;
+        final previousSlot = slotForTarget[targetIndex];
+        if (previousSlot == null || assign(previousSlot, visitedTargets)) {
+          slotForTarget[targetIndex] = slot;
+          targetForSlot[slot] = targetIndex;
+          return true;
+        }
+      }
+      return false;
+    }
+
+    for (var slot = 0; slot < missionSlots.length; slot++) {
+      if (!assign(slot, <int>{})) {
+        throw StateError('No hay personajes de otros equipos suficientes para repartir las pistas únicas.');
+      }
+    }
+    return [for (final targetIndex in targetForSlot) shuffledTargets[targetIndex!]];
   }
 
   _SecondaryClue _secondaryClueFor(GamePlayer target, GameAreaLookup areas) {

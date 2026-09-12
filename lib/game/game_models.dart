@@ -75,6 +75,7 @@ class GameMystery {
     required this.thiefId,
     required this.accompliceIds,
     this.suspectRoomNames = const [],
+    this.secretWord,
   });
 
   final String thiefId;
@@ -82,6 +83,8 @@ class GameMystery {
   /// Una estancia por sospechoso, en el mismo orden que [suspectIds].
   /// No se eliminan los duplicados: tres sospechosos pueden compartir estancia.
   final List<String> suspectRoomNames;
+  /// Palabra común exclusiva del ladrón y sus cómplices.
+  final String? secretWord;
 
   List<String> get suspectIds => [thiefId, ...accompliceIds];
 
@@ -89,7 +92,8 @@ class GameMystery {
         'thief_participant_id': thiefId,
         'accomplice_participant_ids': accompliceIds,
         'compass_holder_participant_id': thiefId,
-        'suspect_room_names': suspectRoomNames,
+      'suspect_room_names': suspectRoomNames,
+      'secret_word': secretWord,
       };
 }
 
@@ -153,6 +157,30 @@ class CurrentSecondaryMission {
 }
 
 enum CompassRole { thief, accomplice }
+
+class CompassSecret {
+  const CompassSecret({
+    required this.role,
+    this.word,
+    required this.canCauseDamage,
+    required this.pendingDamageCount,
+    required this.canPayBribes,
+  });
+
+  final CompassRole? role;
+  final String? word;
+  final bool canCauseDamage;
+  final int pendingDamageCount;
+  final bool canPayBribes;
+}
+
+class SabotageTarget {
+  const SabotageTarget({required this.id, required this.characterName, required this.pendingDamageCount});
+
+  final String id;
+  final String characterName;
+  final int pendingDamageCount;
+}
 
 extension CompassRoleDetails on CompassRole {
   String get label => switch (this) {

@@ -14,6 +14,7 @@ create table if not exists public.game_team_quadrants (
 
 alter table public.game_team_quadrants enable row level security;
 
+drop policy if exists "Admins and teams can read their available quadrants" on public.game_team_quadrants;
 create policy "Admins and teams can read their available quadrants"
 on public.game_team_quadrants for select to authenticated
 using (
@@ -48,6 +49,7 @@ create table if not exists public.game_team_quadrant_locations (
 
 alter table public.game_team_quadrant_locations enable row level security;
 
+drop policy if exists "Admins and teams can read discovered locations" on public.game_team_quadrant_locations;
 create policy "Admins and teams can read discovered locations"
 on public.game_team_quadrant_locations for select to authenticated
 using (
@@ -172,6 +174,8 @@ $$;
 
 -- Al iniciar o reiniciar se vuelven a sortear exactamente dos cuadrantes
 -- visibles y uno secreto por cada equipo que participe en la partida.
+alter table public.game_room_mysteries add column if not exists secret_word text;
+
 create or replace function public.save_game_assignments(
   p_room_id uuid,
   p_assignments jsonb,
@@ -179,7 +183,7 @@ create or replace function public.save_game_assignments(
 )
 returns void language plpgsql security definer set search_path = public as $$
 declare
-  v_thief_id uuid; v_accomplice_ids uuid[]; v_compass_holder_id uuid; v_suspect_room_names text[]; v_team text;
+  v_thief_id uuid; v_accomplice_ids uuid[]; v_compass_holder_id uuid; v_suspect_room_names text[]; v_secret_word text; v_team text;
 begin
   if not public.is_game_room_admin(p_room_id) then raise exception 'Solo el admin puede iniciar la partida'; end if;
   if jsonb_typeof(p_assignments) <> 'array' or jsonb_array_length(p_assignments) < 3 then
@@ -189,8 +193,9 @@ begin
   v_accomplice_ids := array(select jsonb_array_elements_text(p_mystery->'accomplice_participant_ids')::uuid);
   v_compass_holder_id := (p_mystery->>'compass_holder_participant_id')::uuid;
   v_suspect_room_names := array(select jsonb_array_elements_text(p_mystery->'suspect_room_names'));
+  v_secret_word := nullif(trim(p_mystery->>'secret_word'), '');
   if cardinality(v_accomplice_ids) <> 2 or v_thief_id = any(v_accomplice_ids)
-     or v_compass_holder_id <> v_thief_id or cardinality(v_suspect_room_names) <> 3 then
+     or v_compass_holder_id <> v_thief_id or cardinality(v_suspect_room_names) <> 3 or v_secret_word is null then
     raise exception 'La solución del Compás Dorado no es válida';
   end if;
 
@@ -214,8 +219,8 @@ begin
   insert into public.game_family_balances(room_id, team, family_name, coins)
   select distinct p_room_id, item->>'team', coalesce(nullif(item->>'role_name', ''), 'Sin familia'), 100
   from jsonb_array_elements(p_assignments) as item;
-  insert into public.game_room_mysteries(room_id, thief_participant_id, accomplice_participant_ids, suspect_room_names, compass_holder_participant_id)
-  values (p_room_id, v_thief_id, v_accomplice_ids, v_suspect_room_names, v_compass_holder_id);
+  insert into public.game_room_mysteries(room_id, thief_participant_id, accomplice_participant_ids, suspect_room_names, compass_holder_participant_id, secret_word)
+  values (p_room_id, v_thief_id, v_accomplice_ids, v_suspect_room_names, v_compass_holder_id, v_secret_word);
   insert into public.game_room_purchase_settings(room_id, clue_enabled, quadrant_enabled, quadrant_locations_enabled)
   values (p_room_id, false, false, false)
   on conflict (room_id) do update set clue_enabled = false, quadrant_enabled = false, quadrant_locations_enabled = false;

@@ -321,24 +321,6 @@ class _RoomPageState extends State<RoomPage> {
         padding: const EdgeInsets.all(24),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           _PlayerGamePanel(room: room, rooms: rooms, gameRevision: _gameRevision),
-          FutureBuilder<CompassRole?>(
-            future: rooms.myCompassRole(room.id),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) return const SizedBox.shrink();
-              final role = snapshot.data;
-              if (role == null) return const SizedBox.shrink();
-              return Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: Card(
-                  color: Theme.of(context).colorScheme.errorContainer,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(role.label, style: Theme.of(context).textTheme.titleMedium),
-                  ),
-                ),
-              );
-            },
-          ),
           const SizedBox(height: 28),
           if (isAdmin)
             FilledButton.icon(
@@ -368,6 +350,7 @@ class _PlayerGameData {
     required this.quadrants,
     required this.locations,
     required this.currentMission,
+    required this.secret,
   });
 
   final GamePlayer? assignment;
@@ -377,6 +360,7 @@ class _PlayerGameData {
   final List<TeamQuadrant> quadrants;
   final List<QuadrantLocation> locations;
   final CurrentSecondaryMission? currentMission;
+  final CompassSecret? secret;
 }
 
 class _PlayerGamePanel extends StatefulWidget {
@@ -419,6 +403,7 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
         quadrants: [],
         locations: [],
         currentMission: null,
+        secret: null,
       );
     }
     final results = await Future.wait<Object?>([
@@ -428,6 +413,7 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
       widget.rooms.myTeamQuadrants(widget.room.id),
       widget.rooms.myQuadrantLocations(widget.room.id),
       widget.rooms.myCurrentSecondaryMission(widget.room.id),
+      widget.rooms.myCompassSecret(widget.room.id),
     ]);
     return _PlayerGameData(
       assignment: assignment,
@@ -437,6 +423,7 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
       quadrants: results[3] as List<TeamQuadrant>,
       locations: results[4] as List<QuadrantLocation>,
       currentMission: results[5] as CurrentSecondaryMission?,
+      secret: results[6] as CompassSecret?,
     );
   }
 
@@ -453,23 +440,24 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
           return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(12),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(assignment.characterName!, style: Theme.of(context).textTheme.headlineSmall),
-                  Text('Equipo: ${assignment.team!.label} (${assignment.familyName})'),
-                  const SizedBox(height: 8),
-                  Text('Monedas del equipo: ${data.coins ?? 0}', style: Theme.of(context).textTheme.titleMedium),
+                  Text(assignment.characterName!, style: Theme.of(context).textTheme.titleMedium),
+                  Text('Equipo: ${assignment.team!.label} · ${assignment.familyName}', style: Theme.of(context).textTheme.bodySmall),
+                  Text('Monedas del equipo: ${data.coins ?? 0}', style: Theme.of(context).textTheme.bodySmall),
+                  const SizedBox(height: 4),
+                  _SecretRolePanel(secret: data.secret, onCauseDamage: _causeDamage, onPayBribes: _payBribes),
                 ]),
               ),
             ),
             const SizedBox(height: 20),
-            Text('Pistas iniciales', style: Theme.of(context).textTheme.titleMedium),
+            Text('Pistas obtenidas', style: Theme.of(context).textTheme.titleMedium),
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Text('Cuadrantes de tu equipo: ${quadrantNames.join(', ')}'),
             ),
             if (data.clues.isEmpty)
-              const Padding(padding: EdgeInsets.only(top: 6), child: Text('Aún no hay pistas.'))
+              const Padding(padding: EdgeInsets.only(top: 6), child: Text('Aún no habéis obtenido pistas.'))
             else
               ...data.clues.map((clue) => Padding(padding: const EdgeInsets.only(top: 6), child: Text('• $clue'))),
             if (data.locations.isNotEmpty) ...[
@@ -489,6 +477,116 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
         },
       );
 
+  Future<void> _causeDamage() async {
+    try {
+      final targets = await widget.rooms.sabotageTargets(widget.room.id);
+      if (!mounted || targets.isEmpty) return;
+      final target = await showDialog<SabotageTarget>(
+        context: context,
+        builder: (context) => SimpleDialog(
+          title: const Text('¿A quién causar daños?'),
+          children: targets
+              .map((target) => SimpleDialogOption(
+                    onPressed: () => Navigator.of(context).pop(target),
+                    child: Text('${target.characterName}${target.pendingDamageCount == 0 ? '' : ' · ${target.pendingDamageCount} daño(s) pendiente(s)'}'),
+                  ))
+              .toList(),
+        ),
+      );
+      if (target == null || !mounted) return;
+      final result = await widget.rooms.causeDamage(roomId: widget.room.id, targetParticipantId: target.id);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
+      widget.gameRevision.value++;
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    }
+  }
+
+  Future<void> _payBribes() async {
+    try {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('¿Pagar sobornos?'),
+          content: const Text('Se restarán hasta 30 monedas a todos los equipos. Esta acción solo puede hacerse una vez.'),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancelar')),
+            FilledButton(onPressed: () => Navigator.of(context).pop(true), child: const Text('Pagar')),
+          ],
+        ),
+      );
+      if (confirmed != true || !mounted) return;
+      final result = await widget.rooms.payCompassBribes(widget.room.id);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
+      widget.gameRevision.value++;
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    }
+  }
+}
+
+class _SecretRolePanel extends StatefulWidget {
+  const _SecretRolePanel({required this.secret, required this.onCauseDamage, required this.onPayBribes});
+
+  final CompassSecret? secret;
+  final Future<void> Function() onCauseDamage;
+  final Future<void> Function() onPayBribes;
+
+  @override
+  State<_SecretRolePanel> createState() => _SecretRolePanelState();
+}
+
+class _SecretRolePanelState extends State<_SecretRolePanel> {
+  var _visible = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final role = widget.secret?.role;
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      TextButton.icon(
+        onPressed: () => setState(() => _visible = !_visible),
+        icon: Icon(_visible ? Icons.visibility_off_outlined : Icons.visibility_outlined, size: 18),
+        label: Text(_visible ? 'Ocultar información secreta' : 'Ver información secreta'),
+        style: TextButton.styleFrom(visualDensity: VisualDensity.compact, padding: EdgeInsets.zero),
+      ),
+      if (_visible)
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: role == null ? Theme.of(context).colorScheme.surfaceContainerHighest : Theme.of(context).colorScheme.errorContainer,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(role?.label ?? 'No tienes un rol secreto en esta partida.'),
+            if (widget.secret != null && widget.secret!.pendingDamageCount > 0) ...[
+              const SizedBox(height: 6),
+              Text('Daños pendientes: ${widget.secret!.pendingDamageCount}. Perderás una pista por cada misión afectada.'),
+            ],
+            if (role != null) ...[
+              const SizedBox(height: 6),
+              Text('Palabra para reconoceros: ${widget.secret!.word}', style: Theme.of(context).textTheme.titleSmall),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                onPressed: widget.secret!.canCauseDamage ? widget.onCauseDamage : null,
+                icon: const Icon(Icons.lock_outline),
+                label: Text(widget.secret!.canCauseDamage ? 'Causar daños' : 'Daños ya usados o compras desactivadas'),
+              ),
+              if (role == CompassRole.thief) ...[
+                const SizedBox(height: 6),
+                FilledButton.icon(
+                  onPressed: widget.secret!.canPayBribes ? widget.onPayBribes : null,
+                  icon: const Icon(Icons.paid_outlined),
+                  label: Text(widget.secret!.canPayBribes ? 'Pago de sobornos (−30 a cada equipo)' : 'Sobornos ya pagados'),
+                ),
+              ],
+            ],
+          ]),
+        ),
+    ]);
+  }
 }
 
 class _GameActionsData {
@@ -628,34 +726,42 @@ class _GameActionsBarState extends State<_GameActionsBar> {
           return BottomAppBar(
             child: SafeArea(
               top: false,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                 child: Row(
                   children: [
-                    FilledButton.icon(
+                    Expanded(child: _compactActionButton(
+                      filled: true,
                       onPressed: data.currentMission != null && _buyingItem == null
                           ? () => _completeMission(data.currentMission!)
                           : null,
                       icon: _buyingItem == 'mission'
                           ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
                           : const Icon(Icons.task_alt_outlined),
-                      label: const Text('Completar misión secundaria'),
-                    ),
-                    const SizedBox(width: 8),
-                    _purchaseButton('Comprar pista (15 monedas)', 'clue', settings.clueEnabled),
-                    const SizedBox(width: 8),
-                    _purchaseButton('Comprar cuadrante (10 monedas)', 'quadrant', settings.quadrantEnabled),
-                    const SizedBox(width: 8),
-                    OutlinedButton.icon(
+                      label: 'Misión',
+                    )),
+                    const SizedBox(width: 4),
+                    Expanded(child: _compactActionButton(
+                      onPressed: settings.clueEnabled && _buyingItem == null ? () => _purchase('clue') : null,
+                      icon: _buyingItem == 'clue' ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)) : const Icon(Icons.lightbulb_outline),
+                      label: 'Pista · 15',
+                    )),
+                    const SizedBox(width: 4),
+                    Expanded(child: _compactActionButton(
+                      onPressed: settings.quadrantEnabled && _buyingItem == null ? () => _purchase('quadrant') : null,
+                      icon: _buyingItem == 'quadrant' ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)) : const Icon(Icons.grid_view_outlined),
+                      label: 'Cuadr. · 10',
+                    )),
+                    const SizedBox(width: 4),
+                    Expanded(child: _compactActionButton(
                       onPressed: settings.quadrantLocationsEnabled && _buyingItem == null && data.quadrants.isNotEmpty
                           ? () => _buyLocations(data.quadrants)
                           : null,
                       icon: _buyingItem == 'quadrant_locations'
                           ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
                           : const Icon(Icons.location_on_outlined),
-                      label: const Text('Comprar ubicaciones (25 monedas)'),
-                    ),
+                      label: 'Ubic. · 25',
+                    )),
                   ],
                 ),
               ),
@@ -664,13 +770,23 @@ class _GameActionsBarState extends State<_GameActionsBar> {
         },
       );
 
-  Widget _purchaseButton(String label, String item, bool enabled) => OutlinedButton.icon(
-        onPressed: enabled && _buyingItem == null ? () => _purchase(item) : null,
-        icon: _buyingItem == item
-            ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
-            : const Icon(Icons.shopping_cart_outlined),
-        label: Text(label),
-      );
+  Widget _compactActionButton({required VoidCallback? onPressed, required Widget icon, required String label, bool filled = false}) {
+    final child = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      IconTheme.merge(data: const IconThemeData(size: 17), child: icon),
+      const SizedBox(width: 3),
+      Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11))),
+    ]);
+    return filled
+        ? FilledButton(onPressed: onPressed, style: _compactButtonStyle, child: child)
+        : OutlinedButton(onPressed: onPressed, style: _compactButtonStyle, child: child);
+  }
+
+  static final _compactButtonStyle = ButtonStyle(
+    padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 3, vertical: 8)),
+    minimumSize: const WidgetStatePropertyAll(Size(0, 38)),
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    visualDensity: VisualDensity.compact,
+  );
 }
 
 class AdminPage extends StatefulWidget {
@@ -746,6 +862,7 @@ class _AdminPageState extends State<AdminPage> {
         thiefId: mystery.thiefId,
         accompliceIds: mystery.accompliceIds,
         suspectRoomNames: suspectRoomNames,
+        secretWord: mystery.secretWord,
       );
       final secondarySource = await rootBundle.loadString('lib/resources/misionesSecundarias.json');
       List<SecondaryMissionDefinition> parseDefinitions(String source) {

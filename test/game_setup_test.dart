@@ -56,6 +56,7 @@ void main() {
     expect(mystery.accompliceIds, hasLength(2));
     expect(mystery.suspectIds.toSet(), hasLength(3));
     expect(mystery.suspectIds.every((id) => players.any((player) => player.id == id)), isTrue);
+    expect(mystery.secretWord, isNotEmpty);
   });
 
   test('el misterio conserva las tres estancias aunque se repitan', () {
@@ -88,5 +89,53 @@ void main() {
 
     expect(areas.quadrantFor('A1'), 'A');
     expect(areas.roomsFor('A1'), ['Kitchen']);
+  });
+
+  test('las misiones secundarias dan una sola pista de personajes de otro equipo', () {
+    final players = [
+      for (var index = 0; index < 5; index++)
+        GamePlayer(
+          id: 'red-$index',
+          name: 'Rojo $index',
+          isFake: true,
+          team: Team.red,
+          position: BoardPosition(name: 'A${index + 1}', column: index + 1, row: 0),
+          clue: 'Está en tierra.',
+        ),
+      for (var index = 0; index < 5; index++)
+        GamePlayer(
+          id: 'green-$index',
+          name: 'Verde $index',
+          isFake: true,
+          team: Team.green,
+          position: BoardPosition(name: 'B${index + 1}', column: index + 1, row: 1),
+          clue: 'Está en hierba.',
+        ),
+    ];
+    final areas = GameAreaLookup.fromJson(
+      quadrants: const {},
+      rooms: const {
+        'Patio': {'belongBoxes': ['A1', 'A2', 'A3', 'A4', 'A5', 'B1', 'B2', 'B3', 'B4', 'B5']},
+      },
+    );
+    const missions = [
+      SecondaryMissionDefinition(id: '1', level: 1, action: 'Acción 1'),
+      SecondaryMissionDefinition(id: '2', level: 1, action: 'Acción 2'),
+      SecondaryMissionDefinition(id: '3', level: 1, action: 'Acción 3'),
+      SecondaryMissionDefinition(id: '4', level: 1, action: 'Acción 4'),
+      SecondaryMissionDefinition(id: '5', level: 1, action: 'Acción 5'),
+    ];
+
+    final assigned = GameSetup().assignSecondaryMissions(
+      players: players.where((player) => player.team == Team.green).toList(),
+      targets: players,
+      missions: missions,
+      areas: areas,
+    );
+
+    expect(assigned, hasLength(5));
+    expect(assigned.map((mission) => mission['target_participant_id']).toSet(), hasLength(5));
+    expect(assigned.every((mission) => (mission['target_participant_id'] as String).startsWith('red-')), isTrue);
+    expect(assigned.every((mission) => {'room', 'column', 'row', 'location'}.contains(mission['clue_type'])), isTrue);
   });
 }

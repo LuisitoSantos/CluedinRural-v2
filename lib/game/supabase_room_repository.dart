@@ -301,11 +301,42 @@ class SupabaseRoomRepository {
     return result as String;
   }
 
-  Future<CompassRole?> myCompassRole(String roomId) async {
-    final role = await _client.rpc('my_compass_role', params: {'p_room_id': roomId});
-    if (role == null) return null;
-    return CompassRole.values.byName(role as String);
+  Future<CompassSecret?> myCompassSecret(String roomId) async {
+    final result = await _client.rpc('my_compass_secret', params: {'p_room_id': roomId});
+    if (result == null || result is List && result.isEmpty) return null;
+    final value = _firstRow(result);
+    final role = value['role'] as String?;
+    return CompassSecret(
+      role: role == null ? null : CompassRole.values.byName(role),
+      word: value['secret_word'] as String?,
+      canCauseDamage: value['can_cause_damage'] as bool? ?? false,
+      pendingDamageCount: value['pending_damage_count'] as int? ?? 0,
+      canPayBribes: value['can_pay_bribes'] as bool? ?? false,
+    );
   }
+
+  Future<List<SabotageTarget>> sabotageTargets(String roomId) async {
+    final rows = await _client.rpc('my_sabotage_targets', params: {'p_room_id': roomId});
+    return (rows as List<dynamic>)
+        .map((row) {
+          final value = row as Map<String, dynamic>;
+          return SabotageTarget(
+            id: value['participant_id'] as String,
+            characterName: value['character_name'] as String,
+            pendingDamageCount: value['pending_damage_count'] as int,
+          );
+        })
+        .toList();
+  }
+
+  Future<String> causeDamage({required String roomId, required String targetParticipantId}) async =>
+      (await _client.rpc('cause_compass_damage', params: {
+        'p_room_id': roomId,
+        'p_target_participant_id': targetParticipantId,
+      })) as String;
+
+  Future<String> payCompassBribes(String roomId) async =>
+      (await _client.rpc('pay_compass_bribes', params: {'p_room_id': roomId})) as String;
 
   Future<GamePlayer?> myAssignment(String roomId) async {
     final userId = await _ensureAnonymousUser();
