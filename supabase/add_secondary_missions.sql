@@ -69,9 +69,8 @@ begin
   ) then raise exception 'Faltan misiones para algún jugador'; end if;
 
   -- Las pistas se reciben exclusivamente al terminar una misión secundaria.
-  -- Se eliminan las antiguas pistas iniciales al iniciar o reiniciar.
+  -- Las pistas iniciales de ubicación de los compañeros se conservan.
   delete from public.game_team_secondary_clues where room_id = p_room_id;
-  delete from public.game_team_clues where room_id = p_room_id;
   delete from public.game_compass_sabotages where room_id = p_room_id;
   delete from public.game_compass_bribes where room_id = p_room_id;
   update public.game_room_purchase_settings set sabotage_round = 0 where room_id = p_room_id;
@@ -142,13 +141,25 @@ begin
     update public.game_compass_sabotages set consumed_at = now() where id = v_sabotage_id;
     update public.game_secondary_missions set reward_withheld = true
     where room_id = v_mission.room_id and participant_id = v_mission.participant_id and mission_number = v_mission.mission_number;
+    insert into public.game_team_secondary_clues(room_id, team, participant_id, mission_number, clue)
+    values (v_mission.room_id, v_mission.team, v_mission.participant_id, v_mission.mission_number,
+      'Pista perdida por daños. Puede recuperarse del saco del equipo por 30 monedas.');
     return 'Misión completada. Los daños han retenido la pista: tu equipo puede recuperarla del saco por 30 monedas.';
   end if;
   if v_mission.reward_withheld then
+    insert into public.game_team_secondary_clues(room_id, team, participant_id, mission_number, clue)
+    values (v_mission.room_id, v_mission.team, v_mission.participant_id, v_mission.mission_number,
+      'Pista perdida. Ha pasado al saco de pistas del equipo y puede recuperarse por 30 monedas.');
     return 'Misión completada. Esta vez la pista ha pasado al saco de pistas del equipo.';
   end if;
   insert into public.game_team_secondary_clues(room_id, team, participant_id, mission_number, clue)
-  values (v_mission.room_id, v_mission.team, v_mission.participant_id, v_mission.mission_number, v_mission.clue);
+  values (
+    v_mission.room_id,
+    v_mission.team,
+    v_mission.participant_id,
+    v_mission.mission_number,
+    format('Pista recibida por misión %s: %s', v_mission.mission_number, v_mission.clue)
+  );
   update public.game_secondary_missions set clue_revealed_at = now()
   where room_id = v_mission.room_id and participant_id = v_mission.participant_id and mission_number = v_mission.mission_number;
   return 'Misión completada. Tu equipo ha recibido una pista.';
@@ -176,8 +187,14 @@ begin
   update public.game_secondary_missions set clue_purchased_at = now()
   where room_id = v_mission.room_id and participant_id = v_mission.participant_id and mission_number = v_mission.mission_number;
   insert into public.game_team_secondary_clues(room_id, team, participant_id, mission_number, clue)
-  values (v_mission.room_id, v_mission.team, v_mission.participant_id, v_mission.mission_number, v_mission.clue)
-  on conflict do nothing;
+  values (
+    v_mission.room_id,
+    v_mission.team,
+    v_mission.participant_id,
+    v_mission.mission_number,
+    format('Pista recuperada de misión %s: %s', v_mission.mission_number, v_mission.clue)
+  )
+  on conflict (room_id, participant_id, mission_number) do update set clue = excluded.clue;
   return 'Tu equipo ha recuperado una pista del saco por 30 monedas.';
 end;
 $$;

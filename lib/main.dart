@@ -451,13 +451,13 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
               ),
             ),
             const SizedBox(height: 20),
-            Text('Pistas obtenidas', style: Theme.of(context).textTheme.titleMedium),
+            Text('Pistas del equipo', style: Theme.of(context).textTheme.titleMedium),
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Text('Cuadrantes de tu equipo: ${quadrantNames.join(', ')}'),
             ),
             if (data.clues.isEmpty)
-              const Padding(padding: EdgeInsets.only(top: 6), child: Text('Aún no habéis obtenido pistas.'))
+              const Padding(padding: EdgeInsets.only(top: 6), child: Text('Aún no hay pistas disponibles.'))
             else
               ...data.clues.map((clue) => Padding(padding: const EdgeInsets.only(top: 6), child: Text('• $clue'))),
             if (data.locations.isNotEmpty) ...[
