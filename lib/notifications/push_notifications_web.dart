@@ -1,5 +1,13 @@
 import 'dart:convert';
-import 'dart:js_util' as js_util;
+import 'dart:js_interop';
+
+@JS('cluedinNotifications')
+external _CluedinNotifications get _api;
+
+extension type _CluedinNotifications._(JSObject _) implements JSObject {
+  external JSPromise<JSString> subscribe();
+  external JSPromise<JSBoolean> install();
+}
 
 class PushSubscriptionData {
   const PushSubscriptionData({this.endpoint, this.p256dh, this.auth, required this.supported, required this.installed});
@@ -12,10 +20,8 @@ class PushSubscriptionData {
 }
 
 class PushNotifications {
-  static Object get _api => js_util.getProperty<Object>(js_util.globalThis, 'cluedinNotifications');
-
   static Future<PushSubscriptionData> subscribe() async {
-    final raw = await js_util.promiseToFuture<String>(js_util.callMethod<Object>(_api, 'subscribe', const []));
+    final raw = (await _api.subscribe().toDart).toDart;
     final value = jsonDecode(raw) as Map<String, dynamic>;
     return PushSubscriptionData(
       endpoint: value['endpoint'] as String?,
@@ -26,5 +32,5 @@ class PushNotifications {
     );
   }
 
-  static Future<bool> install() => js_util.promiseToFuture<bool>(js_util.callMethod<Object>(_api, 'install', const []));
+  static Future<bool> install() async => (await _api.install().toDart).toDart;
 }

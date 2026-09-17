@@ -31,9 +31,14 @@
       if (/iPhone|iPad|iPod/i.test(navigator.userAgent) && !installed()) {
         return JSON.stringify({ supported: false, installed: false });
       }
-      const registration = await navigator.serviceWorker.ready;
       const permission = await Notification.requestPermission();
       if (permission !== 'granted') return JSON.stringify({ supported: false, installed: installed() });
+      const registration = await navigator.serviceWorker.ready;
+      const existing = await registration.pushManager.getSubscription();
+      if (existing) {
+        const json = existing.toJSON();
+        return JSON.stringify({ supported: true, installed: installed(), endpoint: json.endpoint, p256dh: json.keys.p256dh, auth: json.keys.auth });
+      }
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: base64ToUint8Array(window.CLUE_VAPID_PUBLIC_KEY),
