@@ -6,7 +6,7 @@ create table if not exists public.game_team_quadrants (
   room_id uuid not null references public.game_rooms(id) on delete cascade,
   team text not null check (team in ('red', 'blue', 'green', 'yellow')),
   quadrant text not null check (quadrant in (
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'
   )),
   source text not null check (source in ('initial', 'secret', 'purchase')),
   primary key (room_id, team, quadrant)
@@ -46,6 +46,15 @@ create table if not exists public.game_team_quadrant_locations (
   position_name text not null,
   primary key (room_id, team, quadrant, position_name)
 );
+
+-- El tablero actual es una cuadrícula de 3 × 3: A–I. Se limpian posibles
+-- cuadrantes de la versión anterior (A–R) antes de estrechar la restricción.
+delete from public.game_team_quadrant_locations where quadrant not in ('A','B','C','D','E','F','G','H','I');
+delete from public.game_team_quadrant_location_purchases where quadrant not in ('A','B','C','D','E','F','G','H','I');
+delete from public.game_team_quadrants where quadrant not in ('A','B','C','D','E','F','G','H','I');
+alter table public.game_team_quadrants drop constraint if exists game_team_quadrants_quadrant_check;
+alter table public.game_team_quadrants add constraint game_team_quadrants_quadrant_check
+  check (quadrant in ('A','B','C','D','E','F','G','H','I'));
 
 alter table public.game_team_quadrant_locations enable row level security;
 
@@ -104,7 +113,7 @@ begin
   if p_item = 'quadrant' then
     select quadrant into v_quadrant
     from (
-      select unnest(array['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R']) as quadrant
+      select unnest(array['A','B','C','D','E','F','G','H','I']) as quadrant
     ) candidates
     where not exists (
       select 1 from public.game_team_quadrants owned
@@ -149,17 +158,14 @@ begin
       on owned.room_id = p_room_id and owned.team = v_team and owned.quadrant = v_quadrant
     where assignment.room_id = p_room_id
       and (
-        (v_quadrant in ('A', 'D', 'G', 'J', 'M', 'P') and substring(assignment.position_name from 1 for 1) between 'A' and 'G')
-        or (v_quadrant in ('B', 'E', 'H', 'K', 'N', 'Q') and substring(assignment.position_name from 1 for 1) between 'H' and 'N')
-        or (v_quadrant in ('C', 'F', 'I', 'L', 'O', 'R') and substring(assignment.position_name from 1 for 1) between 'O' and 'U')
+        (v_quadrant in ('A', 'D', 'G') and substring(assignment.position_name from 1 for 1) between 'A' and 'G')
+        or (v_quadrant in ('B', 'E', 'H') and substring(assignment.position_name from 1 for 1) between 'H' and 'N')
+        or (v_quadrant in ('C', 'F', 'I') and substring(assignment.position_name from 1 for 1) between 'O' and 'U')
       )
       and (
-        (v_quadrant in ('A', 'B', 'C') and substring(assignment.position_name from 2)::integer between 1 and 6)
-        or (v_quadrant in ('D', 'E', 'F') and substring(assignment.position_name from 2)::integer between 7 and 11)
-        or (v_quadrant in ('G', 'H', 'I') and substring(assignment.position_name from 2)::integer between 12 and 16)
-        or (v_quadrant in ('J', 'K', 'L') and substring(assignment.position_name from 2)::integer between 17 and 22)
-        or (v_quadrant in ('M', 'N', 'O') and substring(assignment.position_name from 2)::integer between 23 and 27)
-        or (v_quadrant in ('P', 'Q', 'R') and substring(assignment.position_name from 2)::integer between 28 and 33)
+        (v_quadrant in ('A', 'B', 'C') and substring(assignment.position_name from 2)::integer between 1 and 11)
+        or (v_quadrant in ('D', 'E', 'F') and substring(assignment.position_name from 2)::integer between 12 and 22)
+        or (v_quadrant in ('G', 'H', 'I') and substring(assignment.position_name from 2)::integer between 23 and 33)
       );
     get diagnostics v_location_count = row_count;
     if v_location_count = 0 then
@@ -230,7 +236,7 @@ begin
     select p_room_id, v_team, quadrant,
       case when row_number() over (order by random()) <= 2 then 'initial' else 'secret' end
     from (
-      select quadrant from unnest(array['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R']) quadrant
+      select quadrant from unnest(array['A','B','C','D','E','F','G','H','I']) quadrant
       order by random() limit 3
     ) drawn;
   end loop;

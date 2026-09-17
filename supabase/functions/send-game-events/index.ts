@@ -58,5 +58,44 @@ Deno.serve(async () => {
     }))
   }
 
-  return Response.json({ processed: events?.length ?? 0 })
+  const { data: notices, error: noticesError } = await supabase
+    .from('game_player_notices')
+    .select('id, user_id, title, message')
+    .is('push_delivered_at', null)
+    .limit(100)
+  if (noticesError) return Response.json({ error: noticesError.message }, { status: 500 })
+
+  for (const notice of notices ?? []) {
+    // Se reclama el aviso antes de enviarlo para evitar duplicados si llega
+    // a la vez la llamada del trigger y la revisión periódica del cron.
+    const { data: claimed } = await supabase
+      .from('game_player_notices')
+      .update({ push_delivered_at: now })
+      .eq('id', notice.id)
+      .is('push_delivered_at', null)
+      .select('id')
+    if (!claimed?.length) continue
+
+    const { data: subscriptions } = await supabase
+      .from('game_push_subscriptions')
+      .select('endpoint, p256dh, auth')
+      .eq('user_id', notice.user_id)
+    await Promise.all((subscriptions ?? []).map(async (subscription) => {
+      try {
+        await webpush.sendNotification(
+          { endpoint: subscription.endpoint, keys: { p256dh: subscription.p256dh, auth: subscription.auth } },
+          JSON.stringify({ title: notice.title, body: notice.message, url: './' }),
+        )
+      } catch (pushError) {
+        const statusCode = (pushError as { statusCode?: number }).statusCode
+        if (statusCode === 404 || statusCode === 410) {
+          await supabase.from('game_push_subscriptions').delete().eq('endpoint', subscription.endpoint)
+        } else {
+          console.error('No se pudo enviar una notificación', pushError)
+        }
+      }
+    }))
+  }
+
+  return Response.json({ processedEvents: events?.length ?? 0, processedNotices: notices?.length ?? 0 })
 })

@@ -7,7 +7,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'game/game_models.dart';
 import 'game/game_setup.dart';
 import 'game/supabase_room_repository.dart';
-import 'notifications/push_notifications.dart';
 
 const _supabaseUrl = String.fromEnvironment('SUPABASE_URL');
 const _supabaseKey = String.fromEnvironment('SUPABASE_PUBLISHABLE_KEY');
@@ -348,22 +347,22 @@ class _PlayerGameData {
     required this.coins,
     required this.purchaseSettings,
     required this.clues,
+    required this.notices,
     required this.quadrants,
     required this.locations,
     required this.currentMission,
     required this.secret,
-    required this.events,
   });
 
   final GamePlayer? assignment;
   final int? coins;
   final PurchaseSettings purchaseSettings;
-  final List<String> clues;
+  final List<TeamClue> clues;
+  final List<String> notices;
   final List<TeamQuadrant> quadrants;
   final List<QuadrantLocation> locations;
   final CurrentSecondaryMission? currentMission;
   final CompassSecret? secret;
-  final List<ScheduledGameEvent> events;
 }
 
 class _PlayerGamePanel extends StatefulWidget {
@@ -403,33 +402,33 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
         coins: null,
         purchaseSettings: PurchaseSettings(clueEnabled: false, quadrantEnabled: false, quadrantLocationsEnabled: false),
         clues: [],
+        notices: [],
         quadrants: [],
         locations: [],
         currentMission: null,
         secret: null,
-        events: [],
       );
     }
     final results = await Future.wait<Object?>([
       widget.rooms.myFamilyCoins(widget.room.id),
       widget.rooms.purchaseSettings(widget.room.id),
       widget.rooms.myTeamClues(widget.room.id),
+      widget.rooms.myGameNotices(widget.room.id),
       widget.rooms.myTeamQuadrants(widget.room.id),
       widget.rooms.myQuadrantLocations(widget.room.id),
       widget.rooms.myCurrentSecondaryMission(widget.room.id),
       widget.rooms.myCompassSecret(widget.room.id),
-      widget.rooms.roomScheduledEvents(widget.room.id),
     ]);
     return _PlayerGameData(
       assignment: assignment,
       coins: results[0] as int?,
       purchaseSettings: results[1] as PurchaseSettings,
-      clues: results[2] as List<String>,
-      quadrants: results[3] as List<TeamQuadrant>,
-      locations: results[4] as List<QuadrantLocation>,
-      currentMission: results[5] as CurrentSecondaryMission?,
-      secret: results[6] as CompassSecret?,
-      events: results[7] as List<ScheduledGameEvent>,
+      clues: results[2] as List<TeamClue>,
+      notices: results[3] as List<String>,
+      quadrants: results[4] as List<TeamQuadrant>,
+      locations: results[5] as List<QuadrantLocation>,
+      currentMission: results[6] as CurrentSecondaryMission?,
+      secret: results[7] as CompassSecret?,
     );
   }
 
@@ -443,6 +442,8 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
           final assignment = data.assignment;
           if (assignment == null) return const Text('Esperando a que el admin inicie la partida.');
           final quadrantNames = data.quadrants.map((item) => item.quadrant).toSet().toList()..sort();
+          final initialClues = data.clues.where((clue) => clue.kind == TeamClueKind.initial).toList();
+          final earnedClues = data.clues.where((clue) => clue.kind != TeamClueKind.initial).toList();
           return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Card(
               child: Padding(
@@ -453,8 +454,6 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
                   Text('Monedas del equipo: ${data.coins ?? 0}', style: Theme.of(context).textTheme.bodySmall),
                   const SizedBox(height: 4),
                   _SecretRolePanel(secret: data.secret, onCauseDamage: _causeDamage, onPayBribes: _payBribes),
-                  const SizedBox(height: 4),
-                  _NotificationButtons(onSubscribe: _subscribeToNotifications, onInstall: _installPwa),
                 ]),
               ),
             ),
@@ -466,32 +465,49 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
             ),
             if (data.clues.isEmpty)
               const Padding(padding: EdgeInsets.only(top: 6), child: Text('Aún no hay pistas disponibles.'))
-            else
-              ...data.clues.map((clue) => Padding(padding: const EdgeInsets.only(top: 6), child: Text('• $clue'))),
+            else ...[
+              ...initialClues.map(_clueLine),
+              if (initialClues.isNotEmpty && earnedClues.isNotEmpty) const Padding(padding: EdgeInsets.symmetric(vertical: 10), child: Divider()),
+              ...earnedClues.map(_clueLine),
+            ],
+            if (data.notices.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Text('Avisos de partida', style: Theme.of(context).textTheme.titleSmall),
+              ...data.notices.map((notice) => Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text('⚠ $notice'),
+                  )),
+            ],
             if (data.locations.isNotEmpty) ...[
               const SizedBox(height: 8),
-              ...data.locations.map((location) => Padding(
-                    padding: const EdgeInsets.only(top: 6),
-                    child: Text(location.positionName),
-              )),
+              ..._locationGroups(data.locations).entries.expand((entry) => [
+                    Text('Ubicaciones del cuadrante ${entry.key}', style: Theme.of(context).textTheme.titleSmall),
+                    ...entry.value.map((location) => Padding(padding: const EdgeInsets.only(top: 4), child: Text('• $location'))),
+                    const SizedBox(height: 6),
+                  ]),
             ],
             if (data.currentMission != null) ...[
               const SizedBox(height: 20),
-              Text('Misión secundaria ${data.currentMission!.number}/5', style: Theme.of(context).textTheme.titleMedium),
+              Text('Misión secundaria ${data.currentMission!.number}/${data.currentMission!.total}', style: Theme.of(context).textTheme.titleMedium),
               Padding(padding: const EdgeInsets.only(top: 6), child: Text(data.currentMission!.action)),
               Padding(padding: const EdgeInsets.only(top: 4), child: Text('ID: ${data.currentMission!.id}')),
-            ],
-            if (data.events.isNotEmpty) ...[
-              const SizedBox(height: 20),
-              Text('Eventos de la partida', style: Theme.of(context).textTheme.titleMedium),
-              ...data.events.take(5).map((event) => Padding(
-                    padding: const EdgeInsets.only(top: 6),
-                    child: Text('${event.status == 'triggered' ? '✓' : '◷'} ${event.title}: ${event.message}'),
-                  )),
             ],
           ]);
         },
       );
+
+  Widget _clueLine(TeamClue clue) => Padding(
+        padding: const EdgeInsets.only(top: 6),
+        child: Text('• ${clue.text}', style: clue.kind == TeamClueKind.lost ? TextStyle(color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.w600) : null),
+      );
+
+  Map<String, List<String>> _locationGroups(List<QuadrantLocation> locations) {
+    final groups = <String, List<String>>{};
+    for (final location in locations) {
+      groups.putIfAbsent(location.quadrant, () => []).add(location.positionName);
+    }
+    return groups;
+  }
 
   Future<void> _causeDamage() async {
     try {
@@ -542,41 +558,6 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
     }
   }
 
-  Future<void> _subscribeToNotifications() async {
-    try {
-      final subscription = await PushNotifications.subscribe();
-      if (!subscription.supported || subscription.endpoint == null) {
-        throw StateError('Las notificaciones no están disponibles. En iPhone instala antes la app en la pantalla de inicio.');
-      }
-      await widget.rooms.savePushSubscription(
-        endpoint: subscription.endpoint!,
-        p256dh: subscription.p256dh!,
-        auth: subscription.auth!,
-      );
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Notificaciones activadas.')));
-    } catch (error) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
-    }
-  }
-
-  Future<void> _installPwa() async {
-    final installed = await PushNotifications.install();
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(installed ? 'Aplicación instalada.' : 'Usa “Añadir a pantalla de inicio” desde el navegador.')));
-  }
-}
-
-class _NotificationButtons extends StatelessWidget {
-  const _NotificationButtons({required this.onSubscribe, required this.onInstall});
-
-  final Future<void> Function() onSubscribe;
-  final Future<void> Function() onInstall;
-
-  @override
-  Widget build(BuildContext context) => Wrap(spacing: 8, runSpacing: 4, children: [
-        OutlinedButton.icon(onPressed: onInstall, icon: const Icon(Icons.install_mobile_outlined), label: const Text('Instalar app')),
-        OutlinedButton.icon(onPressed: onSubscribe, icon: const Icon(Icons.notifications_active_outlined), label: const Text('Activar avisos')),
-      ]);
 }
 
 class _SecretRolePanel extends StatefulWidget {
@@ -624,7 +605,7 @@ class _SecretRolePanelState extends State<_SecretRolePanel> {
               OutlinedButton.icon(
                 onPressed: widget.secret!.canCauseDamage ? widget.onCauseDamage : null,
                 icon: const Icon(Icons.lock_outline),
-                label: Text(widget.secret!.canCauseDamage ? 'Causar daños' : 'Daños ya usados o compras desactivadas'),
+                label: Text(widget.secret!.canCauseDamage ? 'Hacer daño' : 'Daños ya usados o compras desactivadas'),
               ),
               if (role == CompassRole.thief) ...[
                 const SizedBox(height: 6),
@@ -762,10 +743,17 @@ class _GameActionsBarState extends State<_GameActionsBar> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
       widget.gameRevision.value++;
     } catch (error) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_missionErrorMessage(error))));
     } finally {
       if (mounted) setState(() => _buyingItem = null);
     }
+  }
+
+  String _missionErrorMessage(Object error) {
+    final message = error.toString();
+    if (message.contains('Ese ID no corresponde')) return 'ID de misión incorrecto.';
+    if (message.contains('No tienes más misiones')) return 'No te quedan misiones secundarias.';
+    return 'No se pudo completar la misión. Inténtalo de nuevo.';
   }
 
   @override
@@ -982,6 +970,15 @@ class _AdminPageState extends State<AdminPage> {
     }
   }
 
+  Future<void> _releaseCompassLocationClue() async {
+    try {
+      final result = await widget.rooms.releaseCompassLocationClue(widget.room.id);
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('Administracion de partida')),
@@ -1023,6 +1020,12 @@ class _AdminPageState extends State<AdminPage> {
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => DrawResultsPage(room: room, rooms: widget.rooms, areas: areas),
                   )),
+                ),
+                const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.explore_outlined),
+                  label: const Text('Revelar pista de ubicación del Compás'),
+                  onPressed: _releaseCompassLocationClue,
                 ),
                 const SizedBox(height: 12),
                 OutlinedButton.icon(
@@ -1331,7 +1334,7 @@ class PurchaseSettingsPage extends StatefulWidget {
 
 class _PurchaseSettingsPageState extends State<PurchaseSettingsPage> {
   late Future<PurchaseSettings> _settings;
-  String? _updatingItem;
+  var _updating = false;
 
   @override
   void initState() {
@@ -1339,15 +1342,15 @@ class _PurchaseSettingsPageState extends State<PurchaseSettingsPage> {
     _settings = widget.rooms.purchaseSettings(widget.room.id);
   }
 
-  Future<void> _setEnabled(String item, bool enabled) async {
-    setState(() => _updatingItem = item);
+  Future<void> _setEnabled(bool enabled) async {
+    setState(() => _updating = true);
     try {
-      await widget.rooms.setPurchaseEnabled(roomId: widget.room.id, item: item, enabled: enabled);
+      await widget.rooms.setPurchasesEnabled(roomId: widget.room.id, enabled: enabled);
       if (mounted) setState(() => _settings = widget.rooms.purchaseSettings(widget.room.id));
     } catch (error) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
     } finally {
-      if (mounted) setState(() => _updatingItem = null);
+      if (mounted) setState(() => _updating = false);
     }
   }
 
@@ -1363,14 +1366,13 @@ class _PurchaseSettingsPageState extends State<PurchaseSettingsPage> {
             return ListView(
               padding: const EdgeInsets.all(20),
               children: [
-                const Text('Activa cada compra para que los jugadores puedan usarla.'),
+                const Text('Activa todas las compras a la vez. Cada vez que se abre una ronda, el ladrón y sus dos cómplices pueden hacer un daño cada uno.'),
                 const SizedBox(height: 12),
-                _switch('Permitir comprar pista (15 monedas)', 'clue', settings.clueEnabled),
-                _switch('Permitir comprar cuadrante (10 monedas)', 'quadrant', settings.quadrantEnabled),
-                _switch(
-                  'Permitir comprar ubicaciones de cuadrante (25 monedas)',
-                  'quadrant_locations',
-                  settings.quadrantLocationsEnabled,
+                SwitchListTile(
+                  title: const Text('Habilitar compras y daños'),
+                  subtitle: const Text('Pistas · cuadrantes · ubicaciones'),
+                  value: settings.clueEnabled && settings.quadrantEnabled && settings.quadrantLocationsEnabled,
+                  onChanged: _updating ? null : _setEnabled,
                 ),
               ],
             );
@@ -1378,11 +1380,6 @@ class _PurchaseSettingsPageState extends State<PurchaseSettingsPage> {
         ),
       );
 
-  Widget _switch(String title, String item, bool value) => SwitchListTile(
-        title: Text(title),
-        value: value,
-        onChanged: _updatingItem == null ? (enabled) => _setEnabled(item, enabled) : null,
-      );
 }
 
 class _MysteryCard extends StatelessWidget {

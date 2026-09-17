@@ -5,7 +5,7 @@ create table if not exists public.game_secondary_missions (
   participant_id uuid not null,
   user_id uuid references auth.users(id),
   team text not null check (team in ('red', 'blue', 'green', 'yellow')),
-  mission_number integer not null check (mission_number between 1 and 5),
+  mission_number integer not null check (mission_number >= 1),
   mission_id text not null,
   mission_level integer not null,
   mission_action text not null,
@@ -24,6 +24,8 @@ create table if not exists public.game_secondary_missions (
 alter table public.game_secondary_missions
   add column if not exists target_participant_id uuid,
   add column if not exists clue_type text;
+alter table public.game_secondary_missions drop constraint if exists game_secondary_missions_mission_number_check;
+alter table public.game_secondary_missions add constraint game_secondary_missions_mission_number_check check (mission_number >= 1);
 create unique index if not exists game_secondary_missions_unique_target
   on public.game_secondary_missions(room_id, target_participant_id)
   where target_participant_id is not null;
@@ -37,6 +39,28 @@ create table if not exists public.game_team_secondary_clues (
   mission_number integer not null,
   clue text not null,
   primary key (room_id, participant_id, mission_number)
+);
+
+-- Pistas colectivas de las tres estancias del Compás. El admin las revela
+-- por orden y cada equipo solo la recibe si ha alcanzado el progreso exigido.
+create table if not exists public.game_team_compass_clues (
+  room_id uuid not null references public.game_rooms(id) on delete cascade,
+  team text not null check (team in ('red', 'blue', 'green', 'yellow')),
+  clue_number integer not null check (clue_number between 1 and 3),
+  clue text not null,
+  revealed_at timestamptz not null default now(),
+  primary key (room_id, team, clue_number)
+);
+alter table public.game_team_compass_clues enable row level security;
+drop policy if exists "Teams can read compass clues" on public.game_team_compass_clues;
+create policy "Teams can read compass clues" on public.game_team_compass_clues for select to authenticated
+using (
+  public.is_game_room_admin(room_id) or exists (
+    select 1 from public.game_assignments own_assignment
+    where own_assignment.room_id = game_team_compass_clues.room_id
+      and own_assignment.user_id = (select auth.uid())
+      and own_assignment.team = game_team_compass_clues.team
+  )
 );
 
 alter table public.game_team_secondary_clues enable row level security;
@@ -55,8 +79,9 @@ create or replace function public.save_secondary_missions(p_room_id uuid, p_miss
 returns void language plpgsql security definer set search_path = public as $$
 declare
   v_team text;
-  v_team_size integer;
   v_lost_count integer;
+  v_min_team_missions integer;
+  v_max_team_missions integer;
 begin
   if not public.is_game_room_admin(p_room_id) then raise exception 'Solo el admin puede iniciar la partida'; end if;
   if jsonb_typeof(p_missions) <> 'array' then raise exception 'Las misiones no son válidas'; end if;
@@ -71,6 +96,7 @@ begin
   -- Las pistas se reciben exclusivamente al terminar una misión secundaria.
   -- Las pistas iniciales de ubicación de los compañeros se conservan.
   delete from public.game_team_secondary_clues where room_id = p_room_id;
+  delete from public.game_team_compass_clues where room_id = p_room_id;
   delete from public.game_compass_sabotages where room_id = p_room_id;
   delete from public.game_compass_bribes where room_id = p_room_id;
   update public.game_room_purchase_settings set sabotage_round = 0 where room_id = p_room_id;
@@ -85,22 +111,29 @@ begin
   where target.team <> a.team;
 
   if exists (
-    select 1 from public.game_assignments a where a.room_id = p_room_id
-    group by a.participant_id having count(*) <> 1
-  ) or exists (
-    select 1 from public.game_secondary_missions m where m.room_id = p_room_id
-    group by m.participant_id having count(*) <> 5
-  ) then raise exception 'Cada jugador debe recibir exactamente cinco misiones'; end if;
+    select 1 from public.game_assignments a
+    where a.room_id = p_room_id and a.participant_type = 'real' and not exists (
+      select 1 from public.game_secondary_missions m
+      where m.room_id = p_room_id and m.participant_id = a.participant_id
+    )
+  ) then raise exception 'Faltan misiones secundarias para algún jugador'; end if;
+  select min(mission_count), max(mission_count) into v_min_team_missions, v_max_team_missions
+  from (
+    select team, count(*)::integer as mission_count
+    from public.game_secondary_missions where room_id = p_room_id group by team
+  ) team_missions;
+  if v_min_team_missions <> v_max_team_missions then
+    raise exception 'Todos los equipos deben tener la misma cantidad total de misiones';
+  end if;
   if exists (
     select 1 from public.game_secondary_missions
     where room_id = p_room_id and (target_participant_id is null or clue_type is null)
   ) then raise exception 'Cada misión debe tener una pista válida'; end if;
 
-  -- La pérdida aleatoria original se conserva y puede acumularse con un daño.
+  -- La pérdida aleatoria se conserva. Como cada equipo recibe la misma cuota
+  -- total de misiones, también comparten el mismo rango de pistas perdidas.
   for v_team in select distinct team from public.game_assignments where room_id = p_room_id and participant_type = 'real' loop
-    select count(*) into v_team_size from public.game_assignments
-    where room_id = p_room_id and team = v_team and participant_type = 'real';
-    v_lost_count := floor(random() * (v_team_size + 1));
+    v_lost_count := floor(random() * (ceil(v_max_team_missions / 5.0)::integer + 1));
     with selected as (
       select ctid from public.game_secondary_missions
       where room_id = p_room_id and team = v_team
@@ -112,10 +145,52 @@ begin
 end;
 $$;
 
-create or replace function public.my_current_secondary_mission(p_room_id uuid)
-returns table(mission_id text, mission_level integer, mission_action text, mission_number integer)
+create or replace function public.release_compass_location_clue(p_room_id uuid)
+returns text language plpgsql security definer set search_path = public as $$
+declare
+  v_clue_number integer;
+  v_room_name text;
+  v_delivered_count integer;
+begin
+  if not public.is_game_room_admin(p_room_id) then raise exception 'Solo el admin puede revelar pistas del Compás'; end if;
+  select coalesce(max(clue_number), 0) + 1 into v_clue_number
+  from public.game_team_compass_clues where room_id = p_room_id;
+  if v_clue_number > 3 then raise exception 'Ya se han revelado las tres pistas de ubicación del Compás'; end if;
+  select suspect_room_names[v_clue_number] into v_room_name
+  from public.game_room_mysteries where room_id = p_room_id;
+  if v_room_name is null then raise exception 'Aún no se ha iniciado la partida'; end if;
+
+  insert into public.game_team_compass_clues(room_id, team, clue_number, clue)
+  select p_room_id, progress.team, v_clue_number,
+    format('Pista del Compás %s/3: uno de los sospechosos está en %s.', v_clue_number, v_room_name)
+  from (
+    select m.team,
+      count(*) filter (where m.completed_at is not null)::numeric as completed_missions,
+      count(*)::numeric as total_missions
+    from public.game_secondary_missions m
+    where m.room_id = p_room_id
+    group by m.team
+  ) progress
+  where case v_clue_number
+    when 1 then progress.completed_missions * 3 >= progress.total_missions
+    when 2 then progress.completed_missions * 2 >= progress.total_missions
+    when 3 then progress.completed_missions * 4 >= progress.total_missions * 3
+  end;
+  get diagnostics v_delivered_count = row_count;
+  if v_delivered_count = 0 then
+    return format('Ningún equipo ha alcanzado aún el progreso necesario para la pista %s.', v_clue_number);
+  end if;
+  return format('Pista del Compás %s revelada para %s equipo(s).', v_clue_number, v_delivered_count);
+end;
+$$;
+
+drop function if exists public.my_current_secondary_mission(uuid);
+create function public.my_current_secondary_mission(p_room_id uuid)
+returns table(mission_id text, mission_level integer, mission_action text, mission_number integer, mission_total integer)
 language sql security definer set search_path = public stable as $$
-  select m.mission_id, m.mission_level, m.mission_action, m.mission_number
+  select m.mission_id, m.mission_level, m.mission_action, m.mission_number,
+    (select count(*)::integer from public.game_secondary_missions all_missions
+      where all_missions.room_id = m.room_id and all_missions.participant_id = m.participant_id)
   from public.game_secondary_missions m
   where m.room_id = p_room_id and m.user_id = (select auth.uid()) and m.completed_at is null
   order by m.mission_number limit 1;
@@ -143,13 +218,13 @@ begin
     where room_id = v_mission.room_id and participant_id = v_mission.participant_id and mission_number = v_mission.mission_number;
     insert into public.game_team_secondary_clues(room_id, team, participant_id, mission_number, clue)
     values (v_mission.room_id, v_mission.team, v_mission.participant_id, v_mission.mission_number,
-      'Pista perdida por daños. Puede recuperarse del saco del equipo por 30 monedas.');
-    return 'Misión completada. Los daños han retenido la pista: tu equipo puede recuperarla del saco por 30 monedas.';
+      'Pista perdida por daños. Puede recuperarse del saco del equipo por 15 monedas.');
+    return 'Misión completada. Los daños han retenido la pista: tu equipo puede recuperarla del saco por 15 monedas.';
   end if;
   if v_mission.reward_withheld then
     insert into public.game_team_secondary_clues(room_id, team, participant_id, mission_number, clue)
     values (v_mission.room_id, v_mission.team, v_mission.participant_id, v_mission.mission_number,
-      'Pista perdida. Ha pasado al saco de pistas del equipo y puede recuperarse por 30 monedas.');
+      'Pista perdida. Ha pasado al saco de pistas del equipo y puede recuperarse por 15 monedas.');
     return 'Misión completada. Esta vez la pista ha pasado al saco de pistas del equipo.';
   end if;
   insert into public.game_team_secondary_clues(room_id, team, participant_id, mission_number, clue)
@@ -176,8 +251,8 @@ begin
   if not coalesce((select clue_enabled from public.game_room_purchase_settings where room_id = p_room_id), false) then
     raise exception 'Esta compra no está activada por el admin';
   end if;
-  update public.game_family_balances set coins = coins - 30
-  where room_id = p_room_id and team = v_team and family_name = v_family and coins >= 30;
+  update public.game_family_balances set coins = coins - 15
+  where room_id = p_room_id and team = v_team and family_name = v_family and coins >= 15;
   if not found then raise exception 'Tu equipo no tiene suficientes monedas'; end if;
   select * into v_mission from public.game_secondary_missions
   where room_id = p_room_id and team = v_team and reward_withheld
@@ -195,7 +270,7 @@ begin
     format('Pista recuperada de misión %s: %s', v_mission.mission_number, v_mission.clue)
   )
   on conflict (room_id, participant_id, mission_number) do update set clue = excluded.clue;
-  return 'Tu equipo ha recuperado una pista del saco por 30 monedas.';
+  return 'Tu equipo ha recuperado una pista del saco por 15 monedas.';
 end;
 $$;
 
@@ -227,15 +302,13 @@ returns void language plpgsql security definer set search_path = public as $$
 begin
   if not public.is_game_room_admin(p_room_id) then raise exception 'Solo el admin puede activar compras'; end if;
   insert into public.game_room_purchase_settings(room_id) values (p_room_id) on conflict (room_id) do nothing;
-  if p_item = 'clue' then
+  if p_item = 'all' then
     update public.game_room_purchase_settings
     set sabotage_round = sabotage_round + case when p_enabled and not clue_enabled then 1 else 0 end,
-        clue_enabled = p_enabled
+        clue_enabled = p_enabled,
+        quadrant_enabled = p_enabled,
+        quadrant_locations_enabled = p_enabled
     where room_id = p_room_id;
-  elsif p_item = 'quadrant' then
-    update public.game_room_purchase_settings set quadrant_enabled = p_enabled where room_id = p_room_id;
-  elsif p_item = 'quadrant_locations' then
-    update public.game_room_purchase_settings set quadrant_locations_enabled = p_enabled where room_id = p_room_id;
   else raise exception 'Compra no válida'; end if;
 end;
 $$;
@@ -314,6 +387,7 @@ grant execute on function public.save_secondary_missions(uuid, jsonb) to authent
 grant execute on function public.my_current_secondary_mission(uuid) to authenticated;
 grant execute on function public.complete_secondary_mission(uuid, text) to authenticated;
 grant execute on function public.purchase_team_lost_clue(uuid) to authenticated;
+grant execute on function public.release_compass_location_clue(uuid) to authenticated;
 grant execute on function public.cause_compass_damage(uuid, uuid) to authenticated;
 grant execute on function public.my_sabotage_targets(uuid) to authenticated;
 grant execute on function public.my_compass_secret(uuid) to authenticated;

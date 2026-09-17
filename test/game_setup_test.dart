@@ -138,4 +138,37 @@ void main() {
     expect(assigned.every((mission) => (mission['target_participant_id'] as String).startsWith('red-')), isTrue);
     expect(assigned.every((mission) => {'room', 'column', 'row', 'location'}.contains(mission['clue_type'])), isTrue);
   });
+
+  test('iguala la cuota total de misiones entre equipos de distinto tamaño', () {
+    final players = [
+      for (var index = 0; index < 4; index++)
+        GamePlayer(id: 'red-$index', name: 'Rojo $index', isFake: true, team: Team.red, position: BoardPosition(name: 'A$index', column: index, row: 0), clue: 'Pista'),
+      for (var index = 0; index < 3; index++)
+        GamePlayer(id: 'green-$index', name: 'Verde $index', isFake: true, team: Team.green, position: BoardPosition(name: 'B$index', column: index, row: 1), clue: 'Pista'),
+    ];
+    final targets = [
+      ...players,
+      for (var index = 0; index < 40; index++)
+        GamePlayer(id: 'blue-$index', name: 'Azul $index', isFake: true, team: Team.blue, position: BoardPosition(name: 'C$index', column: index, row: 2), clue: 'Pista'),
+    ];
+    final missions = List.generate(20, (index) => SecondaryMissionDefinition(id: '$index', level: 1, action: 'Acción'));
+
+    final assigned = GameSetup().assignSecondaryMissions(
+      players: players,
+      targets: targets,
+      missions: missions,
+      areas: GameAreaLookup.fromJson(quadrants: const {}, rooms: const {}),
+    );
+    final redCount = assigned.where((mission) => (mission['participant_id'] as String).startsWith('red-')).length;
+    final greenCount = assigned.where((mission) => (mission['participant_id'] as String).startsWith('green-')).length;
+    final byPlayer = <String, int>{};
+    for (final mission in assigned) {
+      final id = mission['participant_id'] as String;
+      byPlayer[id] = (byPlayer[id] ?? 0) + 1;
+    }
+
+    expect(redCount, 20);
+    expect(greenCount, 20);
+    expect(byPlayer.values.reduce((a, b) => a > b ? a : b) - byPlayer.values.reduce((a, b) => a < b ? a : b), lessThanOrEqualTo(1));
+  });
 }

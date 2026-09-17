@@ -88,15 +88,30 @@ class GameSetup {
     required List<SecondaryMissionDefinition> missions,
     required GameAreaLookup areas,
   }) {
-    if (missions.length < 5) throw StateError('No hay suficientes misiones secundarias.');
-    if (targets.length < players.length * 5) {
-      throw StateError('No hay suficientes personajes para asociar una pista única a cada misión.');
-    }
+    if (players.isEmpty) return const [];
     final result = <Map<String, dynamic>>[];
-    final missionSlots = <GamePlayer>[
-      for (final player in players) ...List.filled(5, player),
-    ]..shuffle(_random);
-    final targetsBySlot = _assignUniqueTargets(missionSlots, targets);
+    final teams = <Team, List<GamePlayer>>{};
+    for (final player in players) {
+      teams.putIfAbsent(player.team!, () => []).add(player);
+    }
+    final idealPerTeam = teams.values.map((teamPlayers) => teamPlayers.length).reduce(max) * 5;
+    List<GamePlayer>? missionSlots;
+    List<GamePlayer>? targetsBySlot;
+    for (var perTeam = idealPerTeam; perTeam > 0; perTeam--) {
+      final candidates = _missionSlotsForTeamQuota(teams, perTeam)..shuffle(_random);
+      if (candidates.length > targets.length) continue;
+      try {
+        missionSlots = candidates;
+        targetsBySlot = _assignUniqueTargets(candidates, targets);
+        break;
+      } on StateError {
+        // Se prueba una cuota menor hasta encontrar personajes válidos para
+        // todas las pistas sin repetir ninguno.
+      }
+    }
+    if (missionSlots == null || targetsBySlot == null) {
+      throw StateError('No hay personajes de otros equipos suficientes para repartir pistas secundarias únicas.');
+    }
 
     final slotsByPlayer = <String, List<GamePlayer>>{};
     for (var index = 0; index < missionSlots.length; index++) {
@@ -104,9 +119,13 @@ class GameSetup {
     }
     for (final player in players) {
       final deck = [...missions]..shuffle(_random);
-      for (var index = 0; index < 5; index++) {
+      final playerTargets = slotsByPlayer[player.id]!;
+      if (deck.length < playerTargets.length) {
+        throw StateError('No hay suficientes definiciones de misiones secundarias para este reparto.');
+      }
+      for (var index = 0; index < playerTargets.length; index++) {
         final mission = deck[index];
-        final target = slotsByPlayer[player.id]![index];
+        final target = playerTargets[index];
         final clue = _secondaryClueFor(target, areas);
         result.add({
           'participant_id': player.id,
@@ -122,6 +141,21 @@ class GameSetup {
       }
     }
     return result;
+  }
+
+  /// Da a cada equipo la misma cuota total. Dentro de cada equipo la cuota se
+  /// divide entre sus jugadores, con una diferencia máxima de una misión.
+  List<GamePlayer> _missionSlotsForTeamQuota(Map<Team, List<GamePlayer>> teams, int quota) {
+    final slots = <GamePlayer>[];
+    for (final teamPlayers in teams.values) {
+      final shuffled = [...teamPlayers]..shuffle(_random);
+      final base = quota ~/ shuffled.length;
+      final remainder = quota % shuffled.length;
+      for (var index = 0; index < shuffled.length; index++) {
+        slots.addAll(List.filled(base + (index < remainder ? 1 : 0), shuffled[index]));
+      }
+    }
+    return slots;
   }
 
   /// Empareja cada misión con un personaje de otro equipo sin repetir
