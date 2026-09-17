@@ -182,6 +182,24 @@ class SabotageTarget {
   final int pendingDamageCount;
 }
 
+class ScheduledGameEvent {
+  const ScheduledGameEvent({
+    required this.id,
+    required this.kind,
+    required this.title,
+    required this.message,
+    required this.scheduledFor,
+    required this.status,
+  });
+
+  final String id;
+  final String kind;
+  final String title;
+  final String message;
+  final DateTime scheduledFor;
+  final String status;
+}
+
 extension CompassRoleDetails on CompassRole {
   String get label => switch (this) {
         CompassRole.thief => 'Eres el ladron y llevas el Compas Dorado.',

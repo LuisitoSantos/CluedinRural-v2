@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'game/game_models.dart';
 import 'game/game_setup.dart';
 import 'game/supabase_room_repository.dart';
+import 'notifications/push_notifications.dart';
 
 const _supabaseUrl = String.fromEnvironment('SUPABASE_URL');
 const _supabaseKey = String.fromEnvironment('SUPABASE_PUBLISHABLE_KEY');
@@ -351,6 +352,7 @@ class _PlayerGameData {
     required this.locations,
     required this.currentMission,
     required this.secret,
+    required this.events,
   });
 
   final GamePlayer? assignment;
@@ -361,6 +363,7 @@ class _PlayerGameData {
   final List<QuadrantLocation> locations;
   final CurrentSecondaryMission? currentMission;
   final CompassSecret? secret;
+  final List<ScheduledGameEvent> events;
 }
 
 class _PlayerGamePanel extends StatefulWidget {
@@ -404,6 +407,7 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
         locations: [],
         currentMission: null,
         secret: null,
+        events: [],
       );
     }
     final results = await Future.wait<Object?>([
@@ -414,6 +418,7 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
       widget.rooms.myQuadrantLocations(widget.room.id),
       widget.rooms.myCurrentSecondaryMission(widget.room.id),
       widget.rooms.myCompassSecret(widget.room.id),
+      widget.rooms.roomScheduledEvents(widget.room.id),
     ]);
     return _PlayerGameData(
       assignment: assignment,
@@ -424,6 +429,7 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
       locations: results[4] as List<QuadrantLocation>,
       currentMission: results[5] as CurrentSecondaryMission?,
       secret: results[6] as CompassSecret?,
+      events: results[7] as List<ScheduledGameEvent>,
     );
   }
 
@@ -447,6 +453,8 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
                   Text('Monedas del equipo: ${data.coins ?? 0}', style: Theme.of(context).textTheme.bodySmall),
                   const SizedBox(height: 4),
                   _SecretRolePanel(secret: data.secret, onCauseDamage: _causeDamage, onPayBribes: _payBribes),
+                  const SizedBox(height: 4),
+                  _NotificationButtons(onSubscribe: _subscribeToNotifications, onInstall: _installPwa),
                 ]),
               ),
             ),
@@ -472,6 +480,14 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
               Text('Misión secundaria ${data.currentMission!.number}/5', style: Theme.of(context).textTheme.titleMedium),
               Padding(padding: const EdgeInsets.only(top: 6), child: Text(data.currentMission!.action)),
               Padding(padding: const EdgeInsets.only(top: 4), child: Text('ID: ${data.currentMission!.id}')),
+            ],
+            if (data.events.isNotEmpty) ...[
+              const SizedBox(height: 20),
+              Text('Eventos de la partida', style: Theme.of(context).textTheme.titleMedium),
+              ...data.events.take(5).map((event) => Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text('${event.status == 'triggered' ? '✓' : '◷'} ${event.title}: ${event.message}'),
+                  )),
             ],
           ]);
         },
@@ -525,6 +541,42 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
     }
   }
+
+  Future<void> _subscribeToNotifications() async {
+    try {
+      final subscription = await PushNotifications.subscribe();
+      if (!subscription.supported || subscription.endpoint == null) {
+        throw StateError('Las notificaciones no están disponibles. En iPhone instala antes la app en la pantalla de inicio.');
+      }
+      await widget.rooms.savePushSubscription(
+        endpoint: subscription.endpoint!,
+        p256dh: subscription.p256dh!,
+        auth: subscription.auth!,
+      );
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Notificaciones activadas.')));
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    }
+  }
+
+  Future<void> _installPwa() async {
+    final installed = await PushNotifications.install();
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(installed ? 'Aplicación instalada.' : 'Usa “Añadir a pantalla de inicio” desde el navegador.')));
+  }
+}
+
+class _NotificationButtons extends StatelessWidget {
+  const _NotificationButtons({required this.onSubscribe, required this.onInstall});
+
+  final Future<void> Function() onSubscribe;
+  final Future<void> Function() onInstall;
+
+  @override
+  Widget build(BuildContext context) => Wrap(spacing: 8, runSpacing: 4, children: [
+        OutlinedButton.icon(onPressed: onInstall, icon: const Icon(Icons.install_mobile_outlined), label: const Text('Instalar app')),
+        OutlinedButton.icon(onPressed: onSubscribe, icon: const Icon(Icons.notifications_active_outlined), label: const Text('Activar avisos')),
+      ]);
 }
 
 class _SecretRolePanel extends StatefulWidget {
@@ -988,9 +1040,95 @@ class _AdminPageState extends State<AdminPage> {
                     builder: (_) => PurchaseSettingsPage(room: room, rooms: widget.rooms),
                   )),
                 ),
+                const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.event_outlined),
+                  label: const Text('Programar eventos y probar avisos'),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => ScheduledEventsPage(room: room, rooms: widget.rooms),
+                  )),
+                ),
               ]),
             );
           },
+        ),
+      );
+}
+
+class ScheduledEventsPage extends StatefulWidget {
+  const ScheduledEventsPage({super.key, required this.room, required this.rooms});
+
+  final GameRoom room;
+  final SupabaseRoomRepository rooms;
+
+  @override
+  State<ScheduledEventsPage> createState() => _ScheduledEventsPageState();
+}
+
+class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
+  late Future<List<ScheduledGameEvent>> _events;
+  DateTime _selected = DateTime.now().add(const Duration(minutes: 2));
+  var _saving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _events = widget.rooms.roomScheduledEvents(widget.room.id);
+  }
+
+  Future<void> _selectDateTime() async {
+    final date = await showDatePicker(context: context, firstDate: DateTime.now(), lastDate: DateTime.now().add(const Duration(days: 30)), initialDate: _selected);
+    if (date == null || !mounted) return;
+    final time = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(_selected));
+    if (time == null) return;
+    setState(() => _selected = DateTime(date.year, date.month, date.day, time.hour, time.minute));
+  }
+
+  Future<void> _schedule() async {
+    if (_selected.isBefore(DateTime.now())) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Elige una hora futura.')));
+      return;
+    }
+    setState(() => _saving = true);
+    try {
+      final event = await widget.rooms.scheduleRandomEvent(roomId: widget.room.id, scheduledFor: _selected);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${event.title} programado.')));
+      setState(() => _events = widget.rooms.roomScheduledEvents(widget.room.id));
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('Eventos programados')),
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            const Text('Cada evento se sortea al crearlo: ir a una estancia interior o “Achupé”.'),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(onPressed: _selectDateTime, icon: const Icon(Icons.schedule), label: Text('Hora: ${MaterialLocalizations.of(context).formatMediumDate(_selected)} · ${TimeOfDay.fromDateTime(_selected).format(context)}')),
+            const SizedBox(height: 8),
+            FilledButton.icon(onPressed: _saving ? null : _schedule, icon: const Icon(Icons.notifications_active_outlined), label: const Text('Programar evento aleatorio')),
+            const SizedBox(height: 20),
+            Text('Historial', style: Theme.of(context).textTheme.titleMedium),
+            Expanded(child: FutureBuilder<List<ScheduledGameEvent>>(
+              future: _events,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) return Text(snapshot.error.toString());
+                if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+                if (snapshot.data!.isEmpty) return const Text('Aún no hay eventos programados.');
+                return ListView(children: snapshot.data!.map((event) => ListTile(
+                  leading: Icon(event.status == 'triggered' ? Icons.check_circle_outline : Icons.schedule_outlined),
+                  title: Text(event.title),
+                  subtitle: Text('${event.message}\n${event.scheduledFor}'),
+                )).toList());
+              },
+            )),
+          ]),
         ),
       );
 }

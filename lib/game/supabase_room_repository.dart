@@ -338,6 +338,35 @@ class SupabaseRoomRepository {
   Future<String> payCompassBribes(String roomId) async =>
       (await _client.rpc('pay_compass_bribes', params: {'p_room_id': roomId})) as String;
 
+  Future<void> savePushSubscription({required String endpoint, required String p256dh, required String auth}) =>
+      _client.rpc('save_game_push_subscription', params: {
+        'p_endpoint': endpoint,
+        'p_p256dh': p256dh,
+        'p_auth': auth,
+      });
+
+  Future<ScheduledGameEvent> scheduleRandomEvent({required String roomId, required DateTime scheduledFor}) async {
+    final result = await _client.rpc('schedule_random_game_event', params: {
+      'p_room_id': roomId,
+      'p_scheduled_for': scheduledFor.toUtc().toIso8601String(),
+    });
+    return _scheduledEventFromJson(_firstRow(result));
+  }
+
+  Future<List<ScheduledGameEvent>> roomScheduledEvents(String roomId) async {
+    final rows = await _client.rpc('my_room_scheduled_events', params: {'p_room_id': roomId});
+    return (rows as List<dynamic>).map((row) => _scheduledEventFromJson(row as Map<String, dynamic>)).toList();
+  }
+
+  ScheduledGameEvent _scheduledEventFromJson(Map<String, dynamic> value) => ScheduledGameEvent(
+        id: value['id'] as String,
+        kind: value['event_kind'] as String,
+        title: value['title'] as String,
+        message: value['message'] as String,
+        scheduledFor: DateTime.parse(value['scheduled_for'] as String).toLocal(),
+        status: value['status'] as String,
+      );
+
   Future<GamePlayer?> myAssignment(String roomId) async {
     final userId = await _ensureAnonymousUser();
     final rows = await _client
