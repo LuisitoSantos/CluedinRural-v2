@@ -422,8 +422,15 @@ class SupabaseRoomRepository {
       (await _client.rpc('release_compass_location_clue', params: {'p_room_id': roomId})) as String;
 
   Future<List<String>> myGameNotices(String roomId) async {
-    final rows = await _client.rpc('my_game_notices', params: {'p_room_id': roomId});
-    return (rows as List<dynamic>).map((row) => (row as Map<String, dynamic>)['message'] as String).toList();
+    try {
+      final rows = await _client.rpc('my_game_notices', params: {'p_room_id': roomId});
+      return (rows as List<dynamic>).map((row) => (row as Map<String, dynamic>)['message'] as String).toList();
+    } on PostgrestException catch (error) {
+      // Permite abrir partidas existentes mientras se aplica la migración de
+      // avisos. Una vez instalada, los avisos volverán a cargarse normalmente.
+      if (error.code == 'PGRST202') return const [];
+      rethrow;
+    }
   }
 
   Future<Map<String, String>> roomClues(String roomId) async {
