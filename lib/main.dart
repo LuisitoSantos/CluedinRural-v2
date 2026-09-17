@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'game/game_models.dart';
 import 'game/game_setup.dart';
 import 'game/supabase_room_repository.dart';
+import 'notifications/push_notifications.dart';
 
 const _supabaseUrl = String.fromEnvironment('SUPABASE_URL');
 const _supabaseKey = String.fromEnvironment('SUPABASE_PUBLISHABLE_KEY');
@@ -93,8 +94,27 @@ class _AccessPageState extends State<AccessPage> {
       return _showError('Escribe un nombre y un PIN de 4 a 6 cifras.');
     }
     setState(() => _loading = true);
+    // Se inicia directamente desde el toque del usuario: los navegadores
+    // solo permiten mostrar el permiso de notificaciones desde esa acción.
+    final pushSubscription = PushNotifications.subscribe();
     try {
       final account = await widget.rooms.authenticate(name: _name.text, pin: _pin.text);
+      try {
+        final subscription = await pushSubscription;
+        if (subscription.supported &&
+            subscription.endpoint != null &&
+            subscription.p256dh != null &&
+            subscription.auth != null) {
+          await widget.rooms.savePushSubscription(
+            endpoint: subscription.endpoint!,
+            p256dh: subscription.p256dh!,
+            auth: subscription.auth!,
+          );
+        }
+      } catch (_) {
+        // No impedir el acceso al juego si el navegador no admite push o si
+        // el jugador decide no conceder permiso.
+      }
       if (!mounted) return;
       Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (_) => MyRoomsPage(rooms: widget.rooms, account: account),
@@ -161,7 +181,9 @@ class MyRoomsPage extends StatefulWidget {
 class _MyRoomsPageState extends State<MyRoomsPage> {
   late Future<List<GameRoom>> _rooms = widget.rooms.myRooms();
 
-  void _reload() => setState(() => _rooms = widget.rooms.myRooms());
+  void _reload() => setState(() {
+        _rooms = widget.rooms.myRooms();
+      });
 
   Future<void> _signOut() async {
     try {
@@ -392,7 +414,9 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
     super.dispose();
   }
 
-  void _reload() => setState(() => _gameData = _loadGameData());
+  void _reload() => setState(() {
+        _gameData = _loadGameData();
+      });
 
   Future<_PlayerGameData> _loadGameData() async {
     final assignment = await widget.rooms.myAssignment(widget.room.id);
@@ -659,7 +683,9 @@ class _GameActionsBarState extends State<_GameActionsBar> {
     super.dispose();
   }
 
-  void _reload() => setState(() => _data = _load());
+  void _reload() => setState(() {
+        _data = _load();
+      });
 
   Future<_GameActionsData> _load() async {
     final assignment = await widget.rooms.myAssignment(widget.room.id);
@@ -717,25 +743,11 @@ class _GameActionsBarState extends State<_GameActionsBar> {
   }
 
   Future<void> _completeMission(CurrentSecondaryMission mission) async {
-    final controller = TextEditingController();
     final enteredId = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Completar misión secundaria'),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'ID de la misión'),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancelar')),
-          FilledButton(onPressed: () => Navigator.of(context).pop(controller.text), child: const Text('Confirmar')),
-        ],
-      ),
+      builder: (_) => const _MissionCompletionDialog(),
     );
-    controller.dispose();
-    if (enteredId == null) return;
+    if (!mounted || enteredId == null) return;
     setState(() => _buyingItem = 'mission');
     try {
       final result = await widget.rooms.completeSecondaryMission(roomId: widget.room.id, missionId: enteredId);
@@ -1097,7 +1109,9 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
       final event = await widget.rooms.scheduleRandomEvent(roomId: widget.room.id, scheduledFor: _selected);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${event.title} programado.')));
-      setState(() => _events = widget.rooms.roomScheduledEvents(widget.room.id));
+      setState(() {
+        _events = widget.rooms.roomScheduledEvents(widget.room.id);
+      });
     } catch (error) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
     } finally {
@@ -1225,7 +1239,11 @@ class _FamilyCoinsPageState extends State<FamilyCoinsPage> {
     if (amount == null) return;
     try {
       await widget.rooms.changeFamilyCoins(roomId: widget.room.id, balance: balance, amount: sign * amount);
-      if (mounted) setState(() => _balances = widget.rooms.familyBalances(widget.room.id));
+      if (mounted) {
+        setState(() {
+          _balances = widget.rooms.familyBalances(widget.room.id);
+        });
+      }
     } catch (error) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
     }
@@ -1275,6 +1293,48 @@ class _FamilyCoinsPageState extends State<FamilyCoinsPage> {
             );
           },
         ),
+      );
+}
+
+class _MissionCompletionDialog extends StatefulWidget {
+  const _MissionCompletionDialog();
+
+  @override
+  State<_MissionCompletionDialog> createState() => _MissionCompletionDialogState();
+}
+
+class _MissionCompletionDialogState extends State<_MissionCompletionDialog> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _confirm() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    Navigator.of(context).pop(_controller.text.trim());
+  }
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+        title: const Text('Completar misión secundaria'),
+        content: TextField(
+          controller: _controller,
+          autofocus: true,
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.done,
+          onSubmitted: (_) => _confirm(),
+          decoration: const InputDecoration(labelText: 'ID de la misión'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(onPressed: _confirm, child: const Text('Confirmar')),
+        ],
       );
 }
 
@@ -1334,19 +1394,41 @@ class PurchaseSettingsPage extends StatefulWidget {
 
 class _PurchaseSettingsPageState extends State<PurchaseSettingsPage> {
   late Future<PurchaseSettings> _settings;
+  late Future<List<TeamQuadrant>> _quadrants;
   var _updating = false;
 
   @override
   void initState() {
     super.initState();
     _settings = widget.rooms.purchaseSettings(widget.room.id);
+    _quadrants = widget.rooms.roomTeamQuadrants(widget.room.id);
+  }
+
+  Future<void> _unlockSecretQuadrant(TeamQuadrant quadrant) async {
+    setState(() => _updating = true);
+    try {
+      final result = await widget.rooms.unlockSecretTeamQuadrant(roomId: widget.room.id, team: quadrant.team);
+      if (!mounted) return;
+      setState(() {
+        _quadrants = widget.rooms.roomTeamQuadrants(widget.room.id);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    } finally {
+      if (mounted) setState(() => _updating = false);
+    }
   }
 
   Future<void> _setEnabled(bool enabled) async {
     setState(() => _updating = true);
     try {
       await widget.rooms.setPurchasesEnabled(roomId: widget.room.id, enabled: enabled);
-      if (mounted) setState(() => _settings = widget.rooms.purchaseSettings(widget.room.id));
+      if (mounted) {
+        setState(() {
+          _settings = widget.rooms.purchaseSettings(widget.room.id);
+        });
+      }
     } catch (error) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
     } finally {
@@ -1363,18 +1445,58 @@ class _PurchaseSettingsPageState extends State<PurchaseSettingsPage> {
             if (snapshot.hasError) return _ErrorPage(message: snapshot.error.toString());
             if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
             final settings = snapshot.data!;
-            return ListView(
-              padding: const EdgeInsets.all(20),
-              children: [
-                const Text('Activa todas las compras a la vez. Cada vez que se abre una ronda, el ladrón y sus dos cómplices pueden hacer un daño cada uno.'),
-                const SizedBox(height: 12),
-                SwitchListTile(
-                  title: const Text('Habilitar compras y daños'),
-                  subtitle: const Text('Pistas · cuadrantes · ubicaciones'),
-                  value: settings.clueEnabled && settings.quadrantEnabled && settings.quadrantLocationsEnabled,
-                  onChanged: _updating ? null : _setEnabled,
-                ),
-              ],
+            return FutureBuilder<List<TeamQuadrant>>(
+              future: _quadrants,
+              builder: (context, quadrantsSnapshot) {
+                final secretQuadrants = (quadrantsSnapshot.data ?? const <TeamQuadrant>[])
+                    .where((quadrant) => quadrant.source == 'secret')
+                    .toList();
+                return ListView(
+                  padding: const EdgeInsets.all(20),
+                  children: [
+                    const Text('Activa todas las compras a la vez. Cada vez que se abre una ronda, el ladrón y sus dos cómplices pueden hacer un daño cada uno.'),
+                    const SizedBox(height: 12),
+                    SwitchListTile(
+                      title: const Text('Habilitar compras y daños'),
+                      subtitle: const Text('Pistas · cuadrantes · ubicaciones'),
+                      value: settings.clueEnabled && settings.quadrantEnabled && settings.quadrantLocationsEnabled,
+                      onChanged: _updating ? null : _setEnabled,
+                    ),
+                    const Divider(height: 32),
+                    Text('Cuadrantes secretos conseguidos', style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: 4),
+                    const Text('Márcalo solo cuando ese equipo lo haya conseguido fuera de la app. Así podrán comprar sus ubicaciones.'),
+                    if (quadrantsSnapshot.hasError)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text('No se pudieron cargar los cuadrantes: ${quadrantsSnapshot.error}'),
+                      )
+                    else if (!quadrantsSnapshot.hasData)
+                      const Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(child: CircularProgressIndicator()),
+                      )
+                    else if (secretQuadrants.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 8),
+                        child: Text('No hay cuadrantes secretos pendientes.'),
+                      )
+                    else
+                      ...secretQuadrants.map(
+                        (quadrant) => Card(
+                          child: ListTile(
+                            title: Text('Equipo ${quadrant.team.label}'),
+                            subtitle: Text('Cuadrante secreto: ${quadrant.quadrant}'),
+                            trailing: FilledButton(
+                              onPressed: _updating ? null : () => _unlockSecretQuadrant(quadrant),
+                              child: const Text('Habilitar'),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
             );
           },
         ),

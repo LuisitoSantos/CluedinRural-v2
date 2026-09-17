@@ -73,6 +73,9 @@ using (
 
 -- Se redefine para que un cuadrante comprado se entregue de inmediato, sin
 -- repetir ninguno (incluido el cuadrante secreto que el equipo desconoce).
+-- La versión anterior tenía dos parámetros y provocaría ambigüedad al llamar
+-- a la función sin cuadrante.
+drop function if exists public.purchase_game_item(uuid, text);
 create or replace function public.purchase_game_item(
   p_room_id uuid,
   p_item text,

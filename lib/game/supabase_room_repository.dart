@@ -262,6 +262,12 @@ class SupabaseRoomRepository {
     }).toList();
   }
 
+  Future<String> unlockSecretTeamQuadrant({required String roomId, required Team team}) async =>
+      (await _client.rpc('unlock_secret_team_quadrant', params: {
+        'p_room_id': roomId,
+        'p_team': team.name,
+      })) as String;
+
   Future<List<QuadrantLocation>> myQuadrantLocations(String roomId) async {
     final assignment = await myAssignment(roomId);
     if (assignment == null) return const [];
