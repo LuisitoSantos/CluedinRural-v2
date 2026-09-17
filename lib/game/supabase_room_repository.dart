@@ -203,10 +203,10 @@ class SupabaseRoomRepository {
     );
   }
 
-  Future<void> setPurchaseEnabled({required String roomId, required String item, required bool enabled}) =>
+  Future<void> setPurchasesEnabled({required String roomId, required bool enabled}) =>
       _client.rpc('set_game_purchase_enabled', params: {
         'p_room_id': roomId,
-        'p_item': item,
+        'p_item': 'all',
         'p_enabled': enabled,
       });
 
@@ -290,6 +290,7 @@ class SupabaseRoomRepository {
       level: value['mission_level'] as int,
       action: value['mission_action'] as String,
       number: value['mission_number'] as int,
+      total: value['mission_total'] as int,
     );
   }
 
@@ -386,7 +387,7 @@ class SupabaseRoomRepository {
     );
   }
 
-  Future<List<String>> myTeamClues(String roomId) async {
+  Future<List<TeamClue>> myTeamClues(String roomId) async {
     final userId = await _ensureAnonymousUser();
     final assignment = await myAssignment(roomId);
     if (assignment == null) return const [];
@@ -401,10 +402,28 @@ class SupabaseRoomRepository {
         .select('clue')
         .eq('room_id', roomId)
         .eq('team', assignment.team!.name);
+    final compassRows = await _client
+        .from('game_team_compass_clues')
+        .select('clue')
+        .eq('room_id', roomId)
+        .eq('team', assignment.team!.name)
+        .order('clue_number');
     return [
-      ...(rows as List<dynamic>).map((row) => (row as Map<String, dynamic>)['clue'] as String),
-      ...(secondaryRows as List<dynamic>).map((row) => (row as Map<String, dynamic>)['clue'] as String),
+      ...(rows as List<dynamic>).map((row) => TeamClue(text: (row as Map<String, dynamic>)['clue'] as String, kind: TeamClueKind.initial)),
+      ...(secondaryRows as List<dynamic>).map((row) {
+        final clue = (row as Map<String, dynamic>)['clue'] as String;
+        return TeamClue(text: clue, kind: clue.startsWith('Pista perdida') ? TeamClueKind.lost : TeamClueKind.secondary);
+      }),
+      ...(compassRows as List<dynamic>).map((row) => TeamClue(text: (row as Map<String, dynamic>)['clue'] as String, kind: TeamClueKind.compass)),
     ];
+  }
+
+  Future<String> releaseCompassLocationClue(String roomId) async =>
+      (await _client.rpc('release_compass_location_clue', params: {'p_room_id': roomId})) as String;
+
+  Future<List<String>> myGameNotices(String roomId) async {
+    final rows = await _client.rpc('my_game_notices', params: {'p_room_id': roomId});
+    return (rows as List<dynamic>).map((row) => (row as Map<String, dynamic>)['message'] as String).toList();
   }
 
   Future<Map<String, String>> roomClues(String roomId) async {

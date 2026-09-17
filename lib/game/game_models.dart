@@ -148,12 +148,13 @@ class SecondaryMissionDefinition {
 }
 
 class CurrentSecondaryMission {
-  const CurrentSecondaryMission({required this.id, required this.level, required this.action, required this.number});
+  const CurrentSecondaryMission({required this.id, required this.level, required this.action, required this.number, required this.total});
 
   final String id;
   final int level;
   final String action;
   final int number;
+  final int total;
 }
 
 enum CompassRole { thief, accomplice }
@@ -198,6 +199,15 @@ class ScheduledGameEvent {
   final String message;
   final DateTime scheduledFor;
   final String status;
+}
+
+enum TeamClueKind { initial, secondary, lost, compass }
+
+class TeamClue {
+  const TeamClue({required this.text, required this.kind});
+
+  final String text;
+  final TeamClueKind kind;
 }
 
 extension CompassRoleDetails on CompassRole {
