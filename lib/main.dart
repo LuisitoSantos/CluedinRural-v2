@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -99,22 +100,9 @@ class _AccessPageState extends State<AccessPage> {
     final pushSubscription = PushNotifications.subscribe();
     try {
       final account = await widget.rooms.authenticate(name: _name.text, pin: _pin.text);
-      try {
-        final subscription = await pushSubscription;
-        if (subscription.supported &&
-            subscription.endpoint != null &&
-            subscription.p256dh != null &&
-            subscription.auth != null) {
-          await widget.rooms.savePushSubscription(
-            endpoint: subscription.endpoint!,
-            p256dh: subscription.p256dh!,
-            auth: subscription.auth!,
-          );
-        }
-      } catch (_) {
-        // No impedir el acceso al juego si el navegador no admite push o si
-        // el jugador decide no conceder permiso.
-      }
+      // Nunca se espera a la suscripción para acceder. En algunos móviles el
+      // service worker puede tardar; la suscripción continúa en segundo plano.
+      unawaited(_savePushSubscription(pushSubscription));
       if (!mounted) return;
       Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (_) => MyRoomsPage(rooms: widget.rooms, account: account),
@@ -123,6 +111,25 @@ class _AccessPageState extends State<AccessPage> {
       _showError(error.toString());
     } finally {
       if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _savePushSubscription(Future<PushSubscriptionData> pendingSubscription) async {
+    try {
+      final subscription = await pendingSubscription;
+      if (subscription.supported &&
+          subscription.endpoint != null &&
+          subscription.p256dh != null &&
+          subscription.auth != null) {
+        await widget.rooms.savePushSubscription(
+          endpoint: subscription.endpoint!,
+          p256dh: subscription.p256dh!,
+          auth: subscription.auth!,
+        );
+      }
+    } catch (_) {
+      // No impedir el acceso al juego si el navegador no admite push o si el
+      // jugador decide no conceder permiso.
     }
   }
 
