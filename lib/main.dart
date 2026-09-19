@@ -81,7 +81,13 @@ class AccessPage extends StatefulWidget {
 class _AccessPageState extends State<AccessPage> {
   final _name = TextEditingController();
   final _pin = TextEditingController();
+  late final Future<List<String>> _characterNames = _loadCharacterNames();
   bool _loading = false;
+
+  Future<List<String>> _loadCharacterNames() async {
+    final source = await rootBundle.loadString('lib/resources/personajes.json');
+    return (jsonDecode(source) as Map<String, dynamic>).keys.toList()..sort();
+  }
 
   @override
   void dispose() {
@@ -149,7 +155,23 @@ class _AccessPageState extends State<AccessPage> {
                 children: [
                   Text('Identificate', style: Theme.of(context).textTheme.headlineSmall),
                   const SizedBox(height: 20),
-                  TextField(controller: _name, decoration: const InputDecoration(labelText: 'Nombre de jugador')),
+                  FutureBuilder<List<String>>(
+                    future: _characterNames,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) return const Text('No se pudo cargar la lista de personajes.');
+                      if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+                      return DropdownButtonFormField<String>(
+                        value: _name.text.isEmpty ? null : _name.text,
+                        isExpanded: true,
+                        decoration: const InputDecoration(labelText: 'Personaje'),
+                        hint: const Text('Elige tu personaje'),
+                        items: snapshot.data!
+                            .map((name) => DropdownMenuItem(value: name, child: Text(name)))
+                            .toList(),
+                        onChanged: _loading ? null : (name) => setState(() => _name.text = name ?? ''),
+                      );
+                    },
+                  ),
                   const SizedBox(height: 12),
                   TextField(
                     controller: _pin,
@@ -159,9 +181,12 @@ class _AccessPageState extends State<AccessPage> {
                     decoration: const InputDecoration(labelText: 'PIN (4 a 6 cifras)'),
                   ),
                   const SizedBox(height: 12),
-                  FilledButton(
-                    onPressed: _loading ? null : _continue,
-                    child: Text(_loading ? 'Entrando...' : 'Continuar'),
+                  FutureBuilder<List<String>>(
+                    future: _characterNames,
+                    builder: (context, snapshot) => FilledButton(
+                      onPressed: _loading || !snapshot.hasData ? null : _continue,
+                      child: Text(_loading ? 'Entrando...' : 'Continuar'),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   const Text(
@@ -332,17 +357,22 @@ class _RoomPageState extends State<RoomPage> {
     final account = widget.account;
     final rooms = widget.rooms;
     final isAdmin = room.isAdmin(account.userId);
+    final playerCount = room.players.where((player) => !player.isFake).length;
     return Scaffold(
       appBar: AppBar(
         title: isAdmin
-            ? Text('Código de sala: ${room.code}', style: Theme.of(context).textTheme.labelSmall)
+            ? Text('Código: ${room.code} · $playerCount jugadores', style: Theme.of(context).textTheme.labelSmall)
             : const Text('Sala'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (_) => RoomPage(room: room, account: account, rooms: rooms),
-            )),
+            onPressed: () async {
+              final refreshedRoom = await rooms.getRoom(room.id);
+              if (!context.mounted) return;
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (_) => RoomPage(room: refreshedRoom, account: account, rooms: rooms),
+              ));
+            },
           ),
         ],
       ),
@@ -513,7 +543,12 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
               const SizedBox(height: 8),
               ..._locationGroups(data.locations).entries.expand((entry) => [
                     Text('Ubicaciones del cuadrante ${entry.key}', style: Theme.of(context).textTheme.titleSmall),
-                    ...entry.value.map((location) => Padding(padding: const EdgeInsets.only(top: 4), child: Text('• $location'))),
+                    ...entry.value.map(
+                      (location) => Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text('• ${location.positionName} · ${location.characterName}'),
+                      ),
+                    ),
                     const SizedBox(height: 6),
                   ]),
             ],
@@ -532,10 +567,10 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
         child: Text('• ${clue.text}', style: clue.kind == TeamClueKind.lost ? TextStyle(color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.w600) : null),
       );
 
-  Map<String, List<String>> _locationGroups(List<QuadrantLocation> locations) {
-    final groups = <String, List<String>>{};
+  Map<String, List<QuadrantLocation>> _locationGroups(List<QuadrantLocation> locations) {
+    final groups = <String, List<QuadrantLocation>>{};
     for (final location in locations) {
-      groups.putIfAbsent(location.quadrant, () => []).add(location.positionName);
+      groups.putIfAbsent(location.quadrant, () => []).add(location);
     }
     return groups;
   }
@@ -625,13 +660,22 @@ class _SecretRolePanelState extends State<_SecretRolePanel> {
           ),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(role?.label ?? 'No tienes un rol secreto en esta partida.'),
-            if (widget.secret != null && widget.secret!.pendingDamageCount > 0) ...[
-              const SizedBox(height: 6),
-              Text('Daños pendientes: ${widget.secret!.pendingDamageCount}. Perderás una pista por cada misión afectada.'),
-            ],
             if (role != null) ...[
               const SizedBox(height: 6),
               Text('Palabra para reconoceros: ${widget.secret!.word}', style: Theme.of(context).textTheme.titleSmall),
+              const SizedBox(height: 10),
+              Text('Posiciones del grupo', style: Theme.of(context).textTheme.titleSmall),
+              const SizedBox(height: 4),
+              ...widget.secret!.members.map(
+                (member) => Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Text(
+                    member.isSelf
+                        ? 'Tu casilla: ${member.positionName}'
+                        : 'Aliado: equipo ${member.team.label} · casilla ${member.positionName}',
+                  ),
+                ),
+              ),
               const SizedBox(height: 8),
               OutlinedButton.icon(
                 onPressed: widget.secret!.canCauseDamage ? widget.onCauseDamage : null,
@@ -1443,6 +1487,67 @@ class _PurchaseSettingsPageState extends State<PurchaseSettingsPage> {
     }
   }
 
+  Future<void> _changeQuadrant({required Team team, required String quadrant, required bool add}) async {
+    setState(() => _updating = true);
+    try {
+      final result = await widget.rooms.adminChangeTeamQuadrant(
+        roomId: widget.room.id,
+        team: team,
+        quadrant: quadrant,
+        add: add,
+      );
+      if (!mounted) return;
+      setState(() {
+        _quadrants = widget.rooms.roomTeamQuadrants(widget.room.id);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    } finally {
+      if (mounted) setState(() => _updating = false);
+    }
+  }
+
+  Future<void> _showAddQuadrantDialog() async {
+    var team = Team.red;
+    var quadrant = 'A';
+    final selection = await showDialog<(Team, String)>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('Añadir cuadrante a un equipo'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButtonFormField<Team>(
+                value: team,
+                decoration: const InputDecoration(labelText: 'Equipo'),
+                items: Team.values.map((item) => DropdownMenuItem(value: item, child: Text(item.label))).toList(),
+                onChanged: (value) => setDialogState(() => team = value!),
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<String>(
+                value: quadrant,
+                decoration: const InputDecoration(labelText: 'Cuadrante'),
+                items: const ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+                    .map((item) => DropdownMenuItem(value: item, child: Text('Cuadrante $item')))
+                    .toList(),
+                onChanged: (value) => setDialogState(() => quadrant = value!),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancelar')),
+            FilledButton(onPressed: () => Navigator.of(context).pop((team, quadrant)), child: const Text('Añadir')),
+          ],
+        ),
+      ),
+    );
+    if (selection != null && mounted) {
+      await _changeQuadrant(team: selection.$1, quadrant: selection.$2, add: true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('Compras de jugadores')),
@@ -1501,6 +1606,48 @@ class _PurchaseSettingsPageState extends State<PurchaseSettingsPage> {
                           ),
                         ),
                       ),
+                    const Divider(height: 32),
+                    Text('Cambios de cuadrantes', style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: 4),
+                    const Text('Añade o retira cuadrantes por cambios y robos realizados durante la partida.'),
+                    const SizedBox(height: 8),
+                    OutlinedButton.icon(
+                      onPressed: _updating ? null : _showAddQuadrantDialog,
+                      icon: const Icon(Icons.add),
+                      label: const Text('Añadir cuadrante'),
+                    ),
+                    if (quadrantsSnapshot.hasData)
+                      ...Team.values.map((team) {
+                        final teamQuadrants = quadrantsSnapshot.data!.where((item) => item.team == team).toList();
+                        return Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Equipo ${team.label}', style: Theme.of(context).textTheme.titleSmall),
+                                const SizedBox(height: 4),
+                                if (teamQuadrants.isEmpty)
+                                  const Text('No tiene cuadrantes disponibles.')
+                                else
+                                  Wrap(
+                                    spacing: 6,
+                                    runSpacing: 4,
+                                    children: teamQuadrants
+                                        .map((item) => InputChip(
+                                              label: Text(item.quadrant),
+                                              tooltip: 'Origen: ${item.source}',
+                                              onDeleted: _updating
+                                                  ? null
+                                                  : () => _changeQuadrant(team: team, quadrant: item.quadrant, add: false),
+                                            ))
+                                        .toList(),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
                   ],
                 );
               },
