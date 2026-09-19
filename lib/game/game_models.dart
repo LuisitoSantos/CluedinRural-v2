@@ -127,10 +127,11 @@ class TeamQuadrant {
 }
 
 class QuadrantLocation {
-  const QuadrantLocation({required this.quadrant, required this.positionName});
+  const QuadrantLocation({required this.quadrant, required this.positionName, required this.characterName});
 
   final String quadrant;
   final String positionName;
+  final String characterName;
 }
 
 class SecondaryMissionDefinition {
@@ -164,15 +165,23 @@ class CompassSecret {
     required this.role,
     this.word,
     required this.canCauseDamage,
-    required this.pendingDamageCount,
     required this.canPayBribes,
+    required this.members,
   });
 
   final CompassRole? role;
   final String? word;
   final bool canCauseDamage;
-  final int pendingDamageCount;
   final bool canPayBribes;
+  final List<SecretRoleMember> members;
+}
+
+class SecretRoleMember {
+  const SecretRoleMember({required this.team, required this.positionName, required this.isSelf});
+
+  final Team team;
+  final String positionName;
+  final bool isSelf;
 }
 
 class SabotageTarget {

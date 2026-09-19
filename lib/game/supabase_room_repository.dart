@@ -125,6 +125,7 @@ class SupabaseRoomRepository {
       'p_assignments': assignments,
       'p_mystery': mystery.toJson(),
     });
+    await _client.rpc('refresh_initial_team_quadrant_clues', params: {'p_room_id': roomId});
     await _client.rpc('save_secondary_missions', params: {
       'p_room_id': roomId,
       'p_missions': secondaryMissions,
@@ -268,21 +269,27 @@ class SupabaseRoomRepository {
         'p_team': team.name,
       })) as String;
 
+  Future<String> adminChangeTeamQuadrant({
+    required String roomId,
+    required Team team,
+    required String quadrant,
+    required bool add,
+  }) async =>
+      (await _client.rpc('admin_change_team_quadrant', params: {
+        'p_room_id': roomId,
+        'p_team': team.name,
+        'p_quadrant': quadrant,
+        'p_add': add,
+      })) as String;
+
   Future<List<QuadrantLocation>> myQuadrantLocations(String roomId) async {
-    final assignment = await myAssignment(roomId);
-    if (assignment == null) return const [];
-    final rows = await _client
-        .from('game_team_quadrant_locations')
-        .select('quadrant, position_name')
-        .eq('room_id', roomId)
-        .eq('team', assignment.team!.name)
-        .order('quadrant')
-        .order('position_name');
+    final rows = await _client.rpc('my_team_quadrant_locations', params: {'p_room_id': roomId});
     return (rows as List<dynamic>).map((row) {
       final value = row as Map<String, dynamic>;
       return QuadrantLocation(
         quadrant: value['quadrant'] as String,
         positionName: value['position_name'] as String,
+        characterName: value['character_name'] as String,
       );
     }).toList();
   }
@@ -317,8 +324,17 @@ class SupabaseRoomRepository {
       role: role == null ? null : CompassRole.values.byName(role),
       word: value['secret_word'] as String?,
       canCauseDamage: value['can_cause_damage'] as bool? ?? false,
-      pendingDamageCount: value['pending_damage_count'] as int? ?? 0,
       canPayBribes: value['can_pay_bribes'] as bool? ?? false,
+      members: ((value['members'] as List<dynamic>?) ?? const [])
+          .map((member) {
+            final data = member as Map<String, dynamic>;
+            return SecretRoleMember(
+              team: Team.values.byName(data['team'] as String),
+              positionName: data['position_name'] as String,
+              isSelf: data['is_self'] as bool? ?? false,
+            );
+          })
+          .toList(),
     );
   }
 
