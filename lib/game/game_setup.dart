@@ -280,11 +280,12 @@ class _SecondaryClue {
 }
 
 class CharacterProfile {
-  const CharacterProfile({required this.name, required this.team, required this.family});
+  const CharacterProfile({required this.name, required this.team, required this.family, this.description = ''});
 
   final String name;
   final Team team;
   final String family;
+  final String description;
 
   factory CharacterProfile.fromJson(String name, Map<String, dynamic> json) {
     final teamLabel = json['Equipo'] as String?;
@@ -293,6 +294,11 @@ class CharacterProfile {
     if (team == null || family == null || family.trim().isEmpty) {
       throw FormatException('El personaje "$name" no tiene equipo o familia validos.');
     }
-    return CharacterProfile(name: name, team: team, family: family);
+    return CharacterProfile(
+      name: name,
+      team: team,
+      family: family,
+      description: json['Desc'] as String? ?? '',
+    );
   }
 }

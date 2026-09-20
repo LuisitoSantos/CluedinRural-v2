@@ -411,6 +411,7 @@ class _PlayerGameData {
     required this.locations,
     required this.currentMission,
     required this.secret,
+    required this.description,
   });
 
   final GamePlayer? assignment;
@@ -422,6 +423,7 @@ class _PlayerGameData {
   final List<QuadrantLocation> locations;
   final CurrentSecondaryMission? currentMission;
   final CompassSecret? secret;
+  final String description;
 }
 
 class _PlayerGamePanel extends StatefulWidget {
@@ -437,6 +439,16 @@ class _PlayerGamePanel extends StatefulWidget {
 
 class _PlayerGamePanelState extends State<_PlayerGamePanel> {
   late Future<_PlayerGameData> _gameData;
+  late final Future<Map<String, String>> _characterDescriptions = _loadCharacterDescriptions();
+
+  Future<Map<String, String>> _loadCharacterDescriptions() async {
+    final source = await rootBundle.loadString('lib/resources/personajes.json');
+    final characters = jsonDecode(source) as Map<String, dynamic>;
+    return {
+      for (final entry in characters.entries)
+        entry.key: ((entry.value as Map<String, dynamic>)['Desc'] as String? ?? '').trim(),
+    };
+  }
 
   @override
   void initState() {
@@ -468,6 +480,7 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
         locations: [],
         currentMission: null,
         secret: null,
+        description: '',
       );
     }
     final results = await Future.wait<Object?>([
@@ -479,6 +492,7 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
       widget.rooms.myQuadrantLocations(widget.room.id),
       widget.rooms.myCurrentSecondaryMission(widget.room.id),
       widget.rooms.myCompassSecret(widget.room.id),
+      _characterDescriptions,
     ]);
     return _PlayerGameData(
       assignment: assignment,
@@ -490,6 +504,7 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
       locations: results[5] as List<QuadrantLocation>,
       currentMission: results[6] as CurrentSecondaryMission?,
       secret: results[7] as CompassSecret?,
+      description: (results[8] as Map<String, String>)[assignment.characterName] ?? '',
     );
   }
 
@@ -514,7 +529,12 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
                   Text('Equipo: ${assignment.team!.label} · ${assignment.familyName}', style: Theme.of(context).textTheme.bodySmall),
                   Text('Monedas del equipo: ${data.coins ?? 0}', style: Theme.of(context).textTheme.bodySmall),
                   const SizedBox(height: 4),
-                  _SecretRolePanel(secret: data.secret, onCauseDamage: _causeDamage, onPayBribes: _payBribes),
+                  _SecretRolePanel(
+                    secret: data.secret,
+                    description: data.description,
+                    onCauseDamage: _causeDamage,
+                    onPayBribes: _payBribes,
+                  ),
                 ]),
               ),
             ),
@@ -627,9 +647,10 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
 }
 
 class _SecretRolePanel extends StatefulWidget {
-  const _SecretRolePanel({required this.secret, required this.onCauseDamage, required this.onPayBribes});
+  const _SecretRolePanel({required this.secret, required this.description, required this.onCauseDamage, required this.onPayBribes});
 
   final CompassSecret? secret;
+  final String description;
   final Future<void> Function() onCauseDamage;
   final Future<void> Function() onPayBribes;
 
@@ -660,6 +681,10 @@ class _SecretRolePanelState extends State<_SecretRolePanel> {
           ),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(role?.label ?? 'No tienes un rol secreto en esta partida.'),
+            if (widget.description.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(widget.description),
+            ],
             if (role != null) ...[
               const SizedBox(height: 6),
               Text('Palabra para reconoceros: ${widget.secret!.word}', style: Theme.of(context).textTheme.titleSmall),

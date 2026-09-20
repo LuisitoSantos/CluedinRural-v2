@@ -1,118 +1,147 @@
 {
     "Lewis": {
         "Equipo": "Verde",
-        "Familia": "O'Doherty"
-    },
+        "Familia": "O'Doherty",
+        "Desc": "No te fías de Auveron Beaumont."
+},
     "Isabelle": {
         "Equipo": "Verde",
-        "Familia": "O'Doherty"
-    },
+        "Familia": "O'Doherty",
+        "Desc": "Tuviste un hijo ilegítimo con Auveron Beaumont; manteneis vuestro amor en secreto."
+},
     "Albert": {
         "Equipo": "Verde",
-        "Familia": "O'Doherty"
-    },
+        "Familia": "O'Doherty",
+        "Desc": "Eres fiel a tu familia"
+},
     "Iryn": {
         "Equipo": "Verde",
-        "Familia": "O'Doherty"
-    },
+        "Familia": "O'Doherty",
+        "Desc": "Has establecido una alianza con Gio Rossi, la cual intentareis llevar hasta el final; incluso os cubrireis las espaldas si fuera necesario."
+},
     "Julliete": {
         "Equipo": "Verde",
-        "Familia": "O'Doherty"
-    },
+        "Familia": "O'Doherty",
+        "Desc": "Tuviste un encuentro amoroso con Adrien Beumont en uno de los bares de tu familia."
+},
     "Alexander": {
         "Equipo": "Verde",
-        "Familia": "O'Doherty"
-    },
+        "Familia": "O'Doherty",
+        "Desc": "Eres fiel a tu familia"
+},
     "Alvar": {
         "Equipo": "Verde",
-        "Familia": "O'Doherty"
-    },
+        "Familia": "O'Doherty",
+        "Desc": "Eres fiel a tu familia"
+},
     "Camilo": {
         "Equipo": "Rojo",
-        "Familia": "Rossi"
-    },
+        "Familia": "Rossi",
+        "Desc": "Eres fiel a tu familia"
+},
     "Zita": {
         "Equipo": "Rojo",
-        "Familia": "Rossi"
-    },
-    "Bertina": {
+        "Familia": "Rossi",
+        "Desc": "Eres fiel a tu familia"
+},
+    "Bertini": {
         "Equipo": "Rojo",
-        "Familia": "Rossi"
-    },
+        "Familia": "Rossi",
+        "Desc": "Junto con Carlo Rossi, frecuentais los mismos locales que Natasha Romanov, con la que manteneis una relación de amistad sin que nadie lo sepa."
+},
     "Carlo": {
         "Equipo": "Rojo",
-        "Familia": "Rossi"
-    },
+        "Familia": "Rossi",
+        "Desc": "Junto con Bertini Rossi, frecuentais los mismos locales que Natasha Romanov, con la que manteneis una relación de amistad sin que nadie lo sepa."
+},
     "Vitto": {
         "Equipo": "Rojo",
-        "Familia": "Rossi"
-    },
+        "Familia": "Rossi",
+        "Desc": "Gracias a las realicones comerciales de tu familia, has establecido una relación de confianza con Aridna Romanov."
+},
     "Giuseppe": {
         "Equipo": "Rojo",
-        "Familia": "Rossi"
-    },
+        "Familia": "Rossi",
+        "Desc": "Eres fiel a tu familia"
+},
     "Gio": {
         "Equipo": "Rojo",
-        "Familia": "Rossi"
-    },
+        "Familia": "Rossi",
+        "Desc": "Has establecido una alianza con Iryn O'Doherty, la cual intentareis llevar hasta el final; incluso os cubrireis las espaldas si fuera necesario."
+},
     "Adriano": {
         "Equipo": "Rojo",
-        "Familia": "Rossi"
-    },
+        "Familia": "Rossi",
+        "Desc": "Coincidiste en el servicion militar con Adrik Romanov, y desde entonces trabajais mano a mano con lo que sea; uno da, el otro recibe, y viceversa."
+},
     "Marie": {
         "Equipo": "Azul",
-        "Familia": "Beaumont"
-    },
+        "Familia": "Beaumont",
+        "Desc": "Eres fiel a tu familia"
+},
     "Auveron": {
         "Equipo": "Azul",
-        "Familia": "Beaumont"
-    },
+        "Familia": "Beaumont",
+        "Desc": "Tuviste un hijo ilegítimo con Isabelle O'Doherty; manteneis vuestro amor en secreto y por ello Lewis O'Doherty no se fía de ti."
+},
     "Aube": {
         "Equipo": "Azul",
-        "Familia": "Beaumont"
-    },
+        "Familia": "Beaumont",
+        "Desc": "Eres fiel a tu familia"
+},
     "Artus": {
         "Equipo": "Azul",
-        "Familia": "Beaumont"
-    },
+        "Familia": "Beaumont",
+        "Desc": "Eres fiel a tu familia"
+},
     "Adrien": {
         "Equipo": "Azul",
-        "Familia": "Beaumont"
-    },
+        "Familia": "Beaumont",
+        "Desc": "Tuviste un encuentro amoroso con Julliete O'Doherty en uno de los bares de su familia."
+},
     "Marielle": {
         "Equipo": "Azul",
-        "Familia": "Beaumont"
-    },
+        "Familia": "Beaumont",
+        "Desc": "Eres fiel a tu familia"
+},
     "Soren": {
         "Equipo": "Azul",
-        "Familia": "Beaumont"
-    },
+        "Familia": "Beaumont",
+        "Desc": "Sonya Romanov te hizo un encargo a escondidas de su familia, y tú la engañaste, por lo que ahora no se fía de ti."
+},
     "Natasha": {
         "Equipo": "Amarillo",
-        "Familia": "Romanov"
-    },
+        "Familia": "Romanov",
+        "Desc": "Frecuentas los mismos locales que Bertini y Carlo Rossi, con los que mantienes una relación de amistad sin que nadie lo sepa."
+},
     "Ariadna": {
         "Equipo": "Amarillo",
-        "Familia": "Romanov"
-    },
+        "Familia": "Romanov",
+        "Desc": "Gracias a las realicones comerciales de tu familia, has establecido una relación de confianza con Vitto Rossi."
+},
     "Annia": {
         "Equipo": "Amarillo",
-        "Familia": "Romanov"
-    },
+        "Familia": "Romanov",
+        "Desc": "Eres fiel a tu familia"
+},
     "Kristian": {
         "Equipo": "Amarillo",
-        "Familia": "Romanov"
-    },
+        "Familia": "Romanov",
+        "Desc": "Eres fiel a tu familia"
+},
     "Sonya": {
         "Equipo": "Amarillo",
-        "Familia": "Romanov"
-    },
+        "Familia": "Romanov",
+        "Desc": "A escondidas de tu familia, hiciste un encargo a Soren Beaumont y esté te engañó, por lo que no te fias de él."
+},
     "Adrik": {
         "Equipo": "Amarillo",
-        "Familia": "Romanov"
-    },
+        "Familia": "Romanov",
+        "Desc": "Coincidiste en el servicion militar con Adriano Rossi, y desde entonces trabajais mano a mano con lo que sea; uno da, el otro recibe, y viceversa."
+},
     "Liza": {
         "Equipo": "Amarillo",
-        "Familia": "Romanov"
+        "Familia": "Romanov",
+        "Desc": "Eres fiel a tu familia"
     }    
 }
