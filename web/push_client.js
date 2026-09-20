@@ -48,5 +48,9 @@
     },
   };
 
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('push_service_worker.js');
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('push_service_worker.js', { updateViaCache: 'none' })
+      .then((registration) => registration.update())
+      .catch((error) => console.error('No se pudo registrar el servicio de avisos', error));
+  }
 }());
