@@ -40,12 +40,15 @@ Deno.serve(async () => {
       .select('endpoint, p256dh, auth')
       .in('user_id', userIds)
 
+    console.log(JSON.stringify({ eventId: event.id, roomMembers: userIds.length, subscriptions: subscriptions?.length ?? 0 }))
+
     await Promise.all((subscriptions ?? []).map(async (subscription) => {
       try {
         await webpush.sendNotification(
           { endpoint: subscription.endpoint, keys: { p256dh: subscription.p256dh, auth: subscription.auth } },
           JSON.stringify({ title: event.title, body: event.message, url: './' }),
         )
+        console.log(JSON.stringify({ eventId: event.id, delivered: true }))
       } catch (pushError) {
         // Las suscripciones expiradas (404/410) se eliminan para no reintentarlas.
         const statusCode = (pushError as { statusCode?: number }).statusCode

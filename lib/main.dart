@@ -213,6 +213,34 @@ class MyRoomsPage extends StatefulWidget {
 class _MyRoomsPageState extends State<MyRoomsPage> {
   late Future<List<GameRoom>> _rooms = widget.rooms.myRooms();
 
+  @override
+  void initState() {
+    super.initState();
+    // Vuelve a asociar el dispositivo a la cuenta en cada apertura. Si ya
+    // tiene permiso, no muestra ningún diálogo; si no, el primer acceso sigue
+    // solicitándolo desde el toque en "Continuar".
+    unawaited(_refreshPushSubscription());
+  }
+
+  Future<void> _refreshPushSubscription() async {
+    try {
+      final subscription = await PushNotifications.subscribe();
+      if (subscription.supported &&
+          subscription.endpoint != null &&
+          subscription.p256dh != null &&
+          subscription.auth != null) {
+        await widget.rooms.savePushSubscription(
+          endpoint: subscription.endpoint!,
+          p256dh: subscription.p256dh!,
+          auth: subscription.auth!,
+        );
+      }
+    } catch (_) {
+      // La lista de salas debe seguir funcionando aunque el navegador no
+      // admita avisos o el usuario no los haya autorizado.
+    }
+  }
+
   void _reload() => setState(() {
         _rooms = widget.rooms.myRooms();
       });
@@ -1168,7 +1196,15 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
   }
 
   Future<void> _selectDateTime() async {
-    final date = await showDatePicker(context: context, firstDate: DateTime.now(), lastDate: DateTime.now().add(const Duration(days: 30)), initialDate: _selected);
+    final now = DateTime.now();
+    final date = await showDatePicker(
+      context: context,
+      // El selector trabaja solo con días; si se pasa [now] con su hora, hoy
+      // queda incorrectamente deshabilitado al compararlo con medianoche.
+      firstDate: DateUtils.dateOnly(now),
+      lastDate: now.add(const Duration(days: 30)),
+      initialDate: DateUtils.dateOnly(_selected),
+    );
     if (date == null || !mounted) return;
     final time = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(_selected));
     if (time == null) return;
@@ -1176,7 +1212,7 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
   }
 
   Future<void> _schedule() async {
-    if (_selected.isBefore(DateTime.now())) {
+    if (!_selected.isAfter(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Elige una hora futura.')));
       return;
     }
@@ -1205,7 +1241,15 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
             const SizedBox(height: 12),
             OutlinedButton.icon(onPressed: _selectDateTime, icon: const Icon(Icons.schedule), label: Text('Hora: ${MaterialLocalizations.of(context).formatMediumDate(_selected)} · ${TimeOfDay.fromDateTime(_selected).format(context)}')),
             const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: _saving ? null : () => setState(() => _selected = DateTime.now().add(const Duration(minutes: 1))),
+              icon: const Icon(Icons.bug_report_outlined),
+              label: const Text('Prueba: ahora + 1 minuto'),
+            ),
+            const SizedBox(height: 8),
             FilledButton.icon(onPressed: _saving ? null : _schedule, icon: const Icon(Icons.notifications_active_outlined), label: const Text('Programar evento aleatorio')),
+            const SizedBox(height: 6),
+            const Text('El aviso se enviará en la siguiente revisión del scheduler, que se ejecuta cada 10 minutos.', textAlign: TextAlign.center),
             const SizedBox(height: 20),
             Text('Historial', style: Theme.of(context).textTheme.titleMedium),
             Expanded(child: FutureBuilder<List<ScheduledGameEvent>>(
