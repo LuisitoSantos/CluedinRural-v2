@@ -501,7 +501,7 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
       return const _PlayerGameData(
         assignment: null,
         coins: null,
-        purchaseSettings: PurchaseSettings(clueEnabled: false, quadrantEnabled: false, quadrantLocationsEnabled: false),
+        purchaseSettings: PurchaseSettings(clueEnabled: false, quadrantEnabled: false, quadrantLocationsEnabled: false, missionCompletionEnabled: false),
         clues: [],
         notices: [],
         quadrants: [],
@@ -796,7 +796,7 @@ class _GameActionsBarState extends State<_GameActionsBar> {
     if (assignment == null) {
       return const _GameActionsData(
         assignment: null,
-        settings: PurchaseSettings(clueEnabled: false, quadrantEnabled: false, quadrantLocationsEnabled: false),
+        settings: PurchaseSettings(clueEnabled: false, quadrantEnabled: false, quadrantLocationsEnabled: false, missionCompletionEnabled: false),
         quadrants: [],
         currentMission: null,
       );
@@ -869,6 +869,7 @@ class _GameActionsBarState extends State<_GameActionsBar> {
     final message = error.toString();
     if (message.contains('Ese ID no corresponde')) return 'ID de misión incorrecto.';
     if (message.contains('No tienes más misiones')) return 'No te quedan misiones secundarias.';
+    if (message.contains('El admin no ha activado el envío')) return 'El admin no ha activado el envío de misiones secundarias.';
     return 'No se pudo completar la misión. Inténtalo de nuevo.';
   }
 
@@ -888,13 +889,13 @@ class _GameActionsBarState extends State<_GameActionsBar> {
                   children: [
                     Expanded(child: _compactActionButton(
                       filled: true,
-                      onPressed: data.currentMission != null && _buyingItem == null
+                      onPressed: settings.missionCompletionEnabled && data.currentMission != null && _buyingItem == null
                           ? () => _completeMission(data.currentMission!)
                           : null,
                       icon: _buyingItem == 'mission'
                           ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
                           : const Icon(Icons.task_alt_outlined),
-                      label: 'Misión',
+                      label: settings.missionCompletionEnabled ? 'Misión' : 'Misión cerrada',
                     )),
                     const SizedBox(width: 4),
                     Expanded(child: _compactActionButton(
@@ -1186,13 +1187,21 @@ class ScheduledEventsPage extends StatefulWidget {
 
 class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
   late Future<List<ScheduledGameEvent>> _events;
+  late Future<int> _pushSubscriptionCount;
   DateTime _selected = DateTime.now().add(const Duration(minutes: 2));
+  DateTime _officialDay = DateUtils.dateOnly(DateTime.now());
   var _saving = false;
 
   @override
   void initState() {
     super.initState();
     _events = widget.rooms.roomScheduledEvents(widget.room.id);
+    _pushSubscriptionCount = widget.rooms.roomPushSubscriptionCount(widget.room.id);
+  }
+
+  void _reloadData() {
+    _events = widget.rooms.roomScheduledEvents(widget.room.id);
+    _pushSubscriptionCount = widget.rooms.roomPushSubscriptionCount(widget.room.id);
   }
 
   Future<void> _selectDateTime() async {
@@ -1222,8 +1231,92 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${event.title} programado.')));
       setState(() {
-        _events = widget.rooms.roomScheduledEvents(widget.room.id);
+        _reloadData();
       });
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  Future<void> _selectOfficialDay() async {
+    final today = DateUtils.dateOnly(DateTime.now());
+    final day = await showDatePicker(
+      context: context,
+      firstDate: today,
+      lastDate: today.add(const Duration(days: 30)),
+      initialDate: _officialDay.isBefore(today) ? today : _officialDay,
+    );
+    if (day != null && mounted) setState(() => _officialDay = DateUtils.dateOnly(day));
+  }
+
+  Future<void> _scheduleOfficial(String kind) async {
+    setState(() => _saving = true);
+    try {
+      final event = await widget.rooms.scheduleOfficialGameEvent(
+        roomId: widget.room.id,
+        kind: kind,
+        day: _officialDay,
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${event.title} programado para ${TimeOfDay.fromDateTime(event.scheduledFor).format(context)}.')));
+      setState(_reloadData);
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  Future<void> _resolveOfficialEvent(ScheduledGameEvent event) async {
+    final isRaid = event.kind == 'police_raid';
+    final selection = <Team>{};
+    final teams = await showDialog<List<Team>>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(isRaid ? 'Últimos equipos en la redada' : 'Equipo ganador de la reunión'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(isRaid ? 'Selecciona el último o los últimos equipos. Se restarán 15 monedas a cada uno.' : 'Selecciona el primer equipo que se agrupó. Ganará 15 monedas.'),
+              const SizedBox(height: 8),
+              ...Team.values.map(
+                (team) => CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(team.label),
+                  value: selection.contains(team),
+                  onChanged: (selected) => setDialogState(() {
+                    if (isRaid) {
+                      selected == true ? selection.add(team) : selection.remove(team);
+                    } else {
+                      selection
+                        ..clear()
+                        ..addAll(selected == true ? [team] : const []);
+                    }
+                  }),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancelar')),
+            FilledButton(
+              onPressed: selection.isEmpty ? null : () => Navigator.of(context).pop(selection.toList()),
+              child: const Text('Aplicar resultado'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (teams == null || !mounted) return;
+    setState(() => _saving = true);
+    try {
+      final result = await widget.rooms.resolveOfficialGameEvent(eventId: event.id, teams: teams);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
+      setState(_reloadData);
     } catch (error) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
     } finally {
@@ -1237,6 +1330,41 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
         body: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Text('Eventos oficiales', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 4),
+            const Text('Elige el día; la estancia y la hora se sortearán dentro de su franja. El resultado físico lo confirma el admin después del evento.'),
+            FutureBuilder<int>(
+              future: _pushSubscriptionCount,
+              builder: (context, snapshot) => Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(
+                  snapshot.hasError
+                      ? 'No se pudo comprobar cuántos dispositivos tienen los avisos activos.'
+                      : 'Dispositivos con avisos registrados: ${snapshot.data ?? '…'}',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            OutlinedButton.icon(
+              onPressed: _saving ? null : _selectOfficialDay,
+              icon: const Icon(Icons.calendar_month_outlined),
+              label: Text('Día: ${MaterialLocalizations.of(context).formatMediumDate(_officialDay)}'),
+            ),
+            const SizedBox(height: 8),
+            FilledButton.icon(
+              onPressed: _saving ? null : () => _scheduleOfficial('police_raid'),
+              icon: const Icon(Icons.local_police_outlined),
+              label: const Text('Programar Redada policial · 15:30–17:00'),
+            ),
+            const SizedBox(height: 8),
+            FilledButton.icon(
+              onPressed: _saving ? null : () => _scheduleOfficial('family_reunion'),
+              icon: const Icon(Icons.groups_outlined),
+              label: const Text('Programar Reunión familiar · 19:00–20:30'),
+            ),
+            const Divider(height: 32),
+            Text('Eventos de prueba', style: Theme.of(context).textTheme.titleMedium),
             const Text('Cada evento se sortea al crearlo: ir a una estancia interior o “Achupé”.'),
             const SizedBox(height: 12),
             OutlinedButton.icon(onPressed: _selectDateTime, icon: const Icon(Icons.schedule), label: Text('Hora: ${MaterialLocalizations.of(context).formatMediumDate(_selected)} · ${TimeOfDay.fromDateTime(_selected).format(context)}')),
@@ -1258,11 +1386,17 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
                 if (snapshot.hasError) return Text(snapshot.error.toString());
                 if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
                 if (snapshot.data!.isEmpty) return const Text('Aún no hay eventos programados.');
-                return ListView(children: snapshot.data!.map((event) => ListTile(
-                  leading: Icon(event.status == 'triggered' ? Icons.check_circle_outline : Icons.schedule_outlined),
-                  title: Text(event.title),
-                  subtitle: Text('${event.message}\n${event.scheduledFor}'),
-                )).toList());
+                return ListView(children: snapshot.data!.map((event) {
+                  final isOfficial = event.kind == 'police_raid' || event.kind == 'family_reunion';
+                  final canResolve = isOfficial && event.status == 'triggered';
+                  return ListTile(
+                    leading: Icon(event.status == 'resolved' ? Icons.task_alt_outlined : event.status == 'triggered' ? Icons.check_circle_outline : Icons.schedule_outlined),
+                    title: Text(event.title),
+                    subtitle: Text('${event.message}\n${event.scheduledFor}\nEstado: ${event.status == 'resolved' ? 'resuelto' : event.status == 'triggered' ? 'pendiente de resultado' : 'programado'}'),
+                    isThreeLine: true,
+                    trailing: canResolve ? FilledButton(onPressed: _saving ? null : () => _resolveOfficialEvent(event), child: const Text('Resolver')) : null,
+                  );
+                }).toList());
               },
             )),
           ]),
@@ -1556,6 +1690,22 @@ class _PurchaseSettingsPageState extends State<PurchaseSettingsPage> {
     }
   }
 
+  Future<void> _setMissionCompletionEnabled(bool enabled) async {
+    setState(() => _updating = true);
+    try {
+      await widget.rooms.setMissionCompletionEnabled(roomId: widget.room.id, enabled: enabled);
+      if (mounted) {
+        setState(() {
+          _settings = widget.rooms.purchaseSettings(widget.room.id);
+        });
+      }
+    } catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+    } finally {
+      if (mounted) setState(() => _updating = false);
+    }
+  }
+
   Future<void> _changeQuadrant({required Team team, required String quadrant, required bool add}) async {
     setState(() => _updating = true);
     try {
@@ -1642,6 +1792,12 @@ class _PurchaseSettingsPageState extends State<PurchaseSettingsPage> {
                       subtitle: const Text('Pistas · cuadrantes · ubicaciones'),
                       value: settings.clueEnabled && settings.quadrantEnabled && settings.quadrantLocationsEnabled,
                       onChanged: _updating ? null : _setEnabled,
+                    ),
+                    SwitchListTile(
+                      title: const Text('Permitir enviar misiones secundarias'),
+                      subtitle: const Text('Los jugadores solo podrán completar su misión mientras esté activado.'),
+                      value: settings.missionCompletionEnabled,
+                      onChanged: _updating ? null : _setMissionCompletionEnabled,
                     ),
                     const Divider(height: 32),
                     Text('Cuadrantes secretos conseguidos', style: Theme.of(context).textTheme.titleMedium),

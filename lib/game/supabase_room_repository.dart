@@ -191,16 +191,17 @@ class SupabaseRoomRepository {
   Future<PurchaseSettings> purchaseSettings(String roomId) async {
     final rows = await _client
         .from('game_room_purchase_settings')
-        .select('clue_enabled, quadrant_enabled, quadrant_locations_enabled')
+        .select('clue_enabled, quadrant_enabled, quadrant_locations_enabled, mission_completion_enabled')
         .eq('room_id', roomId);
     if ((rows as List<dynamic>).isEmpty) {
-      return const PurchaseSettings(clueEnabled: false, quadrantEnabled: false, quadrantLocationsEnabled: false);
+      return const PurchaseSettings(clueEnabled: false, quadrantEnabled: false, quadrantLocationsEnabled: false, missionCompletionEnabled: false);
     }
     final settings = rows.first as Map<String, dynamic>;
     return PurchaseSettings(
       clueEnabled: settings['clue_enabled'] as bool,
       quadrantEnabled: settings['quadrant_enabled'] as bool,
       quadrantLocationsEnabled: settings['quadrant_locations_enabled'] as bool,
+      missionCompletionEnabled: settings['mission_completion_enabled'] as bool? ?? false,
     );
   }
 
@@ -208,6 +209,12 @@ class SupabaseRoomRepository {
       _client.rpc('set_game_purchase_enabled', params: {
         'p_room_id': roomId,
         'p_item': 'all',
+        'p_enabled': enabled,
+      });
+
+  Future<void> setMissionCompletionEnabled({required String roomId, required bool enabled}) =>
+      _client.rpc('set_game_mission_completion_enabled', params: {
+        'p_room_id': roomId,
         'p_enabled': enabled,
       });
 
@@ -368,6 +375,9 @@ class SupabaseRoomRepository {
         'p_auth': auth,
       });
 
+  Future<int> roomPushSubscriptionCount(String roomId) async =>
+      (await _client.rpc('my_room_push_subscription_count', params: {'p_room_id': roomId})) as int;
+
   Future<ScheduledGameEvent> scheduleRandomEvent({required String roomId, required DateTime scheduledFor}) async {
     final result = await _client.rpc('schedule_random_game_event', params: {
       'p_room_id': roomId,
@@ -375,6 +385,25 @@ class SupabaseRoomRepository {
     });
     return _scheduledEventFromJson(_firstRow(result));
   }
+
+  Future<ScheduledGameEvent> scheduleOfficialGameEvent({
+    required String roomId,
+    required String kind,
+    required DateTime day,
+  }) async {
+    final result = await _client.rpc('schedule_official_game_event', params: {
+      'p_room_id': roomId,
+      'p_event_kind': kind,
+      'p_event_day': day.toIso8601String().substring(0, 10),
+    });
+    return _scheduledEventFromJson(_firstRow(result));
+  }
+
+  Future<String> resolveOfficialGameEvent({required String eventId, required List<Team> teams}) async =>
+      (await _client.rpc('resolve_official_game_event', params: {
+        'p_event_id': eventId,
+        'p_teams': teams.map((team) => team.name).toList(),
+      })) as String;
 
   Future<List<ScheduledGameEvent>> roomScheduledEvents(String roomId) async {
     final rows = await _client.rpc('my_room_scheduled_events', params: {'p_room_id': roomId});

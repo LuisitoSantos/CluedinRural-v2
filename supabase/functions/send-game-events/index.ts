@@ -37,7 +37,7 @@ Deno.serve(async () => {
     if (!userIds.length) continue
     const { data: subscriptions } = await supabase
       .from('game_push_subscriptions')
-      .select('endpoint, p256dh, auth')
+      .select('endpoint, p256dh, auth, user_id')
       .in('user_id', userIds)
 
     console.log(JSON.stringify({ eventId: event.id, roomMembers: userIds.length, subscriptions: subscriptions?.length ?? 0 }))
@@ -48,6 +48,7 @@ Deno.serve(async () => {
           { endpoint: subscription.endpoint, keys: { p256dh: subscription.p256dh, auth: subscription.auth } },
           JSON.stringify({ title: event.title, body: event.message, url: './' }),
         )
+        await supabase.from('game_push_delivery_log').insert({ event_id: event.id, user_id: subscription.user_id, success: true })
         console.log(JSON.stringify({ eventId: event.id, delivered: true }))
       } catch (pushError) {
         // Las suscripciones expiradas (404/410) se eliminan para no reintentarlas.
@@ -57,6 +58,12 @@ Deno.serve(async () => {
         } else {
           console.error('No se pudo enviar una notificación', pushError)
         }
+        await supabase.from('game_push_delivery_log').insert({
+          event_id: event.id,
+          user_id: subscription.user_id,
+          success: false,
+          details: String(pushError),
+        })
       }
     }))
   }

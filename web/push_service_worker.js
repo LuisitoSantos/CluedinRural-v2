@@ -7,6 +7,13 @@ self.addEventListener('push', (event) => {
     body: data.body || 'Hay un nuevo evento de partida.',
     icon: 'icons/Icon-192.png',
     badge: 'icons/Icon-192.png',
+    // Cada evento debe generar un aviso visible y audible independiente. iOS
+    // puede ignorar parte de estas preferencias según los ajustes del sistema.
+    tag: `cluedin-${Date.now()}-${Math.random()}`,
+    renotify: true,
+    silent: false,
+    requireInteraction: true,
+    timestamp: Date.now(),
     data: { url: data.url || './' },
   }));
 });

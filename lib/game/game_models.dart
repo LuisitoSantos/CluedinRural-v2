@@ -110,11 +110,14 @@ class PurchaseSettings {
     required this.clueEnabled,
     required this.quadrantEnabled,
     required this.quadrantLocationsEnabled,
+    required this.missionCompletionEnabled,
   });
 
   final bool clueEnabled;
   final bool quadrantEnabled;
   final bool quadrantLocationsEnabled;
+  /// El admin debe abrir explícitamente el envío de misiones secundarias.
+  final bool missionCompletionEnabled;
 }
 
 class TeamQuadrant {
