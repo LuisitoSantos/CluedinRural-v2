@@ -968,6 +968,31 @@ class _AdminPageState extends State<AdminPage> {
   void initState() {
     super.initState();
     _room = widget.rooms.getRoom(widget.room.id);
+    unawaited(_loadExistingGame());
+  }
+
+  /// Las asignaciones viven en Supabase. No deben depender de que este
+  /// dispositivo fuera el que inició el sorteo.
+  Future<void> _loadExistingGame() async {
+    try {
+      final room = await _room;
+      final result = await Future.wait<Object?>([
+        widget.rooms.roomAssignments(room),
+        widget.rooms.roomMystery(room.id),
+      ]);
+      if (!mounted) return;
+      final assignments = result[0] as List<GamePlayer>;
+      final mystery = result[1] as GameMystery?;
+      if (assignments.isNotEmpty && mystery != null) {
+        setState(() {
+          _assignedPlayers = assignments;
+          _mystery = mystery;
+        });
+      }
+    } catch (_) {
+      // La pantalla conserva la opción de iniciar partida y mostrará los
+      // errores de Supabase cuando el admin realice una acción.
+    }
   }
 
   Future<List<MapTile>> _loadTiles() async {
@@ -1188,6 +1213,7 @@ class ScheduledEventsPage extends StatefulWidget {
 class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
   late Future<List<ScheduledGameEvent>> _events;
   late Future<int> _pushSubscriptionCount;
+  final ScrollController _historyScrollController = ScrollController();
   DateTime _selected = DateTime.now().add(const Duration(minutes: 2));
   DateTime _officialDay = DateUtils.dateOnly(DateTime.now());
   var _saving = false;
@@ -1197,6 +1223,12 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
     super.initState();
     _events = widget.rooms.roomScheduledEvents(widget.room.id);
     _pushSubscriptionCount = widget.rooms.roomPushSubscriptionCount(widget.room.id);
+  }
+
+  @override
+  void dispose() {
+    _historyScrollController.dispose();
+    super.dispose();
   }
 
   void _reloadData() {
@@ -1327,9 +1359,9 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('Eventos programados')),
-        body: Padding(
+        body: ListView(
           padding: const EdgeInsets.all(20),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          children: [
             Text('Eventos oficiales', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 4),
             const Text('Elige el día; la estancia y la hora se sortearán dentro de su franja. El resultado físico lo confirma el admin después del evento.'),
@@ -1380,26 +1412,40 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
             const Text('El aviso se enviará en la siguiente revisión del scheduler, que se ejecuta cada 10 minutos.', textAlign: TextAlign.center),
             const SizedBox(height: 20),
             Text('Historial', style: Theme.of(context).textTheme.titleMedium),
-            Expanded(child: FutureBuilder<List<ScheduledGameEvent>>(
-              future: _events,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) return Text(snapshot.error.toString());
-                if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
-                if (snapshot.data!.isEmpty) return const Text('Aún no hay eventos programados.');
-                return ListView(children: snapshot.data!.map((event) {
-                  final isOfficial = event.kind == 'police_raid' || event.kind == 'family_reunion';
-                  final canResolve = isOfficial && event.status == 'triggered';
-                  return ListTile(
-                    leading: Icon(event.status == 'resolved' ? Icons.task_alt_outlined : event.status == 'triggered' ? Icons.check_circle_outline : Icons.schedule_outlined),
-                    title: Text(event.title),
-                    subtitle: Text('${event.message}\n${event.scheduledFor}\nEstado: ${event.status == 'resolved' ? 'resuelto' : event.status == 'triggered' ? 'pendiente de resultado' : 'programado'}'),
-                    isThreeLine: true,
-                    trailing: canResolve ? FilledButton(onPressed: _saving ? null : () => _resolveOfficialEvent(event), child: const Text('Resolver')) : null,
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 340,
+              child: FutureBuilder<List<ScheduledGameEvent>>(
+                future: _events,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) return Text(snapshot.error.toString());
+                  if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+                  if (snapshot.data!.isEmpty) return const Text('Aún no hay eventos programados.');
+                  return Scrollbar(
+                    controller: _historyScrollController,
+                    thumbVisibility: true,
+                    child: ListView.separated(
+                      controller: _historyScrollController,
+                      itemCount: snapshot.data!.length,
+                      separatorBuilder: (_, _) => const Divider(height: 1),
+                      itemBuilder: (context, index) {
+                        final event = snapshot.data![index];
+                        final isOfficial = event.kind == 'police_raid' || event.kind == 'family_reunion';
+                        final canResolve = isOfficial && event.status == 'triggered';
+                        return ListTile(
+                          leading: Icon(event.status == 'resolved' ? Icons.task_alt_outlined : event.status == 'triggered' ? Icons.check_circle_outline : Icons.schedule_outlined),
+                          title: Text(event.title),
+                          subtitle: Text('${event.message}\n${event.scheduledFor}\nEstado: ${event.status == 'resolved' ? 'resuelto' : event.status == 'triggered' ? 'pendiente de resultado' : 'programado'}'),
+                          isThreeLine: true,
+                          trailing: canResolve ? FilledButton(onPressed: _saving ? null : () => _resolveOfficialEvent(event), child: const Text('Resolver')) : null,
+                        );
+                      },
+                    ),
                   );
-                }).toList());
-              },
-            )),
-          ]),
+                },
+              ),
+            ),
+          ],
         ),
       );
 }
