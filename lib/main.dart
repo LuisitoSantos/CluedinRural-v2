@@ -567,10 +567,10 @@ class _PlayerGamePanelState extends State<_PlayerGamePanel> {
               ),
             ),
             const SizedBox(height: 20),
-            Text('Pistas del equipo', style: Theme.of(context).textTheme.titleMedium),
+            Text('Tus pistas', style: Theme.of(context).textTheme.titleMedium),
             Padding(
               padding: const EdgeInsets.only(top: 6),
-              child: Text('Cuadrantes de tu equipo: ${quadrantNames.join(', ')}'),
+              child: Text('Cuadrantes compartidos de tu equipo: ${quadrantNames.join(', ')}'),
             ),
             if (data.clues.isEmpty)
               const Padding(padding: EdgeInsets.only(top: 6), child: Text('Aún no hay pistas disponibles.'))

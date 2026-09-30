@@ -65,13 +65,14 @@ using (
 
 alter table public.game_team_secondary_clues enable row level security;
 drop policy if exists "Teams can read secondary clues" on public.game_team_secondary_clues;
-create policy "Teams can read secondary clues" on public.game_team_secondary_clues for select to authenticated
+drop policy if exists "Players can read their secondary clues" on public.game_team_secondary_clues;
+create policy "Players can read their secondary clues" on public.game_team_secondary_clues for select to authenticated
 using (
   public.is_game_room_admin(room_id) or exists (
     select 1 from public.game_assignments own_assignment
     where own_assignment.room_id = game_team_secondary_clues.room_id
       and own_assignment.user_id = (select auth.uid())
-      and own_assignment.team = game_team_secondary_clues.team
+      and own_assignment.participant_id = game_team_secondary_clues.participant_id
   )
 );
 
@@ -219,13 +220,13 @@ begin
     insert into public.game_team_secondary_clues(room_id, team, participant_id, mission_number, clue)
     values (v_mission.room_id, v_mission.team, v_mission.participant_id, v_mission.mission_number,
       'Pista perdida por daños. Puede recuperarse del saco del equipo por 15 monedas.');
-    return 'Misión completada. Los daños han retenido la pista: tu equipo puede recuperarla del saco por 15 monedas.';
+    return 'Misión completada. Los daños han retenido tu pista: el equipo puede recuperarla del saco por 15 monedas.';
   end if;
   if v_mission.reward_withheld then
     insert into public.game_team_secondary_clues(room_id, team, participant_id, mission_number, clue)
     values (v_mission.room_id, v_mission.team, v_mission.participant_id, v_mission.mission_number,
       'Pista perdida. Ha pasado al saco de pistas del equipo y puede recuperarse por 15 monedas.');
-    return 'Misión completada. Esta vez la pista ha pasado al saco de pistas del equipo.';
+    return 'Misión completada. Esta vez tu pista ha pasado al saco de pistas del equipo.';
   end if;
   insert into public.game_team_secondary_clues(room_id, team, participant_id, mission_number, clue)
   values (
@@ -237,7 +238,7 @@ begin
   );
   update public.game_secondary_missions set clue_revealed_at = now()
   where room_id = v_mission.room_id and participant_id = v_mission.participant_id and mission_number = v_mission.mission_number;
-  return 'Misión completada. Tu equipo ha recibido una pista.';
+  return 'Misión completada. Has recibido una pista.';
 end;
 $$;
 
@@ -270,7 +271,7 @@ begin
     format('Pista recuperada de misión %s: %s', v_mission.mission_number, v_mission.clue)
   )
   on conflict (room_id, participant_id, mission_number) do update set clue = excluded.clue;
-  return 'Tu equipo ha recuperado una pista del saco por 15 monedas.';
+  return 'El jugador que completó esa misión ha recuperado su pista del saco por 15 monedas.';
 end;
 $$;
 

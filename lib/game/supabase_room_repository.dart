@@ -452,7 +452,9 @@ class SupabaseRoomRepository {
         .from('game_team_secondary_clues')
         .select('clue')
         .eq('room_id', roomId)
-        .eq('team', assignment.team!.name);
+        // Las pistas de misión secundaria pertenecen al jugador que realizó
+        // esa misión, no al equipo completo.
+        .eq('participant_id', userId);
     final compassRows = await _client
         .from('game_team_compass_clues')
         .select('clue')
