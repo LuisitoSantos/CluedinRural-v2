@@ -26,7 +26,11 @@ alter table public.game_secondary_missions
   add column if not exists clue_type text;
 alter table public.game_secondary_missions drop constraint if exists game_secondary_missions_mission_number_check;
 alter table public.game_secondary_missions add constraint game_secondary_missions_mission_number_check check (mission_number >= 1);
-create unique index if not exists game_secondary_missions_unique_target
+-- Una pista no se repite para quien la recibe, pero distintos compañeros del
+-- mismo equipo pueden investigar al mismo rival. Por ello el objetivo ya no
+-- es único para toda la sala.
+drop index if exists public.game_secondary_missions_unique_target;
+create index if not exists game_secondary_missions_target_lookup
   on public.game_secondary_missions(room_id, target_participant_id)
   where target_participant_id is not null;
 
@@ -81,8 +85,7 @@ returns void language plpgsql security definer set search_path = public as $$
 declare
   v_team text;
   v_lost_count integer;
-  v_min_team_missions integer;
-  v_max_team_missions integer;
+  v_team_missions integer;
 begin
   if not public.is_game_room_admin(p_room_id) then raise exception 'Solo el admin puede iniciar la partida'; end if;
   if jsonb_typeof(p_missions) <> 'array' then raise exception 'Las misiones no son válidas'; end if;
@@ -118,30 +121,33 @@ begin
       where m.room_id = p_room_id and m.participant_id = a.participant_id
     )
   ) then raise exception 'Faltan misiones secundarias para algún jugador'; end if;
-  select min(mission_count), max(mission_count) into v_min_team_missions, v_max_team_missions
-  from (
-    select team, count(*)::integer as mission_count
-    from public.game_secondary_missions where room_id = p_room_id group by team
-  ) team_missions;
-  if v_min_team_missions <> v_max_team_missions and exists (
+  if exists (
+    select 1 from public.game_secondary_missions
+    where room_id = p_room_id
+    group by participant_id, target_participant_id
+    having count(*) > 1
+  ) then raise exception 'Un jugador no puede recibir dos pistas sobre el mismo personaje'; end if;
+  if exists (
     select 1
-    from public.game_secondary_missions m
-    where m.room_id = p_room_id
-    group by m.participant_id
-    having count(*) <> 1
-  ) then
-    raise exception 'Todos los equipos deben tener la misma cantidad total de misiones';
-  end if;
+    from (select distinct team from public.game_assignments where room_id = p_room_id and participant_type = 'real') source_team
+    join public.game_assignments target on target.room_id = p_room_id and target.team <> source_team.team
+    where not exists (
+      select 1 from public.game_secondary_missions mission
+      where mission.room_id = p_room_id and mission.team = source_team.team and mission.target_participant_id = target.participant_id
+    )
+  ) then raise exception 'Cada equipo debe recibir al menos una pista sobre cada rival'; end if;
   if exists (
     select 1 from public.game_secondary_missions
     where room_id = p_room_id and (target_participant_id is null or clue_type is null)
   ) then raise exception 'Cada misión debe tener una pista válida'; end if;
 
-  -- La pérdida aleatoria se conserva. En la alternativa para partidas
-  -- pequeñas todos reciben una misión, aunque los equipos no tengan igual
-  -- número de jugadores.
+  -- Las pistas de misión son personales. Cada equipo cubre primero a todos
+  -- los rivales y puede tener más misiones si tiene más jugadores; la
+  -- pérdida aleatoria escala con la cantidad real de misiones de ese equipo.
   for v_team in select distinct team from public.game_assignments where room_id = p_room_id and participant_type = 'real' loop
-    v_lost_count := floor(random() * (ceil(v_max_team_missions / 5.0)::integer + 1));
+    select count(*) into v_team_missions from public.game_secondary_missions
+    where room_id = p_room_id and team = v_team;
+    v_lost_count := floor(random() * (ceil(v_team_missions / 5.0)::integer + 1));
     with selected as (
       select ctid from public.game_secondary_missions
       where room_id = p_room_id and team = v_team

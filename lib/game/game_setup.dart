@@ -94,115 +94,61 @@ class GameSetup {
     for (final player in players) {
       teams.putIfAbsent(player.team!, () => []).add(player);
     }
-    final idealPerTeam = teams.values.map((teamPlayers) => teamPlayers.length).reduce(max) * 5;
-    List<GamePlayer>? missionSlots;
-    List<GamePlayer>? targetsBySlot;
-    for (var perTeam = idealPerTeam; perTeam > 0; perTeam--) {
-      final candidates = _missionSlotsForTeamQuota(teams, perTeam)..shuffle(_random);
-      // El reparto normal solo es válido si todos los jugadores reciben al
-      // menos una misión. Con pocos jugadores y equipos desiguales puede
-      // caber una cuota por equipo, pero dejar a alguien sin misión.
-      if (candidates.map((player) => player.id).toSet().length != players.length) continue;
-      if (candidates.length > targets.length) continue;
-      try {
-        missionSlots = candidates;
-        targetsBySlot = _assignUniqueTargets(candidates, targets);
-        break;
-      } on StateError {
-        // Se prueba una cuota menor hasta encontrar personajes válidos para
-        // todas las pistas sin repetir ninguno.
-      }
-    }
-    // En partidas pequeñas no siempre es matemáticamente posible mantener
-    // el mismo total de misiones por equipo y, a la vez, dar una misión a
-    // cada jugador sin repetir personaje objetivo. En ese caso prima que
-    // todos jueguen: una misión personal contra alguien de otro equipo.
-    if (missionSlots == null || targetsBySlot == null) {
-      final candidates = [...players]..shuffle(_random);
-      try {
-        missionSlots = candidates;
-        targetsBySlot = _assignUniqueTargets(candidates, targets);
-      } on StateError {
+    for (final entry in teams.entries) {
+      final teamPlayers = [...entry.value]..shuffle(_random);
+      final eligibleTargets = targets.where((target) => target.team != entry.key).toList()..shuffle(_random);
+      if (eligibleTargets.isEmpty) {
         throw StateError('Se necesitan jugadores de al menos dos equipos para repartir las misiones secundarias.');
       }
-    }
 
-    final slotsByPlayer = <String, List<GamePlayer>>{};
-    for (var index = 0; index < missionSlots.length; index++) {
-      slotsByPlayer.putIfAbsent(missionSlots[index].id, () => []).add(targetsBySlot[index]);
-    }
-    for (final player in players) {
-      final deck = [...missions]..shuffle(_random);
-      final playerTargets = slotsByPlayer[player.id] ?? const <GamePlayer>[];
-      if (deck.length < playerTargets.length) {
+      // Hasta cinco misiones por persona es la base habitual. Si hay menos
+      // rivales disponibles se limita a esos rivales; si un equipo es muy
+      // pequeño, se amplía lo justo para cubrirlos a todos.
+      final missionsPerPlayer = min(
+        eligibleTargets.length,
+        max(5, (eligibleTargets.length / teamPlayers.length).ceil()),
+      );
+      if (missions.length < missionsPerPlayer) {
         throw StateError('No hay suficientes definiciones de misiones secundarias para este reparto.');
       }
-      for (var index = 0; index < playerTargets.length; index++) {
-        final mission = deck[index];
-        final target = playerTargets[index];
-        final clue = _secondaryClueFor(target, areas);
-        result.add({
-          'participant_id': player.id,
-          'participant_type': player.isFake ? 'fake' : 'real',
-          'mission_number': index + 1,
-          'mission_id': mission.id,
-          'mission_level': mission.level,
-          'mission_action': mission.action,
-          'clue': clue.text,
-          'target_participant_id': target.id,
-          'clue_type': clue.type,
-        });
+
+      final targetsByPlayer = <String, List<GamePlayer>>{for (final player in teamPlayers) player.id: []};
+      // Primera vuelta: el equipo recibe información de todos los demás
+      // personajes al menos una vez, repartida de forma equilibrada.
+      for (final target in eligibleTargets) {
+        final candidates = teamPlayers.where((player) => targetsByPlayer[player.id]!.length < missionsPerPlayer).toList()
+          ..shuffle(_random);
+        candidates.sort((a, b) => targetsByPlayer[a.id]!.length.compareTo(targetsByPlayer[b.id]!.length));
+        targetsByPlayer[candidates.first.id]!.add(target);
+      }
+      // Segunda vuelta: completa las misiones. Aquí puede repetirse un
+      // objetivo dentro del equipo, pero nunca para la misma persona.
+      for (final player in teamPlayers) {
+        final assignedTargets = targetsByPlayer[player.id]!;
+        while (assignedTargets.length < missionsPerPlayer) {
+          final choices = eligibleTargets.where((target) => !assignedTargets.contains(target)).toList()..shuffle(_random);
+          assignedTargets.add(choices.first);
+        }
+        final deck = [...missions]..shuffle(_random);
+        for (var index = 0; index < assignedTargets.length; index++) {
+          final mission = deck[index];
+          final target = assignedTargets[index];
+          final clue = _secondaryClueFor(target, areas);
+          result.add({
+            'participant_id': player.id,
+            'participant_type': player.isFake ? 'fake' : 'real',
+            'mission_number': index + 1,
+            'mission_id': mission.id,
+            'mission_level': mission.level,
+            'mission_action': mission.action,
+            'clue': clue.text,
+            'target_participant_id': target.id,
+            'clue_type': clue.type,
+          });
+        }
       }
     }
     return result;
-  }
-
-  /// Da a cada equipo la misma cuota total. Dentro de cada equipo la cuota se
-  /// divide entre sus jugadores, con una diferencia máxima de una misión.
-  List<GamePlayer> _missionSlotsForTeamQuota(Map<Team, List<GamePlayer>> teams, int quota) {
-    final slots = <GamePlayer>[];
-    for (final teamPlayers in teams.values) {
-      final shuffled = [...teamPlayers]..shuffle(_random);
-      final base = quota ~/ shuffled.length;
-      final remainder = quota % shuffled.length;
-      for (var index = 0; index < shuffled.length; index++) {
-        slots.addAll(List.filled(base + (index < remainder ? 1 : 0), shuffled[index]));
-      }
-    }
-    return slots;
-  }
-
-  /// Empareja cada misión con un personaje de otro equipo sin repetir
-  /// personaje. El emparejamiento aumentante evita que un orden de sorteo
-  /// desafortunado descarte una distribución que sí era posible.
-  List<GamePlayer> _assignUniqueTargets(List<GamePlayer> missionSlots, List<GamePlayer> targets) {
-    final shuffledTargets = [...targets]..shuffle(_random);
-    final targetForSlot = List<int?>.filled(missionSlots.length, null);
-    final slotForTarget = List<int?>.filled(shuffledTargets.length, null);
-
-    bool assign(int slot, Set<int> visitedTargets) {
-      final candidates = <int>[
-        for (var targetIndex = 0; targetIndex < shuffledTargets.length; targetIndex++)
-          if (shuffledTargets[targetIndex].team != missionSlots[slot].team) targetIndex,
-      ]..shuffle(_random);
-      for (final targetIndex in candidates) {
-        if (!visitedTargets.add(targetIndex)) continue;
-        final previousSlot = slotForTarget[targetIndex];
-        if (previousSlot == null || assign(previousSlot, visitedTargets)) {
-          slotForTarget[targetIndex] = slot;
-          targetForSlot[slot] = targetIndex;
-          return true;
-        }
-      }
-      return false;
-    }
-
-    for (var slot = 0; slot < missionSlots.length; slot++) {
-      if (!assign(slot, <int>{})) {
-        throw StateError('No hay personajes de otros equipos suficientes para repartir las pistas únicas.');
-      }
-    }
-    return [for (final targetIndex in targetForSlot) shuffledTargets[targetIndex!]];
   }
 
   _SecondaryClue _secondaryClueFor(GamePlayer target, GameAreaLookup areas) {
