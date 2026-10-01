@@ -123,7 +123,13 @@ begin
     select team, count(*)::integer as mission_count
     from public.game_secondary_missions where room_id = p_room_id group by team
   ) team_missions;
-  if v_min_team_missions <> v_max_team_missions then
+  if v_min_team_missions <> v_max_team_missions and exists (
+    select 1
+    from public.game_secondary_missions m
+    where m.room_id = p_room_id
+    group by m.participant_id
+    having count(*) <> 1
+  ) then
     raise exception 'Todos los equipos deben tener la misma cantidad total de misiones';
   end if;
   if exists (
@@ -131,8 +137,9 @@ begin
     where room_id = p_room_id and (target_participant_id is null or clue_type is null)
   ) then raise exception 'Cada misión debe tener una pista válida'; end if;
 
-  -- La pérdida aleatoria se conserva. Como cada equipo recibe la misma cuota
-  -- total de misiones, también comparten el mismo rango de pistas perdidas.
+  -- La pérdida aleatoria se conserva. En la alternativa para partidas
+  -- pequeñas todos reciben una misión, aunque los equipos no tengan igual
+  -- número de jugadores.
   for v_team in select distinct team from public.game_assignments where room_id = p_room_id and participant_type = 'real' loop
     v_lost_count := floor(random() * (ceil(v_max_team_missions / 5.0)::integer + 1));
     with selected as (

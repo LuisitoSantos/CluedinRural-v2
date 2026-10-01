@@ -99,6 +99,10 @@ class GameSetup {
     List<GamePlayer>? targetsBySlot;
     for (var perTeam = idealPerTeam; perTeam > 0; perTeam--) {
       final candidates = _missionSlotsForTeamQuota(teams, perTeam)..shuffle(_random);
+      // El reparto normal solo es válido si todos los jugadores reciben al
+      // menos una misión. Con pocos jugadores y equipos desiguales puede
+      // caber una cuota por equipo, pero dejar a alguien sin misión.
+      if (candidates.map((player) => player.id).toSet().length != players.length) continue;
       if (candidates.length > targets.length) continue;
       try {
         missionSlots = candidates;
@@ -109,8 +113,18 @@ class GameSetup {
         // todas las pistas sin repetir ninguno.
       }
     }
+    // En partidas pequeñas no siempre es matemáticamente posible mantener
+    // el mismo total de misiones por equipo y, a la vez, dar una misión a
+    // cada jugador sin repetir personaje objetivo. En ese caso prima que
+    // todos jueguen: una misión personal contra alguien de otro equipo.
     if (missionSlots == null || targetsBySlot == null) {
-      throw StateError('No hay personajes de otros equipos suficientes para repartir pistas secundarias únicas.');
+      final candidates = [...players]..shuffle(_random);
+      try {
+        missionSlots = candidates;
+        targetsBySlot = _assignUniqueTargets(candidates, targets);
+      } on StateError {
+        throw StateError('Se necesitan jugadores de al menos dos equipos para repartir las misiones secundarias.');
+      }
     }
 
     final slotsByPlayer = <String, List<GamePlayer>>{};
@@ -119,7 +133,7 @@ class GameSetup {
     }
     for (final player in players) {
       final deck = [...missions]..shuffle(_random);
-      final playerTargets = slotsByPlayer[player.id]!;
+      final playerTargets = slotsByPlayer[player.id] ?? const <GamePlayer>[];
       if (deck.length < playerTargets.length) {
         throw StateError('No hay suficientes definiciones de misiones secundarias para este reparto.');
       }
