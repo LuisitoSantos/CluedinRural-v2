@@ -171,4 +171,28 @@ void main() {
     expect(greenCount, 20);
     expect(byPlayer.values.reduce((a, b) => a > b ? a : b) - byPlayer.values.reduce((a, b) => a < b ? a : b), lessThanOrEqualTo(1));
   });
+
+  test('en una partida pequeña da una misión a cada jugador sin repetir objetivo', () {
+    final players = [
+      for (var index = 0; index < 3; index++)
+        GamePlayer(id: 'red-$index', name: 'Rojo $index', isFake: true, team: Team.red, position: BoardPosition(name: 'A$index', column: index, row: 0), clue: 'Pista'),
+      for (var index = 0; index < 2; index++)
+        GamePlayer(id: 'green-$index', name: 'Verde $index', isFake: true, team: Team.green, position: BoardPosition(name: 'B$index', column: index, row: 1), clue: 'Pista'),
+    ];
+    final assigned = GameSetup().assignSecondaryMissions(
+      players: players,
+      targets: players,
+      missions: List.generate(5, (index) => SecondaryMissionDefinition(id: '$index', level: 1, action: 'Acción')),
+      areas: GameAreaLookup.fromJson(quadrants: const {}, rooms: const {}),
+    );
+
+    expect(assigned, hasLength(5));
+    expect(assigned.map((mission) => mission['participant_id']).toSet(), hasLength(5));
+    expect(assigned.map((mission) => mission['target_participant_id']).toSet(), hasLength(5));
+    for (final mission in assigned) {
+      final player = players.firstWhere((item) => item.id == mission['participant_id']);
+      final target = players.firstWhere((item) => item.id == mission['target_participant_id']);
+      expect(target.team, isNot(player.team));
+    }
+  });
 }
