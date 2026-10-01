@@ -139,18 +139,14 @@ void main() {
     expect(assigned.every((mission) => {'room', 'column', 'row', 'location'}.contains(mission['clue_type'])), isTrue);
   });
 
-  test('iguala la cuota total de misiones entre equipos de distinto tamaño', () {
+  test('da el máximo de misiones personales sin repetir un rival para la misma persona', () {
     final players = [
       for (var index = 0; index < 4; index++)
         GamePlayer(id: 'red-$index', name: 'Rojo $index', isFake: true, team: Team.red, position: BoardPosition(name: 'A$index', column: index, row: 0), clue: 'Pista'),
       for (var index = 0; index < 3; index++)
         GamePlayer(id: 'green-$index', name: 'Verde $index', isFake: true, team: Team.green, position: BoardPosition(name: 'B$index', column: index, row: 1), clue: 'Pista'),
     ];
-    final targets = [
-      ...players,
-      for (var index = 0; index < 40; index++)
-        GamePlayer(id: 'blue-$index', name: 'Azul $index', isFake: true, team: Team.blue, position: BoardPosition(name: 'C$index', column: index, row: 2), clue: 'Pista'),
-    ];
+    final targets = players;
     final missions = List.generate(20, (index) => SecondaryMissionDefinition(id: '$index', level: 1, action: 'Acción'));
 
     final assigned = GameSetup().assignSecondaryMissions(
@@ -167,12 +163,13 @@ void main() {
       byPlayer[id] = (byPlayer[id] ?? 0) + 1;
     }
 
-    expect(redCount, 20);
-    expect(greenCount, 20);
-    expect(byPlayer.values.reduce((a, b) => a > b ? a : b) - byPlayer.values.reduce((a, b) => a < b ? a : b), lessThanOrEqualTo(1));
+    expect(redCount, 12);
+    expect(greenCount, 12);
+    expect(byPlayer.entries.where((entry) => entry.key.startsWith('red-')).map((entry) => entry.value), everyElement(3));
+    expect(byPlayer.entries.where((entry) => entry.key.startsWith('green-')).map((entry) => entry.value), everyElement(4));
   });
 
-  test('en una partida pequeña da una misión a cada jugador sin repetir objetivo', () {
+  test('cubre a todos los rivales de cada equipo y no repite objetivo para una persona', () {
     final players = [
       for (var index = 0; index < 3; index++)
         GamePlayer(id: 'red-$index', name: 'Rojo $index', isFake: true, team: Team.red, position: BoardPosition(name: 'A$index', column: index, row: 0), clue: 'Pista'),
@@ -186,13 +183,59 @@ void main() {
       areas: GameAreaLookup.fromJson(quadrants: const {}, rooms: const {}),
     );
 
-    expect(assigned, hasLength(5));
-    expect(assigned.map((mission) => mission['participant_id']).toSet(), hasLength(5));
-    expect(assigned.map((mission) => mission['target_participant_id']).toSet(), hasLength(5));
+    expect(assigned, hasLength(12));
     for (final mission in assigned) {
       final player = players.firstWhere((item) => item.id == mission['participant_id']);
       final target = players.firstWhere((item) => item.id == mission['target_participant_id']);
       expect(target.team, isNot(player.team));
+    }
+    for (final player in players) {
+      final playerTargets = assigned
+          .where((mission) => mission['participant_id'] == player.id)
+          .map((mission) => mission['target_participant_id'])
+          .toList();
+      final maximumForPlayer = players.where((item) => item.team != player.team).length;
+      expect(playerTargets, hasLength(maximumForPlayer));
+      expect(playerTargets.toSet(), hasLength(maximumForPlayer));
+      final teamTargets = assigned
+          .where((mission) => players.firstWhere((item) => item.id == mission['participant_id']).team == player.team)
+          .map((mission) => mission['target_participant_id'])
+          .toSet();
+      final rivals = players.where((item) => item.team != player.team).map((item) => item.id).toSet();
+      expect(teamTargets.containsAll(rivals), isTrue);
+    }
+  });
+
+  test('con equipos 6, 6, 6 y 8 genera cinco misiones por jugador', () {
+    final sizes = <Team, int>{Team.red: 6, Team.blue: 6, Team.green: 6, Team.yellow: 8};
+    final players = <GamePlayer>[];
+    for (final entry in sizes.entries) {
+      for (var index = 0; index < entry.value; index++) {
+        players.add(GamePlayer(
+          id: '${entry.key.name}-$index',
+          name: '${entry.key.name} $index',
+          isFake: true,
+          team: entry.key,
+          position: BoardPosition(name: '${entry.key.name.substring(0, 1)}$index', column: index, row: 0),
+          clue: 'Pista',
+        ));
+      }
+    }
+    final assigned = GameSetup().assignSecondaryMissions(
+      players: players,
+      targets: players,
+      missions: List.generate(5, (index) => SecondaryMissionDefinition(id: '$index', level: 1, action: 'Acción')),
+      areas: GameAreaLookup.fromJson(quadrants: const {}, rooms: const {}),
+    );
+
+    expect(assigned, hasLength(130));
+    for (final player in players) {
+      final targetsForPlayer = assigned
+          .where((mission) => mission['participant_id'] == player.id)
+          .map((mission) => mission['target_participant_id'])
+          .toList();
+      expect(targetsForPlayer, hasLength(5));
+      expect(targetsForPlayer.toSet(), hasLength(5));
     }
   });
 }
